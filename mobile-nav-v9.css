@@ -1,0 +1,42 @@
+/* BOMB V9: mobile bottom navigation only. Desktop left untouched. */
+@media (max-width:850px){
+  footer{display:none!important;} /* Mobile reference has a fixed dock, not a desktop footer. */
+  body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0px));}
+  .mobile-nav{
+    display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    align-items:stretch!important;gap:2px!important;
+    position:fixed!important;bottom:calc(7px + env(safe-area-inset-bottom,0px))!important;
+    left:50%!important;right:auto!important;transform:translateX(-50%)!important;
+    width:calc(100% - 18px)!important;max-width:650px!important;
+    height:78px!important;padding:7px 9px!important;
+    border:2px solid #ef60de!important;border-radius:42px!important;
+    background:linear-gradient(180deg,#70236f 0%,#360a40 22%,#240029 72%,#350936 100%)!important;
+    box-shadow:0 0 0 3px rgba(89,11,85,.65),0 0 16px rgba(255,65,234,.95),inset 0 2px 6px rgba(255,155,239,.42)!important;
+    z-index:150!important;isolation:isolate;
+  }
+  .mobile-nav button{
+    min-width:0!important;height:100%!important;padding:4px 2px!important;
+    border:1px solid transparent!important;border-radius:30px!important;
+    background:transparent!important;box-shadow:none!important;
+    display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;
+    gap:4px!important;color:#f8eff9!important;text-align:center!important;
+    font-size:13px!important;font-weight:850!important;line-height:1.05!important;
+    text-shadow:0 1px 3px #100013!important;
+  }
+  .mobile-nav svg{display:block!important;width:30px!important;height:30px!important;flex:none!important;filter:drop-shadow(0 1px 2px #0009);}
+  .mobile-nav .nav-label{display:block!important;font-size:13px!important;white-space:nowrap!important;letter-spacing:.1px!important;}
+  .mobile-nav button.active{
+    color:#fff!important;
+    background:linear-gradient(180deg,#ffe9a4 0%,#efb22c 30%,#d88408 69%,#b96a08 100%)!important;
+    border:1.5px solid #ffe876!important;border-radius:32px!important;
+    box-shadow:inset 0 2px 4px #fff9,0 0 16px #ffad11b8,0 3px 7px #1d0015!important;
+    text-shadow:0 2px 3px #7b3900!important;
+  }
+  .mobile-nav button.active svg{filter:drop-shadow(0 2px 2px #a36012);}
+}
+@media(max-width:390px){
+ .mobile-nav{height:70px!important;padding:6px 6px!important;}
+ .mobile-nav button{gap:2px!important;}
+ .mobile-nav svg{width:26px!important;height:26px!important;}
+ .mobile-nav .nav-label{font-size:11px!important;}
+}
