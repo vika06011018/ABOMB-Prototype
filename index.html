@@ -338,6 +338,30 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
   }
 }
 
+
+/* Floating tool collapsed state: animated transparent gift icon */
+@media (min-width:900px) {
+  #floatToggle.is-collapsed {
+    width:calc(62 * var(--u));
+    height:calc(64 * var(--u));
+    min-width:48px;
+    min-height:50px;
+    padding:4px 2px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:1px;
+    border:1px solid #ffce90;
+    border-radius:13px;
+    background:linear-gradient(145deg,#542456,#210d32);
+    box-shadow:0 0 12px #ff92da88, inset 0 0 8px #ff9dd633;
+    cursor:pointer;
+  }
+  #floatToggle.is-collapsed:hover {filter:brightness(1.12);}
+  #floatToggle .float-gift-icon {display:block;width:75%;height:68%;object-fit:contain;pointer-events:none;}
+  #floatToggle .float-gift-label {font-size:calc(10 * var(--u));line-height:1.1;white-space:nowrap;color:#fff;pointer-events:none;}
+}
 </style>
 </head>
 <body>
@@ -638,7 +662,10 @@ $('#floatToggle').addEventListener('click', (event) => {
   actionsPanel.hidden = !actionsPanel.hidden;
   button.setAttribute('aria-expanded', String(!actionsPanel.hidden));
   button.setAttribute('aria-label', actionsPanel.hidden ? '展開工具列' : '收合工具列');
-  button.textContent = actionsPanel.hidden ? '+' : '−';
+  button.classList.toggle('is-collapsed', actionsPanel.hidden);
+  button.innerHTML = actionsPanel.hidden
+    ? '<img src="assets/BOMB_快速工具_禮物盒搖晃.gif" alt="" aria-hidden="true" class="float-gift-icon"><span class="float-gift-label">快速工具</span>'
+    : '−';
 });
 
 const hero = $('#hero');
