@@ -1,1 +1,0 @@
-V18 only replaces desktop APP download ribbon with a complete frame cropped from approved reference. Mobile and other sections unchanged. Background includes displayed text and buttons; HTML controls remain clickable overlay.
