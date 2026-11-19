@@ -79,4 +79,6 @@ if (catalog) {
     showModal(button.closest('.catalog-card').dataset.entry, '遊戲入口示意，正式連結待提供。');
   });
   applySearch();
+  const initialSection = groups.find(group => '#' + group.id === location.hash);
+  if (initialSection) initialSection.scrollIntoView({block:'start', behavior:'instant'});
 }
