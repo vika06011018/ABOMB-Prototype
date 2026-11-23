@@ -1,0 +1,36 @@
+/* BOMB visual reference alignment V4: dedicated desktop promo surfaces. */
+@media (min-width:851px) {
+ #download .promo,#referral .promo{position:relative;box-sizing:border-box;aspect-ratio:960/165!important;height:auto!important;overflow:hidden!important;isolation:isolate;padding-top:1.4%!important;padding-bottom:1.4%!important;border:2px solid #ffbd6d!important;border-radius:clamp(18px,1.8vw,28px)!important;box-shadow:0 0 0 1px #ff53de,0 0 15px #e526d2a1,inset 0 0 12px #ff6ba990!important;}
+ #download .promo{background:linear-gradient(90deg,#30051950,#25021a45),url('assets/app_ambient.webp') center/100% 100% no-repeat!important;gap:1.15%!important;padding-left:3.6%!important;padding-right:2.8%!important;}
+ #referral .promo{background:linear-gradient(90deg,#31041b50,#21021d50),url('assets/refer_ambient.webp') center/100% 100% no-repeat!important;gap:1.2%!important;padding-left:1.5%!important;padding-right:2.5%!important;}
+ #download .promo::before,#referral .promo::before{content:''!important;position:absolute!important;inset:0!important;transform:none!important;width:auto!important;height:auto!important;border:0!important;border-radius:inherit!important;z-index:0!important;pointer-events:none!important;background:radial-gradient(ellipse at 0% 2%,#ffa12c9a,transparent 12%),radial-gradient(ellipse at 98% 100%,#ff9c438a,transparent 17%),radial-gradient(ellipse at 65% 103%,#f745d55a,transparent 35%)!important;box-shadow:none!important;}
+ #download .promo::after,#referral .promo::after{content:''!important;position:absolute!important;inset:2px!important;transform:none!important;width:auto!important;height:auto!important;z-index:0!important;border-radius:inherit!important;pointer-events:none!important;border:1px solid #ffdb9773!important;box-shadow:inset 0 5px 9px #ff8f4854,inset 0 -6px 12px #ff4ab951!important;}
+ #download .art-logo{width:12%!important;height:85%!important;object-fit:contain!important;flex:none!important;background:none!important;border:0!important;box-shadow:none!important;filter:drop-shadow(0 0 9px #f126caaa)!important;}
+ #download .promo-copy{flex:1 1 auto!important;min-width:0!important;padding-left:.5%!important;}
+ #download .promo h3{font-size:clamp(23px,2.1vw,37px)!important;line-height:1.12!important;margin:0 0 .24em!important;white-space:nowrap!important;}
+ #download .promo p{font-size:clamp(12px,.98vw,18px)!important;margin:0 0 .7em!important;line-height:1.3!important;}
+ #download .btns{flex-wrap:nowrap!important;gap:14px!important;}
+ #download .btns .gold-btn{font-size:clamp(13px,1.05vw,19px)!important;padding:7px 18px!important;white-space:nowrap!important;}
+ #download .phone-art{width:27%!important;height:126%!important;min-width:0!important;align-self:flex-end!important;margin:0 -1% -3% 0!important;overflow:visible!important;flex:none!important;}
+ #download .phones{width:100%!important;height:100%!important;object-fit:contain!important;mix-blend-mode:normal!important;mask-image:none!important;}
+ #download .download-icon{width:6%!important;height:34%!important;margin:0 0 0 1%!important;display:block!important;}
+ #referral .gift-art{width:18%!important;height:122%!important;flex:none!important;margin-left:-1%!important;margin-right:.5%!important;}
+ #referral .gift{height:100%!important;width:100%!important;object-fit:contain!important;mix-blend-mode:normal!important;mask-image:none!important;}
+ #referral .promo-copy{flex:1.1 1 0!important;min-width:0!important;}
+ #referral .promo h3{font-size:clamp(20px,1.73vw,31px)!important;line-height:1.15!important;margin:0 0 .3em!important;}
+ #referral .promo p{font-size:clamp(11px,.9vw,17px)!important;line-height:1.5!important;margin:0 0 .6em!important;}
+ #referral .promo-copy .gold-btn{font-size:clamp(13px,.94vw,18px)!important;padding:7px 24px!important;}
+ #referral .steps{flex:1.06 1 0!important;min-width:0!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-evenly!important;gap:2%!important;height:82%!important;padding-left:2%!important;border-left:1px solid #ffc16890!important;}
+ #referral .step{flex:1 1 0!important;display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:3px!important;position:relative!important;min-width:0!important;}
+ #referral .step-icon{width:clamp(46px,4vw,70px)!important;height:clamp(46px,4vw,70px)!important;display:grid!important;place-items:center!important;border:2px solid #fcd37e!important;border-radius:50%!important;background:radial-gradient(circle at 36% 12%,#ffcc78,#8c3909 49%,#4d0b16 88%)!important;box-shadow:inset 0 1px 6px #ffbe76,0 0 12px #ff8a2c91!important;}
+ #referral .step-icon svg{width:52%!important;height:52%!important;color:#ffe28c!important;}
+ #referral .step b{display:flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;gap:4px!important;font-size:clamp(11px,.89vw,16px)!important;line-height:1.2!important;}
+ #referral .step b em{flex:none!important;display:inline-grid!important;place-items:center!important;float:none!important;font-style:normal!important;font-size:clamp(12px,.9vw,17px)!important;width:clamp(23px,1.8vw,31px)!important;height:clamp(23px,1.8vw,31px)!important;border-radius:50%!important;background:linear-gradient(#fffca3,#ffc91b 65%,#b97300)!important;border:1px solid #ffeba4!important;color:#4b1a07!important;text-shadow:none!important;box-shadow:0 0 7px #ffb12480!important;}
+ #referral .step small{font-size:clamp(10px,.77vw,14px)!important;line-height:1.3!important;}
+ #referral .step:not(:last-child)::after{top:25%!important;right:-9%!important;font-size:clamp(15px,1.1vw,21px)!important;}
+}
+/* Mobile retains a dedicated layout, without desktop size overrides. Remove diagonal strokes. */
+@media (max-width:850px) {
+ #download .promo::before,#referral .promo::before{transform:none!important;width:auto!important;height:auto!important;inset:0!important;border:none!important;border-radius:inherit!important;box-shadow:none!important;background:radial-gradient(ellipse at 5% 0%,#ff9b4863,transparent 35%),radial-gradient(ellipse at 88% 95%,#ff42cb8c,transparent 40%)!important;}
+ #download .promo,#referral .promo{background:radial-gradient(ellipse at 84% 90%,#83225b,#22051e 70%)!important;}
+}

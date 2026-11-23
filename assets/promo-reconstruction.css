@@ -1,0 +1,60 @@
+/* Reference-directed promo reconstruction — desktop 1600px & separate mobile layout.
+   Only affects APP download / referral + their heading icons. */
+#download .promo,#referral .promo{position:relative;isolation:isolate;overflow:hidden!important;border:2px solid #ffc466;box-shadow:0 0 0 1px #ff70e8,0 0 16px #ee23c9a8,inset 0 0 16px #ff71b35c;background:radial-gradient(ellipse at 60% -15%,#76264b 0%,transparent 44%),radial-gradient(ellipse at 97% 85%,#84124b 0%,transparent 48%),linear-gradient(100deg,#2f0923 0%,#26051f 48%,#38072c 100%);}
+#download .promo:before,#referral .promo:before{content:"";position:absolute;z-index:0;inset:0;pointer-events:none;background:radial-gradient(ellipse at 13% -10%,#ffa538b5,transparent 20%),radial-gradient(ellipse at 85% 108%,#ff69b577,transparent 34%),linear-gradient(169deg,transparent 76%,#ec7a194d 78%,#ffce6190 78.4%,transparent 79.1%);opacity:.9;}
+#download .promo:after,#referral .promo:after{content:"";z-index:0;position:absolute;pointer-events:none;inset:1px;border-radius:inherit;border:1px solid #f7a25767;box-shadow:inset 0 0 16px #ff7c2070;clip-path:none;}
+#download .promo-copy,#referral .promo-copy,#download .art-logo,#download .phone-art,#referral .gift-art,#referral .steps,#download .download-icon{position:relative;z-index:2;}
+#download .phone-art,#referral .gift-art{overflow:visible;}
+#download .phones,#referral .gift{filter:drop-shadow(0 6px 9px #a5147b95) drop-shadow(0 0 7px #ff8c33a0);}
+#download .art-logo{filter:drop-shadow(0 0 10px #fc56d3aa);}
+#download .download-icon svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 6px #ffb424) drop-shadow(0 0 12px #f9a816);}
+#download .download-icon{color:#ffc83d;}
+#download .gold-btn,#referral .gold-btn{background:linear-gradient(180deg,#fffcd1 0%,#fff69b 24%,#ffd22d 58%,#e9a400 100%);border:1px solid #fff2b2;box-shadow:inset 0 1px 2px #fff,0 2px 8px #e998168c;color:#251200;font-weight:900;}
+#download .os-icon{font-weight:900;margin-right:.3em;}
+#download .android-icon{font-size:1.15em;}
+#download .apple-icon{font-size:1.1em;}
+#referral .steps{border-left:1px solid #faba637e;}
+#referral .step{position:relative;}
+#referral .step-icon{color:#ffdd72;display:grid;place-items:center;background:radial-gradient(circle at 30% 10%,#bd7731,#713213 56%,#360a15 100%);border:2px solid #ffd177;box-shadow:inset 0 0 8px #ffae3687,0 0 10px #ffa626a0;}
+#referral .step-icon svg{width:52%;height:52%;filter:drop-shadow(0 2px 2px #240007);}
+#referral .step b em{background:linear-gradient(180deg,#fffcc6,#ffcf26 70%,#de8a00);color:#260e04;box-shadow:0 0 5px #ffba32;}
+@media(min-width:851px){
+  #download .promo,#referral .promo{aspect-ratio:960/165!important;height:auto!important;padding-top:1.6%;padding-bottom:1.6%;border-radius:clamp(18px,1.9vw,30px);}
+  #download .promo{gap:1.8%;padding-left:3.5%;padding-right:2.5%;}
+  #download .art-logo{width:12.6%;height:83%;max-height:none;}
+  #download .promo-copy{flex:1.1 1 auto;min-width:0;}
+  #download .promo h3{font-size:clamp(24px,2.25vw,39px);margin-bottom:.2em;}
+  #download .promo p{font-size:clamp(12px,1.1vw,19px);margin-bottom:.65em;}
+  #download .phone-art{width:26%;height:116%;margin:0 -1% -1% auto;align-self:flex-end;}
+  #download .download-icon{width:5.5%;height:35%;margin:0 0 0 1%;}
+  #referral .promo{gap:1.2%;padding-left:1.4%;padding-right:2%;}
+  #referral .gift-art{width:17.2%;height:118%;margin-left:-1%;}
+  #referral .promo-copy{flex:1.05 1 0;}
+  #referral .steps{flex:1.07 1 0;min-width:0;display:flex;flex-direction:row;align-items:center;justify-content:space-around;height:80%;padding-left:2.8%;gap:1%;}
+  #referral .step{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;min-width:0;}
+  #referral .step:not(:last-child):after{content:'➜';position:absolute;top:19%;right:-6%;font-size:1.35em;color:#ffca27;text-shadow:0 0 7px #ffad26;}
+  #referral .step-icon{width:clamp(41px,4.1vw,68px);height:clamp(41px,4.1vw,68px);font-size:initial;}
+  #referral .step b{white-space:nowrap;font-size:clamp(11px,.95vw,17px)}
+  #referral .step small{font-size:clamp(10px,.8vw,14px)}
+  #referral .promo h3{font-size:clamp(21px,1.9vw,32px)}
+}
+@media(max-width:850px){#referral .step-icon{display:none;}}
+@media(max-width:600px){
+  #download .promo,#referral .promo{aspect-ratio:875/184!important;height:auto!important;padding:2% 3%;border-radius:clamp(13px,3vw,19px);}
+  #download .promo{display:flex;gap:1%;}
+  #download .promo-copy{flex:1 1 0;}
+  #download .promo h3{font-size:clamp(13px,3.5vw,22px);}
+  #download .promo p{font-size:clamp(7px,1.8vw,12px);}
+  #download .phone-art{height:125%;width:38%;margin-right:-2%;margin-bottom:-3%;}
+  #download .download-icon{display:none;}
+  #referral .promo{display:grid;grid-template-columns:24% 42% minmax(0,1fr);gap:1%;}
+  #referral .gift-art{grid-column:1;width:100%;height:112%;margin-left:-5%;}
+  #referral .promo-copy{grid-column:2;}
+  #referral .steps{grid-column:3;display:flex;flex-direction:column;gap:2%;height:87%;justify-content:space-around;padding-left:4%;border-left:1px solid #ffaa6b80;}
+  #referral .step{display:block;text-align:left;}
+  #referral .step b{font-size:clamp(7px,1.7vw,11px);}
+  #referral .step small{font-size:clamp(6px,1.4vw,9px);}
+  #referral .step-icon{display:none;}
+}
+
+#download .os-icon{display:inline-flex;vertical-align:middle;align-items:center;justify-content:center;} #download .os-icon svg{display:block;width:1.1em;height:1.1em;}
