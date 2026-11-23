@@ -3,7 +3,6 @@
 .desktop-games-route .floating:has(#floatToggle.is-collapsed) { bottom:84px; }
 .desktop-games-route .floating[style*="top:"] { bottom:auto; }
 
-.desktop-games-route .main.site-width { width:min(1291px,calc(100% - clamp(180px,17vw,360px))); }
 
 #desktop-games { margin-top:24px; }
 .desktop-game-section { scroll-margin-top:var(--desktop-games-offset, 90px); }

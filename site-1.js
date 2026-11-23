@@ -1,6 +1,5 @@
 const originalFeaturedArt = {
-  baccarat: "assets/desktop-exclusive-baccarat.webp",
-  pachinko: "assets/desktop-exclusive-slot.webp"
+  baccarat: "assets/desktop-exclusive-baccarat.webp"
 };
 
 'use strict';
@@ -8,14 +7,15 @@ const originalFeaturedArt = {
 const $ = (selector) => document.querySelector(selector);
 const games = [
   ['baccarat', 'Bomb 真人百家', '今天 14:26', '視訊'],
-  ['pachinko', '柏青哥 SLOT', '今天 12:03', '電子'],
+  ['pachinko', '小丑2', '今天 12:03', '電子'],
   ['fish', '黃金捕魚', '昨天 22:37', '捕魚'],
   ['slots', '經典老虎機', '昨天 19:15', '電子'],
-  ['sports', '體育賽事', '昨天 16:40', '體育'],
+  ['sports', '足球', '昨天 16:40', '體育'],
   ['lottery', '六合彩', '01/10 23:06', '彩票'],
-  ['mahjong', '麻將對戰', '01/10 20:48', '棋牌'],
+  ['mahjong', '正宗十六張麻將', '01/10 20:48', '棋牌'],
   ['poker', '德州撲克', '01/09 21:32', '棋牌'],
   ['shark', '電子捕魚', '01/09 18:17', '捕魚'],
+  ['thor', '雷神之鎚', '', '電子'],
   ['seth', '戰神賽特', '', '電子']
 ].map(([id, name, time, category]) => ({id, name, time, category}));
 
@@ -32,12 +32,9 @@ function savePreference(key, value) {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* Private or file browsing may disable storage. */ }
 }
 
-const favoritesKey = 'bomb-demo-favorites';
-const defaultFavorites = ['slots', 'fish', 'baccarat', 'sports', 'mahjong', 'poker'];
-function desktopHomeDefaults() {
-  return matchMedia('(min-width:900px)').matches ? ['baccarat','seth','fish','mahjong','poker','shark'] : defaultFavorites;
-}
-let favorites = [...new Set(readPreference(favoritesKey, desktopHomeDefaults(), Array.isArray))]
+const favoritesKey = 'bomb-demo-favorites-featured-six';
+const homeGameIds = ['thor','seth','mahjong','sports','baccarat','pachinko'];
+let favorites = [...new Set(readPreference(favoritesKey, homeGameIds, Array.isArray))]
   .filter((id) => games.some((game) => game.id === id));
 
 const labels = [
@@ -69,6 +66,20 @@ function translate(label) {
   return languages[locale][1][labels.indexOf(label)] ?? label;
 }
 
+function homeProvider(game) {
+  if (game.id === 'baccarat' || game.id === 'pachinko') {
+    return {name:'BOMB', logo:`assets/catalog/logo-${game.id === 'baccarat' ? 0 : 1}.webp`};
+  }
+  if (game.id === 'seth') return {name:'ATG', logo:'assets/provider-marks/atg-official.png'};
+  const providers = {
+    thor: ['RSG', 'rsg-official.svg'],
+    mahjong: ['高登棋牌', 'provider-20.png'],
+    sports: ['SUPER 體育', 'super-official.png']
+  };
+  const mark = providers[game.id];
+  return mark ? {name:mark[0], logo:`assets/provider-marks/${mark[1]}`} : null;
+}
+
 function createCard(game, isFavorite) {
   const card = document.createElement('button');
   card.type = 'button';
@@ -77,13 +88,33 @@ function createCard(game, isFavorite) {
     ? `<span class="goldbtn">${translate('快速進入')} ›</span>`
     : '<span class="play-dot" aria-hidden="true">▶</span>';
   const art = originalFeaturedArt[game.id] ?? `assets/home-games/${game.id}.webp`;
-  card.innerHTML = `<picture><img class="game-art" src="${art}" alt=""></picture><span class="game-info"><strong>${game.name}</strong></span>${action}`;
+  const homeMark = homeProvider(game);
+  card.innerHTML = `<picture><img class="game-art" src="${art}" alt=""></picture><span class="game-info"><strong>${homeMark ? `<img class="home-provider-image" src="${homeMark.logo}" alt="${homeMark.name}">` : ''}<span>${game.name}</span></strong></span>${action}`;
   if (isFavorite) {
     card.dataset.cover = game.id;
     card.style.setProperty('--cover', `url("${art}")`);
   }
   card.addEventListener('click', () => openGame(game));
-  return card;
+  const wrap = document.createElement('div');
+  wrap.className = 'home-card-wrap';
+  const heart = document.createElement('button');
+  heart.type = 'button';
+  heart.className = 'home-heart';
+  const saved = favorites.includes(game.id);
+  heart.setAttribute('aria-pressed', String(saved));
+  heart.setAttribute('aria-label', (saved ? '取消收藏 ' : '收藏 ') + game.name);
+  heart.textContent = saved ? '♥' : '♡';
+  heart.addEventListener('click', () => {
+    favorites = saved ? favorites.filter(id => id !== game.id) : [game.id, ...favorites];
+    savePreference(favoritesKey, favorites);
+    renderRecent();
+    renderFavorites();
+  });
+  const play = document.createElement('span');
+  play.className = 'home-play';
+  play.textContent = translate('立即遊玩');
+  wrap.append(card, heart, play);
+  return wrap;
 }
 
 function renderFavorites() {
@@ -97,13 +128,10 @@ function renderFavorites() {
   }
 }
 
-const desktopHome = matchMedia('(min-width:900px)');
 function renderRecent() {
-  const ids = ['baccarat','seth','fish','slots','sports','lottery'];
-  const cards = desktopHome.matches ? ids.map(id => games.find(game => game.id === id)) : games.filter(game => game.id !== 'seth');
+  const cards = homeGameIds.map(id => games.find(game => game.id === id));
   $('#recentGrid')?.replaceChildren(...cards.map(game => createCard(game, false)));
 }
-desktopHome.addEventListener('change', () => { renderRecent(); renderFavorites(); });
 function setLanguage(language) {
   locale = language;
   document.documentElement.lang = languages[locale][0];
@@ -155,10 +183,19 @@ function openGame(game) {
     run: () => {
       favorites = isFavorite ? favorites.filter((id) => id !== game.id) : [game.id, ...favorites];
       savePreference(favoritesKey, favorites);
+      renderRecent();
       renderFavorites();
       openGame(game);
     }
   });
+}
+
+function openHomeGameList(title, ids) {
+  const items = ids.map(id => games.find(game => game.id === id)).filter(Boolean);
+  showModal(translate(title), items.length ? '選擇遊戲可查看入口。' : '目前沒有收藏的遊戲。', items.map(game => [
+    game.name,
+    () => openGame(game)
+  ]));
 }
 
 function openCatalog(category) {
@@ -206,7 +243,8 @@ if (isCatalogPage) {
 const actions = {
   home: () => (isCatalogPage || document.querySelector('#desktop-games')) ? location.assign('index.html') : window.scrollTo({top:0, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}),
   all: () => { if (!isCatalogPage) location.assign("all-games.html"); },
-  recent: () => openCatalog(),
+  recent: () => openHomeGameList('玩過', homeGameIds),
+  favorites: () => openHomeGameList('收藏', favorites),
   referral: () => showModal('推薦好友', '依序取得推薦資訊、分享給好友並確認活動條件。', [
     ['1　取得推薦資訊', placeholder('取得推薦資訊', '正式推薦連結等待會員服務提供。')],
     ['2　分享給好友', placeholder('分享給好友', '可於取得正式連結後傳送給好友。')],
@@ -275,17 +313,7 @@ document.addEventListener('keydown', (event) => {
   activeMenu?.[0].focus();
 });
 
-$('#floatToggle').addEventListener('click', (event) => {
-  const button = event.currentTarget;
-  const actionsPanel = $('#floatActions');
-  actionsPanel.hidden = !actionsPanel.hidden;
-  button.setAttribute('aria-expanded', String(!actionsPanel.hidden));
-  button.setAttribute('aria-label', actionsPanel.hidden ? '展開工具列' : '收合工具列');
-  button.classList.toggle('is-collapsed', actionsPanel.hidden);
-  button.innerHTML = actionsPanel.hidden
-    ? '<img src="assets/desktop-home/gift.webp" alt="" aria-hidden="true" class="float-gift-icon">'
-    : '−';
-});
+
 
 const hero = $('#hero');
 const slideCopy = [

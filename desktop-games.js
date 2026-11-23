@@ -64,8 +64,8 @@
           <div class="desktop-game-grid">${categoryGroups[group][1].map((entry, item) => card(group, item, entry)).join('')}</div>
         </section>`;
       }).join('');
-      sections = [...lobby.querySelectorAll('section')];
     }
+    sections = ids.map(id => lobby.querySelector('#games-' + id));
 
     document.documentElement.classList.add('desktop-games-route');
     document.title = '遊戲大廳｜BOMB 娛樂平台';
@@ -86,8 +86,9 @@
     } else if (!isLobby) {
       location.assign('desktop-games.html' + (index ? '#games-' + ids[index] : ''));
     } else {
+      activate(index);
       history.replaceState(null, '', '#games-' + ids[index]);
-      sections[index].scrollIntoView({block:'start', behavior:behavior()});
+      sections[index].scrollIntoView({block:'start', behavior:'instant'});
     }
   });
 
