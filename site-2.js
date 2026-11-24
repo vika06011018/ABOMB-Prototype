@@ -1,13 +1,3 @@
-const toolsToggle = document.querySelector('.float-tools-toggle');
-toolsToggle?.addEventListener('click', () => {
-  const panel = document.querySelector('#floatActions');
-  panel.hidden = !panel.hidden;
-  toolsToggle.setAttribute('aria-expanded', String(!panel.hidden));
-  toolsToggle.setAttribute('aria-label', panel.hidden ? '展開工具列' : '收合工具列');
-  toolsToggle.textContent = panel.hidden ? '＋' : '−';
-  window.dispatchEvent(new Event('resize'));
-});
-
 document.getElementById('floatToggle')?.addEventListener('click', () => {
   if (!location.pathname.endsWith('/deposit.html')) location.assign('deposit.html');
 });
