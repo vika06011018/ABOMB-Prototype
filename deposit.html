@@ -641,28 +641,29 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 </nav></details>
 <div id="depositView"><h1 id="deposit-title" tabindex="-1">儲值</h1>
 <form id="depositForm" autocomplete="off">
-<fieldset><legend>選擇儲值方式</legend><div class="deposit-channels"><label class="deposit-tile"><input type="radio" name="channel" value="銀行轉帳-09" checked><img class="deposit-icon" src="assets/deposit/bank.webp" alt="" width="112" height="76"><strong>銀行轉帳-09</strong></label>
-<label class="deposit-tile"><input type="radio" name="channel" value="銀行轉帳-14"><img class="deposit-icon" src="assets/deposit/bank.webp" alt="" width="112" height="76"><strong>銀行轉帳-14</strong></label>
+<fieldset><legend>選擇儲值方式</legend><div class="deposit-channels">
+<label class="deposit-tile"><input type="radio" name="channel" value="銀行轉帳-00" data-binding-required><img class="deposit-icon" src="assets/deposit/bank.webp" alt="" width="112" height="76"><strong>銀行轉帳-00</strong></label>
 <label class="deposit-tile"><input type="radio" name="channel" value="銀行轉帳-03"><img class="deposit-icon" src="assets/deposit/bank.webp" alt="" width="112" height="76"><strong>銀行轉帳-03</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="銀行轉帳-09" checked><img class="deposit-icon" src="assets/deposit/bank.webp" alt="" width="112" height="76"><strong>銀行轉帳-09</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="銀行轉帳-14"><img class="deposit-icon" src="assets/deposit/bank.webp" alt="" width="112" height="76"><strong>銀行轉帳-14</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="小額轉帳-00" data-binding-required><img class="deposit-icon" src="assets/deposit/transfer.webp" alt="" width="112" height="76"><strong>小額轉帳-00</strong></label>
 <label class="deposit-tile"><input type="radio" name="channel" value="小額轉帳-01"><img class="deposit-icon" src="assets/deposit/transfer.webp" alt="" width="112" height="76"><strong>小額轉帳-01</strong></label>
-<label class="deposit-tile"><input type="radio" name="channel" value="信用卡通道-05"><img class="deposit-icon" src="assets/deposit/card.webp" alt="" width="112" height="76"><strong>信用卡通道-05</strong></label>
-<label class="deposit-tile"><input type="radio" name="channel" value="信用卡通道-04"><img class="deposit-icon" src="assets/deposit/card.webp" alt="" width="112" height="76"><strong>信用卡通道-04</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="信用卡通道-00" data-binding-required><img class="deposit-icon" src="assets/deposit/card.webp" alt="" width="112" height="76"><strong>信用卡通道-00</strong></label>
 <label class="deposit-tile"><input type="radio" name="channel" value="信用卡通道-01"><img class="deposit-icon" src="assets/deposit/card.webp" alt="" width="112" height="76"><strong>信用卡通道-01</strong></label>
 <label class="deposit-tile"><input type="radio" name="channel" value="信用卡通道-02"><img class="deposit-icon" src="assets/deposit/card.webp" alt="" width="112" height="76"><strong>信用卡通道-02</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="信用卡通道-04"><img class="deposit-icon" src="assets/deposit/card.webp" alt="" width="112" height="76"><strong>信用卡通道-04</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="信用卡通道-05"><img class="deposit-icon" src="assets/deposit/card.webp" alt="" width="112" height="76"><strong>信用卡通道-05</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="Apple Pay / Google Pay 專用通道-00" data-binding-required><img class="deposit-icon" src="assets/deposit/mobile-pay.webp" alt="" width="112" height="76"><strong>Apple Pay / Google Pay 專用通道-00</strong></label>
 <label class="deposit-tile"><input type="radio" name="channel" value="Apple Pay / Google Pay 專用通道-01"><img class="deposit-icon" src="assets/deposit/mobile-pay.webp" alt="" width="112" height="76"><strong>Apple Pay / Google Pay 專用通道-01</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="支付寶信用卡-00" data-binding-required><img class="deposit-icon" src="assets/deposit/alipay.webp" alt="" width="112" height="76"><strong>支付寶信用卡-00</strong></label>
 <label class="deposit-tile"><input type="radio" name="channel" value="支付寶信用卡-01"><img class="deposit-icon" src="assets/deposit/alipay.webp" alt="" width="112" height="76"><strong>支付寶信用卡-01</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="USDT轉帳-00" data-binding-required><img class="deposit-icon" src="assets/deposit/usdt.webp" alt="" width="112" height="76"><strong>USDT轉帳-00</strong></label>
 <label class="deposit-tile"><input type="radio" name="channel" value="USDT轉帳-01"><img class="deposit-icon" src="assets/deposit/usdt.webp" alt="" width="112" height="76"><strong>USDT轉帳-01</strong></label>
 <label class="deposit-tile"><input type="radio" name="channel" value="USDT轉帳-02"><img class="deposit-icon" src="assets/deposit/usdt.webp" alt="" width="112" height="76"><strong>USDT轉帳-02</strong></label>
-<label class="deposit-tile"><input type="radio" name="channel" value="711超商專用代碼-04"><img class="deposit-icon" src="assets/deposit/7-eleven.webp" alt="" width="112" height="76"><strong>711超商專用代碼-04</strong></label>
-<label class="deposit-tile"><input type="radio" name="channel" value="全家超商專用代碼-02"><img class="deposit-icon" src="assets/deposit/familymart.webp" alt="" width="112" height="76"><strong>全家超商專用代碼-02</strong></label>
-<label class="deposit-tile"><input type="radio" name="channel" value="銀行轉帳-00" data-binding-required><img class="deposit-icon" src="assets/deposit/bank.webp" alt="" width="112" height="76"><strong>銀行轉帳-00</strong></label>
-<label class="deposit-tile"><input type="radio" name="channel" value="小額轉帳-00" data-binding-required><img class="deposit-icon" src="assets/deposit/transfer.webp" alt="" width="112" height="76"><strong>小額轉帳-00</strong></label>
-<label class="deposit-tile"><input type="radio" name="channel" value="信用卡通道-00" data-binding-required><img class="deposit-icon" src="assets/deposit/card.webp" alt="" width="112" height="76"><strong>信用卡通道-00</strong></label>
-<label class="deposit-tile"><input type="radio" name="channel" value="Apple Pay / Google Pay 專用通道-00" data-binding-required><img class="deposit-icon" src="assets/deposit/mobile-pay.webp" alt="" width="112" height="76"><strong>Apple Pay / Google Pay 專用通道-00</strong></label>
-<label class="deposit-tile"><input type="radio" name="channel" value="支付寶信用卡-00" data-binding-required><img class="deposit-icon" src="assets/deposit/alipay.webp" alt="" width="112" height="76"><strong>支付寶信用卡-00</strong></label>
-<label class="deposit-tile"><input type="radio" name="channel" value="USDT轉帳-00" data-binding-required><img class="deposit-icon" src="assets/deposit/usdt.webp" alt="" width="112" height="76"><strong>USDT轉帳-00</strong></label>
 <label class="deposit-tile"><input type="radio" name="channel" value="711超商專用代碼-00" data-binding-required><img class="deposit-icon" src="assets/deposit/7-eleven.webp" alt="" width="112" height="76"><strong>711超商專用代碼-00</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="711超商專用代碼-04"><img class="deposit-icon" src="assets/deposit/7-eleven.webp" alt="" width="112" height="76"><strong>711超商專用代碼-04</strong></label>
 <label class="deposit-tile"><input type="radio" name="channel" value="全家超商專用代碼-00" data-binding-required><img class="deposit-icon" src="assets/deposit/familymart.webp" alt="" width="112" height="76"><strong>全家超商專用代碼-00</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="全家超商專用代碼-02"><img class="deposit-icon" src="assets/deposit/familymart.webp" alt="" width="112" height="76"><strong>全家超商專用代碼-02</strong></label>
 </div></fieldset>
 <div id="depositUnbound" class="deposit-unbound" hidden>
   <svg width="142" height="112" viewBox="0 0 142 112" fill="none" aria-hidden="true">
