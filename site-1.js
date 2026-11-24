@@ -205,7 +205,7 @@ function openGame(game) {
 
 function openHomeGameList(title, ids, isRecent = false) {
   const items = ids.map(id => games.find(game => game.id === id)).filter(Boolean);
-  showModal(translate(title), isRecent ? '近 7 天遊戲過' : (items.length ? '' : '目前沒有收藏的遊戲。'));
+  showModal(translate(title), isRecent ? '近7天遊戲過' : (items.length ? '' : '目前沒有收藏的遊戲。'));
   if (!items.length) return;
 
   const grid = document.createElement('div');
@@ -221,7 +221,7 @@ function openHomeGameList(title, ids, isRecent = false) {
       <div class="home-modal-card-copy">
         ${mark ? `<img class="home-modal-logo" src="${mark.logo}" alt="">` : ''}
         <strong>${name}</strong>
-        <button type="button" aria-label="${provider ? '前往館別' : '立即遊戲'} ${name}">${provider ? '前往館別' : '立即遊戲'} ›</button>
+        <button type="button" aria-label="立即遊戲 ${name}">立即遊戲 ›</button>
       </div>`;
     card.querySelector('button').addEventListener('click', () => {
       if (provider) openRecentProvider(provider);
