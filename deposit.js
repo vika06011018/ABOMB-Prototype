@@ -49,6 +49,8 @@ const accountViews = {
   '#bind-bank-card': [bindingView, 'binding', '綁定銀行卡'],
   '#transfer': [document.querySelector('#transferView'), 'transfer', '轉點'],
   '#withdraw': [document.querySelector('#withdrawView'), 'withdraw', '託售'],
+  '#announcements': [document.querySelector('#announcementsView'), 'announcements', ''],
+  '#messages': [document.querySelector('#messagesView'), 'messages', ''],
   '#personal-center': [document.querySelector('#personalView'), 'personal', ''],
 };
 const accountMenu = document.querySelector('.deposit-mobile-menu');
@@ -65,7 +67,7 @@ function updateAccountView(focusHeading) {
     if (link.dataset.depositView === key) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   }
-  const personal = key === 'personal';
+  const personal = ['personal','announcements','messages'].includes(key);
   accountMenu.hidden = personal;
   menuSummary.textContent = label ? `帳務中心 · ${label}` : '帳務中心';
   memberTab.classList.toggle('active', personal);

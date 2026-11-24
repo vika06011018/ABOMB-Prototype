@@ -95,3 +95,15 @@
   .desktop-personal-title { display:none; }
   .mobile-personal-title { display:inline; }
 }
+
+.inbox-filters { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+.inbox-filters button { padding:8px 13px; border:1px solid #805064; border-radius:8px; background:#2f162a; color:#ffe2a0; cursor:pointer; }
+.inbox-filters [aria-pressed="true"] { background:#eac477; color:#231225; border-color:#eac477; font-weight:800; }
+.inbox-item { margin-bottom:8px; border:1px solid #664054; border-radius:10px; background:#270e26; }
+.inbox-item summary { padding:12px; color:#fff1e5; cursor:pointer; }
+.inbox-item p { margin:0; padding:0 12px 12px; color:#e5d3dc; }
+@media (min-width:900px) {
+  .deposit-layout .personal-links .personal-mobile-only { display:none; }
+}
+
+@media (max-width:899px) { .deposit-layout .personal-links .personal-desktop-only { display:none; } }

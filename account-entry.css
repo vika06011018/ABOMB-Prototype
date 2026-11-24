@@ -15,3 +15,14 @@
   #walletBtn .wallet-account-mobile { display:none; }
   .top .top-actions { gap:clamp(6px,1vw,16px); }
 }
+
+.inbox-drop { display:contents; }
+.inbox-menu[hidden], .inbox-dot[hidden], .inbox-sr[hidden] { display:none !important; }
+.inbox-dot { display:inline-block; flex:none; width:7px; height:7px; margin-inline-start:7px; border-radius:50%; background:#ff3757; vertical-align:middle; }
+.inbox-sr { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+@media (min-width:900px) {
+  .top-actions .inbox-drop { display:block; position:relative; }
+  .top-actions #inboxBell .notification-bell { width:32px; height:32px; }
+  .inbox-menu a { display:block; color:#fff5ec; padding:9px 12px; border-radius:6px; text-decoration:none; white-space:nowrap; }
+  .inbox-menu a:is(:hover,:focus-visible) { background:#503043; }
+}
