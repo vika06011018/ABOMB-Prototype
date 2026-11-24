@@ -274,6 +274,14 @@ if (isCatalogPage) {
 
 const isDepositPage = document.body.classList.contains('deposit-page');
 
+function openAccountView(hash = '#deposit-title') {
+  if (isDepositPage) {
+    location.hash = hash;
+  } else {
+    location.assign(hash === '#deposit-title' ? 'deposit.html' : 'deposit.html' + hash);
+  }
+}
+
 const actions = {
   home: () => (isDepositPage || isCatalogPage || document.querySelector('#desktop-games')) ? location.assign('index.html') : window.scrollTo({top:0, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}),
   all: () => { if (!isCatalogPage) location.assign("all-games.html"); },
@@ -284,8 +292,10 @@ const actions = {
     ['2　分享給好友', placeholder('分享給好友', '可於取得正式連結後傳送給好友。')],
     ['3　確認活動條件', placeholder('確認活動條件', '獎勵及資格等待活動公告。')]
   ]),
-  deposit: () => { if (!isDepositPage) location.assign('deposit.html'); },
-  withdraw: placeholder('主錢包｜託售','正式託售服務等待串接。'),
+  deposit: () => openAccountView(),
+  withdraw: () => openAccountView('#withdraw'),
+  transfer: () => openAccountView('#transfer'),
+  personal: () => openAccountView('#personal-center'),
   promo: () => showModal('優惠活動', '活動內容為原型示範。', announcements.slice(1).map(([title, message]) => [title, () => showModal(title, message)])),
   notifications: () => showModal('通知中心', '未讀通知為原型示範。', [[announcements[0][0], () => showModal(...announcements[0])]]),
   announcements: () => showModal('最新公告', '選擇要閱讀的公告。', announcements.map(([title, message]) => [title, () => showModal(title,message)])),

@@ -6,8 +6,6 @@ const depositView = document.querySelector('#depositView');
 const bindingView = document.querySelector('#depositBindingView');
 const amountFormat = new Intl.NumberFormat('zh-TW');
 
-document.querySelector('.mobile-bottom [data-action="deposit"]').setAttribute('aria-current', 'page');
-
 for (const button of depositForm.querySelectorAll('[data-add]')) {
   button.addEventListener('click', () => {
     depositAmount.value = (depositAmount.valueAsNumber || 0) + Number(button.dataset.add);
@@ -45,24 +43,51 @@ depositForm.addEventListener('reset', () => requestAnimationFrame(updateChannel)
 window.addEventListener('pageshow', updateChannel);
 updateChannel();
 
+
+const accountViews = {
+  '#deposit-title': [depositView, 'deposit', '儲值'],
+  '#bind-bank-card': [bindingView, 'binding', '綁定銀行卡'],
+  '#transfer': [document.querySelector('#transferView'), 'transfer', '轉點'],
+  '#withdraw': [document.querySelector('#withdrawView'), 'withdraw', '託售'],
+  '#personal-center': [document.querySelector('#personalView'), 'personal', ''],
+};
+const accountMenu = document.querySelector('.deposit-mobile-menu');
+const menuSummary = document.querySelector('#accountMenuSummary');
+const accountLinks = document.querySelectorAll('.deposit-layout nav [data-deposit-view]');
+const dock = document.querySelector('.mobile-bottom');
+const depositTab = dock.querySelector('[data-action="deposit"]');
+const memberTab = dock.querySelector('[data-action="personal"]');
+
 function updateAccountView(focusHeading) {
-  const binding = location.hash === '#bind-bank-card';
-  depositView.hidden = binding;
-  bindingView.hidden = !binding;
-  for (const link of document.querySelectorAll('.deposit-layout nav [data-deposit-view]')) {
-    if (link.dataset.depositView === (binding ? 'binding' : 'deposit')) {
-      link.setAttribute('aria-current', 'page');
-    } else {
-      link.removeAttribute('aria-current');
-    }
+  const [view, key, label] = accountViews[location.hash] ?? accountViews['#deposit-title'];
+  for (const [panel] of Object.values(accountViews)) panel.hidden = panel !== view;
+  for (const link of accountLinks) {
+    if (link.dataset.depositView === key) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
   }
+  const personal = key === 'personal';
+  accountMenu.hidden = personal;
+  menuSummary.textContent = label ? `帳務中心 · ${label}` : '帳務中心';
+  memberTab.classList.toggle('active', personal);
+  depositTab.removeAttribute('aria-current');
+  memberTab.removeAttribute('aria-current');
+  (personal ? memberTab : depositTab).setAttribute('aria-current', 'page');
   if (focusHeading) {
-    document.querySelector('.deposit-mobile-menu').open = false;
-    const heading = (binding ? bindingView : depositView).querySelector('h1');
-    heading.focus({preventScroll:true});
+    accountMenu.open = false;
+    view.querySelector('h1').focus({preventScroll:true});
     window.scrollTo(0, 0);
   }
 }
 
 window.addEventListener('hashchange', () => updateAccountView(true));
 updateAccountView(false);
+
+const transferStatus = document.querySelector('#transferStatus');
+document.querySelector('[data-transfer-action="refresh"]').addEventListener('click', () => {
+  transferStatus.hidden = false;
+  transferStatus.textContent = '館別餘額已重新顯示（示範資料）。';
+});
+document.querySelector('[data-transfer-action="return"]').addEventListener('click', () => {
+  transferStatus.hidden = false;
+  transferStatus.textContent = '目前沒有可轉回的示範點數。';
+});

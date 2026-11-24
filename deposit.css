@@ -54,3 +54,44 @@
 .deposit-unbound { display:grid; justify-items:center; gap:12px; padding:18px 0 30px; }
 .deposit-unbound svg { display:block; max-width:100%; }
 .deposit-bind-button { display:inline-flex; justify-content:center; align-items:center; min-width:160px; min-height:40px; text-decoration:none; }
+
+.transfer-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:14px; }
+.transfer-toolbar p { margin:0 6px 0 0; }
+.transfer-toolbar strong { color:#ffdb8a; }
+.transfer-toolbar button { min-height:36px; padding:5px 12px; white-space:nowrap; }
+#transferStatus { color:#ffdb8a; margin:0 0 10px; }
+.transfer-grid {
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:10px;
+  padding:0;
+  margin:0;
+  list-style:none;
+}
+.transfer-grid li {
+  display:grid;
+  align-content:center;
+  justify-items:center;
+  gap:6px;
+  min-height:108px;
+  padding:8px 5px;
+  border:1px solid #a17a43;
+  border-radius:10px;
+  background:linear-gradient(150deg,#351426,#230c20);
+  text-align:center;
+  overflow-wrap:anywhere;
+}
+.transfer-grid img { width:min(100%,96px); height:40px; object-fit:contain; }
+.transfer-grid strong { font-size:14px; }
+.personal-account { border:1px solid #805064; border-radius:10px; margin:0 0 12px; padding:12px; color:#ffdb8a; }
+.personal-links { display:grid; gap:7px; }
+.deposit-layout .personal-links :is(button,a) { border:1px solid #805064; background:#2f162a; min-height:40px; }
+.mobile-personal-title { display:none; }
+@media (max-width:899px) {
+  .transfer-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; }
+  .transfer-grid li { min-height:96px; }
+  .transfer-grid strong { font-size:12px; }
+  .transfer-grid img { height:33px; }
+  .desktop-personal-title { display:none; }
+  .mobile-personal-title { display:inline; }
+}

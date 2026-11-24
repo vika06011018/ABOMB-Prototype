@@ -1,0 +1,17 @@
+.desktop-account-entry { display:none; }
+#walletMenu.open { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; min-width:220px; }
+#walletMenu p { grid-column:1/-1; }
+#walletMenu button { white-space:nowrap; }
+@media (min-width:900px) {
+  .top-actions .desktop-account-entry {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    color:#fff4ff;
+    text-decoration:none;
+    white-space:nowrap;
+    font-size:13px;
+  }
+  #walletBtn .wallet-account-mobile { display:none; }
+  .top .top-actions { gap:clamp(6px,1vw,16px); }
+}
