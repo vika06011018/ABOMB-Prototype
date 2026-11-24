@@ -873,38 +873,6 @@ img:is([src$="/zg-symbol.png"],[src$="/we.png"],[src$="/gc.png"]) {
   }
 }
 
-@media (min-width: 900px) and (hover: hover) and (pointer: fine) {
-  #recentGrid .home-play,
-  #favoriteGrid .home-play {
-    transform: translate(0, 0);
-    white-space: nowrap;
-    transition: right 240ms ease, bottom 240ms ease, transform 240ms ease, filter 240ms ease;
-  }
-
-  :is(#recentGrid,#favoriteGrid) .home-card-wrap:is(:hover, :has(> button:focus-visible)) .home-play {
-    right: 50%;
-    bottom: 50%;
-    transform: translate(50%, 50%);
-    filter: brightness(1.2);
-  }
-
-  .main #featured .feature-text .goldbtn {
-    transition: left 240ms ease, top 240ms ease, filter 240ms ease;
-  }
-
-  .main #featured .feature:is(:hover, :focus-within) .feature-text .goldbtn {
-    left: 50%;
-    top: 50%;
-    filter: brightness(1.2);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #recentGrid .home-play,
-  #favoriteGrid .home-play,
-  .main #featured .feature-text .goldbtn { transition: none; }
-}
-
 @media (max-width: 899px) {
   #recentGrid .home-play-desktop { display: none; }
 }
