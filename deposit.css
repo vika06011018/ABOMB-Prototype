@@ -1,0 +1,43 @@
+.deposit-page { color-scheme: dark; }
+.deposit-layout { display:grid; grid-template-columns: minmax(160px, 20%) minmax(0, 1fr); gap:clamp(12px,2vw,26px); }
+.deposit-side, .deposit-content { min-width:0; }
+.deposit-side { align-self:start; border:1px solid #664054; border-radius:14px; background:#270e26; padding:14px; }
+.deposit-side > h2 { margin:0 0 12px; color:#ffdb8a; font-size:21px; }
+.deposit-side nav, .deposit-mobile-menu nav { display:grid; gap:4px; }
+.deposit-layout nav :is(button,a) { display:block; padding:9px 12px; text-align:left; border:0; border-radius:8px; background:transparent; color:#fff1e5; text-decoration:none; cursor:pointer; }
+.deposit-layout nav :is(button,a):hover { background:#503043; }
+.deposit-layout nav [aria-current="page"] { background:linear-gradient(100deg,#7e4e2e,#eac477); color:#231225; font-weight:800; }
+.deposit-layout nav h2 { margin:14px 0 5px; padding-top:12px; border-top:1px solid #694153; font-size:17px; color:#ffdb8a; }
+.deposit-content h1 { margin:0 0 14px; color:#ffe2a0; font-size:clamp(24px,3vw,38px); }
+.deposit-mobile-menu { display:none; }
+#depositForm { display:grid; gap:10px; }
+#depositForm fieldset { min-width:0; margin:0 0 4px; padding:0; border:0; }
+#depositForm :is(legend,h2,label[for]) { margin:0; font-size:16px; font-weight:800; color:#ffdb8a; }
+#depositForm legend { margin-bottom:9px; }
+.deposit-channels { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; }
+.deposit-tile { display:grid; align-content:center; justify-items:center; position:relative; min-height:91px; gap:6px; padding:7px 4px; border:1px solid #805064; border-radius:10px; background:linear-gradient(#351429,#240f25); text-align:center; cursor:pointer; overflow-wrap:anywhere; }
+.deposit-tile input { position:absolute; width:1px; height:1px; opacity:0; }
+.deposit-tile > span { font-size:29px; line-height:1.1; }
+.deposit-tile strong { font-size:clamp(12px,1.25vw,14px); line-height:1.25; }
+.deposit-tile:has(input:checked) { border-color:#ffd47b; box-shadow:inset 0 0 12px #f8b65940,0 0 5px #f8b65980; }
+.deposit-tile:has(input:focus-visible) { outline:2px solid #fff2ae; outline-offset:2px; }
+.deposit-quick { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:6px; }
+.deposit-quick button, .deposit-actions button { min-height:40px; border:1px solid #d3a94f; border-radius:9px; background:#2f162a; color:#ffe2a0; cursor:pointer; padding:5px; }
+#depositAmount { width:100%; min-height:42px; padding:8px 12px; border:1px solid #805064; border-radius:8px; background:#291127; color:#fff; font-size:16px; }
+.deposit-notes { padding:14px; border:1px solid #664054; border-radius:12px; background:#270e26; color:#f3e6e8; font-size:14px; line-height:1.55; }
+.deposit-notes ol { margin:7px 0 8px; padding-inline-start:1.5em; }
+.deposit-notes p { margin:0; color:#ffd981; font-weight:700; }
+.deposit-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); width:min(100%,340px); gap:12px; margin:4px auto 12px; }
+.deposit-actions button[type="submit"] { background:linear-gradient(#ffe49a,#dfa448); color:#2a1205; }
+@media (max-width:899px) {
+  .deposit-page .main { padding-bottom:calc(95px + env(safe-area-inset-bottom)); }
+  .deposit-layout { display:block; }
+  .deposit-side { display:none; }
+  .deposit-mobile-menu { display:block; margin:8px 0 12px; border:1px solid #b38a48; border-radius:9px; background:#2a1327; }
+  .deposit-mobile-menu summary { padding:10px 12px; font-weight:800; color:#ffe2a0; cursor:pointer; }
+  .deposit-mobile-menu nav { padding:0 8px 8px; grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .deposit-mobile-menu h2 { grid-column:1/-1; }
+  .deposit-channels { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .deposit-quick button { font-size:clamp(11px,3.2vw,14px); }
+}
+@media (max-width:360px) { .deposit-channels { grid-template-columns:repeat(2,minmax(0,1fr)); } }

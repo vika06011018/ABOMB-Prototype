@@ -1,17 +1,18 @@
-document.getElementById('floatToggle').addEventListener('click', (event) => {
-  const button = event.currentTarget;
-  const actionsPanel = document.getElementById('floatActions');
-  actionsPanel.hidden = !actionsPanel.hidden;
-  button.setAttribute('aria-expanded', String(!actionsPanel.hidden));
-  button.setAttribute('aria-label', actionsPanel.hidden ? '展開工具列' : '收合工具列');
-  button.classList.toggle('is-collapsed', actionsPanel.hidden);
-  button.innerHTML = actionsPanel.hidden
-    ? '<img src="assets/desktop-home/gift.webp" alt="" aria-hidden="true" class="float-gift-icon">'
-    : '−';
+const toolsToggle = document.querySelector('.float-tools-toggle');
+toolsToggle?.addEventListener('click', () => {
+  const panel = document.querySelector('#floatActions');
+  panel.hidden = !panel.hidden;
+  toolsToggle.setAttribute('aria-expanded', String(!panel.hidden));
+  toolsToggle.setAttribute('aria-label', panel.hidden ? '展開工具列' : '收合工具列');
+  toolsToggle.textContent = panel.hidden ? '＋' : '−';
+  window.dispatchEvent(new Event('resize'));
 });
 
+document.getElementById('floatToggle')?.addEventListener('click', () => {
+  if (!location.pathname.endsWith('/deposit.html')) location.assign('deposit.html');
+});
 
-/* Drag & snap quick tools: a short tap keeps the original expand/collapse click. */
+/* Drag & snap quick tools: a short tap opens the deposit page. */
 (() => {
   const floating = document.querySelector('.floating');
   const toggle = document.getElementById('floatToggle');
@@ -86,17 +87,13 @@ document.getElementById('floatToggle').addEventListener('click', (event) => {
   }
   toggle.addEventListener('pointerup', release);
   toggle.addEventListener('pointercancel', release);
-  // Capture phase blocks the normal expand/collapse handler only following a drag.
+  // Capture phase blocks the deposit navigation only following a drag.
   toggle.addEventListener('click', event => {
     if (!swallowClick) return;
     event.preventDefault();
     event.stopImmediatePropagation();
     swallowClick = false;
   }, true);
-  // The panel becomes taller/shorter when toggled; keep the entire panel on-screen.
-  toggle.addEventListener('click', () => {
-    if (desktop.matches && saved) requestAnimationFrame(refresh);
-  });
   window.addEventListener('resize', refresh, {passive:true});
   refresh();
 })();

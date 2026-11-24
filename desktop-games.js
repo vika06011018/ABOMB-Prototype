@@ -12,7 +12,7 @@
   const behavior = () => motion.matches ? 'instant' : 'smooth';
 
   function activate(index) {
-    home.classList.toggle('selected', index < 0);
+    home.classList.toggle('selected', index < 0 && !document.body.classList.contains('deposit-page'));
     buttons.forEach((button, position) => {
       button.classList.toggle('selected', position === index);
       if (position === index) button.setAttribute('aria-current', 'location');

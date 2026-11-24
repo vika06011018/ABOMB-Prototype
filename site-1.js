@@ -272,8 +272,10 @@ if (isCatalogPage) {
   catalogTab.setAttribute('aria-current', 'page');
 }
 
+const isDepositPage = document.body.classList.contains('deposit-page');
+
 const actions = {
-  home: () => (isCatalogPage || document.querySelector('#desktop-games')) ? location.assign('index.html') : window.scrollTo({top:0, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}),
+  home: () => (isDepositPage || isCatalogPage || document.querySelector('#desktop-games')) ? location.assign('index.html') : window.scrollTo({top:0, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}),
   all: () => { if (!isCatalogPage) location.assign("all-games.html"); },
   recent: () => openHomeGameList('玩過', recentProviders.map(provider => provider.id), true),
   favorites: () => openHomeGameList('收藏', favorites),
@@ -282,7 +284,7 @@ const actions = {
     ['2　分享給好友', placeholder('分享給好友', '可於取得正式連結後傳送給好友。')],
     ['3　確認活動條件', placeholder('確認活動條件', '獎勵及資格等待活動公告。')]
   ]),
-  deposit: placeholder('主錢包｜儲值','金流等待正式串接。此視窗展示入口。'),
+  deposit: () => { if (!isDepositPage) location.assign('deposit.html'); },
   withdraw: placeholder('主錢包｜託售','正式託售服務等待串接。'),
   promo: () => showModal('優惠活動', '活動內容為原型示範。', announcements.slice(1).map(([title, message]) => [title, () => showModal(title, message)])),
   notifications: () => showModal('通知中心', '未讀通知為原型示範。', [[announcements[0][0], () => showModal(...announcements[0])]]),
@@ -312,7 +314,13 @@ function openMenu(activeMenu) {
   }
 }
 for (const [button, menu] of menus) {
-  button.addEventListener('click', () => openMenu(menu.classList.contains('open') ? null : menu));
+  button.addEventListener('click', () => {
+    if (button.id === 'walletBtn' && matchMedia('(min-width:900px)').matches) {
+      actions.deposit();
+      return;
+    }
+    openMenu(menu.classList.contains('open') ? null : menu);
+  });
 }
 
 document.addEventListener('click', (event) => {
@@ -347,58 +355,60 @@ document.addEventListener('keydown', (event) => {
 
 
 
+setLanguage(locale);
+
 const hero = $('#hero');
-const slideCopy = [
-  ['多元遊戲 一站暢玩', '全新娛樂平台', '真人・電子・彩票・棋牌・捕魚・體育賽事', '真人 × 電子 × 多元玩法'],
-  ['首儲優惠', '首儲優惠', '限時活動・原型預覽', '限時活動・原型預覽'],
-  ['VIP 專屬禮遇', 'VIP 專屬禮遇', '會員優惠・原型預覽', '會員優惠・原型預覽']
-];
-const slideLabels = [...hero.querySelectorAll('.hero-copy .desktop-title,.hero-copy .mobile-title')];
-const dots = [...$('#bannerDots').querySelectorAll('button')];
-const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-let slide = 0;
-let timer;
-let touchStart;
+if (hero) {
+  const slideCopy = [
+    ['多元遊戲 一站暢玩', '全新娛樂平台', '真人・電子・彩票・棋牌・捕魚・體育賽事', '真人 × 電子 × 多元玩法'],
+    ['首儲優惠', '首儲優惠', '限時活動・原型預覽', '限時活動・原型預覽'],
+    ['VIP 專屬禮遇', 'VIP 專屬禮遇', '會員優惠・原型預覽', '會員優惠・原型預覽']
+  ];
+  const slideLabels = [...hero.querySelectorAll('.hero-copy .desktop-title,.hero-copy .mobile-title')];
+  const dots = [...$('#bannerDots').querySelectorAll('button')];
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  let slide = 0;
+  let timer;
+  let touchStart;
 
-function setSlide(next) {
-  slide = (next + slideCopy.length) % slideCopy.length;
-  hero.dataset.slide = String(slide);
-  slideLabels.forEach((node, index) => { node.textContent = slideCopy[slide][index]; });
-  dots.forEach((dot, index) => {
-    dot.classList.toggle('on', index === slide);
-    dot.setAttribute('aria-current', String(index === slide));
-  });
-}
+  function setSlide(next) {
+    slide = (next + slideCopy.length) % slideCopy.length;
+    hero.dataset.slide = String(slide);
+    slideLabels.forEach((node, index) => { node.textContent = slideCopy[slide][index]; });
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('on', index === slide);
+      dot.setAttribute('aria-current', String(index === slide));
+    });
+  }
 
-function scheduleSlide() {
-  clearTimeout(timer);
-  if (reducedMotion.matches || document.hidden || hero.matches(':hover, :focus-within')) return;
-  timer = setTimeout(() => { setSlide(slide + 1); scheduleSlide(); }, 6500);
-}
-function changeSlide(next) {
-  setSlide(next);
+  function scheduleSlide() {
+    clearTimeout(timer);
+    if (reducedMotion.matches || document.hidden || hero.matches(':hover, :focus-within')) return;
+    timer = setTimeout(() => { setSlide(slide + 1); scheduleSlide(); }, 6500);
+  }
+  function changeSlide(next) {
+    setSlide(next);
+    scheduleSlide();
+  }
+  $('#bannerPrev').addEventListener('click', () => changeSlide(slide - 1));
+  $('#bannerNext').addEventListener('click', () => changeSlide(slide + 1));
+  dots.forEach((dot, index) => dot.addEventListener('click', () => changeSlide(index)));
+  hero.addEventListener('touchstart', (event) => {
+    const {clientX, clientY} = event.changedTouches[0];
+    touchStart = {clientX, clientY};
+  }, {passive:true});
+  hero.addEventListener('touchend', (event) => {
+    if (!touchStart) return;
+    const dx = event.changedTouches[0].clientX - touchStart.clientX;
+    const dy = event.changedTouches[0].clientY - touchStart.clientY;
+    if (Math.abs(dx) > 34 && Math.abs(dx) > Math.abs(dy)) changeSlide(slide + (dx < 0 ? 1 : -1));
+    touchStart = null;
+  }, {passive:true});
+  for (const event of ['pointerenter','pointerleave','focusin','focusout']) {
+    hero.addEventListener(event, () => setTimeout(scheduleSlide, 0));
+  }
+  document.addEventListener('visibilitychange', scheduleSlide);
+  reducedMotion.addEventListener('change', scheduleSlide);
+  setSlide(0);
   scheduleSlide();
 }
-$('#bannerPrev').addEventListener('click', () => changeSlide(slide - 1));
-$('#bannerNext').addEventListener('click', () => changeSlide(slide + 1));
-dots.forEach((dot, index) => dot.addEventListener('click', () => changeSlide(index)));
-hero.addEventListener('touchstart', (event) => {
-  const {clientX, clientY} = event.changedTouches[0];
-  touchStart = {clientX, clientY};
-}, {passive:true});
-hero.addEventListener('touchend', (event) => {
-  if (!touchStart) return;
-  const dx = event.changedTouches[0].clientX - touchStart.clientX;
-  const dy = event.changedTouches[0].clientY - touchStart.clientY;
-  if (Math.abs(dx) > 34 && Math.abs(dx) > Math.abs(dy)) changeSlide(slide + (dx < 0 ? 1 : -1));
-  touchStart = null;
-}, {passive:true});
-for (const event of ['pointerenter','pointerleave','focusin','focusout']) {
-  hero.addEventListener(event, () => setTimeout(scheduleSlide, 0));
-}
-document.addEventListener('visibilitychange', scheduleSlide);
-reducedMotion.addEventListener('change', scheduleSlide);
-setSlide(0);
-setLanguage(locale);
-scheduleSlide();
-
