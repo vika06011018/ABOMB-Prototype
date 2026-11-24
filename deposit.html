@@ -593,7 +593,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 @media (max-width:899px) { .top-actions .notification-bell { width:clamp(20px,5.8vw,25px); height:auto; } }
 </style>
 <link rel="stylesheet" href="bomb-final.css?v=44">
-<link rel="stylesheet" href="deposit.css?v=54">
+<link rel="stylesheet" href="deposit.css?v=55">
 <link rel="stylesheet" href="account-entry.css?v=54">
 </head>
 <body class="deposit-page">
@@ -632,7 +632,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <aside class="deposit-side"><h2>帳務中心</h2><nav aria-label="帳務中心選單">
 <a href="#deposit-title" data-deposit-view="deposit" aria-current="page">儲值</a><a href="#withdraw" data-deposit-view="withdraw">託售</a>
 <a href="#transfer" data-deposit-view="transfer">轉點</a><button type="button" data-account-label="遊戲紀錄">遊戲紀錄</button><a href="#bind-bank-card" data-deposit-view="binding">綁定銀行卡</a>
-<h2>個人中心</h2><a href="#announcements" data-deposit-view="announcements" data-unread-link="announcements">消息公告<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="#messages" data-deposit-view="messages" data-unread-link="messages">個人訊息<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><button type="button" data-action="member">個人資料</button><button type="button" data-account-label="密碼修改">密碼修改</button><button type="button" data-account-label="維護時間">維護時間</button><a href="app-guide.html">APP 下載</a>
+<h2>個人中心</h2><a href="#announcements" data-deposit-view="announcements" data-unread-link="announcements">消息公告<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="#messages" data-deposit-view="messages" data-unread-link="messages">個人訊息<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="#personal-center" data-deposit-view="personal">個人資料</a><button type="button" data-account-label="密碼修改">密碼修改</button><button type="button" data-account-label="維護時間">維護時間</button><a href="app-guide.html">APP 下載</a>
 </nav></aside>
 <section class="deposit-content">
 <details class="deposit-mobile-menu"><summary id="accountMenuSummary">帳務中心</summary><nav aria-label="帳務中心選單">
@@ -715,8 +715,50 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <div id="withdrawView" hidden><h1 id="withdraw" tabindex="-1">託售</h1><div class="deposit-notes">正式託售服務待串接。</div></div>
 <div id="personalView" hidden>
   <h1 id="personal-center" tabindex="-1"><span class="desktop-personal-title">個人中心</span><span class="mobile-personal-title">會員中心</span></h1>
-  <p class="personal-account">demo001</p>
-  <nav class="personal-links" aria-label="個人中心"><button class="personal-mobile-only" type="button" data-action="promo">優惠申請</button><button class="personal-mobile-only" type="button" data-action="notifications">消息公告</button><a class="personal-desktop-only" href="#announcements" data-deposit-view="announcements" data-unread-link="announcements">消息公告<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a class="personal-desktop-only" href="#messages" data-deposit-view="messages" data-unread-link="messages">個人訊息<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><button type="button" data-action="member">個人資料</button><button type="button" data-account-label="密碼修改">密碼修改</button><button type="button" data-account-label="維護時間">維護時間</button><button class="personal-mobile-only" type="button" data-action="about">關於我們</button><a href="app-guide.html">APP 下載</a>
+  <p class="personal-account personal-mobile-only">demo001</p>
+<div class="personal-desktop-profile">
+  <nav class="profile-tabs" aria-label="個人中心標籤">
+    <button type="button" data-profile-tab="membership" aria-controls="profile-membership" aria-pressed="true">會員資料</button>
+    <button type="button" data-profile-tab="vip" aria-controls="profile-vip" aria-pressed="false">VIP詳情</button>
+    <button type="button" data-profile-tab="details" aria-controls="profile-details" aria-pressed="false">個人資料</button>
+  </nav>
+  <section id="profile-membership" class="profile-panel" aria-label="會員資料">
+    <div class="profile-tier-header">
+      <span class="profile-tier-badge">VIP 1</span>
+      <div><h2>demo001</h2><p>累計儲值 <strong>$0</strong>，距 VIP2 尚差 <strong>$10,000</strong></p>
+      <p>累計流水 <strong>$0</strong>，距 VIP2 尚差 <strong>$100,000</strong></p></div>
+    </div>
+    <ol class="profile-levels" aria-label="VIP 等級"></ol>
+    <section class="profile-benefits"><h2>VIP1 專享</h2><dl id="profile-current-benefits"></dl></section>
+    <section class="profile-benefits"><h2>晉升 VIP2 的優惠</h2><dl id="profile-next-benefits"></dl></section>
+  </section>
+  <section id="profile-vip" class="profile-panel" aria-label="VIP詳情" hidden>
+    <details class="profile-rules"><summary>升級、保級與活動規則</summary><ol id="vip-rule-list"></ol></details>
+    <h2>活動表格</h2>
+    <div class="vip-selects">
+      <label>比較等級一 <select id="vip-left"></select></label>
+      <label>比較等級二 <select id="vip-right"></select></label>
+    </div>
+    <table class="vip-comparison" aria-label="VIP 等級權益比較">
+      <thead><tr><th scope="col">比較項目</th><th scope="col" id="vip-left-title"></th><th scope="col" id="vip-right-title"></th></tr></thead>
+    </table>
+  </section>
+  <section id="profile-details" class="profile-panel profile-details" aria-label="個人資料" hidden>
+    <section><h2>個人資訊</h2><dl>
+      <div><dt>帳號</dt><dd>demo001</dd></div><div><dt>姓名</dt><dd>示範會員</dd></div>
+      <div><dt>生日</dt><dd>未填寫</dd></div><div><dt>聯繫電話</dt><dd>未填寫</dd></div>
+    </dl></section>
+    <section><h2>聯絡資訊</h2><dl>
+      <div><dt>LINE</dt><dd>未綁定</dd></div><div><dt>WeChat</dt><dd>未綁定</dd></div>
+      <div><dt>WhatsApp</dt><dd>未綁定</dd></div><div><dt>Telegram</dt><dd>未綁定</dd></div>
+    </dl><form id="profile-email-form">
+      <label for="profile-email">Email</label><input id="profile-email" type="email" required placeholder="請輸入信箱">
+      <button type="submit" class="goldbtn">驗證並送出</button>
+      <p id="profile-email-status" role="status" hidden></p>
+    </form></section>
+  </section>
+</div>
+  <nav class="personal-links personal-mobile-only" aria-label="個人中心"><button class="personal-mobile-only" type="button" data-action="promo">優惠申請</button><button class="personal-mobile-only" type="button" data-action="notifications">消息公告</button><a class="personal-desktop-only" href="#announcements" data-deposit-view="announcements" data-unread-link="announcements">消息公告<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a class="personal-desktop-only" href="#messages" data-deposit-view="messages" data-unread-link="messages">個人訊息<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><button type="button" data-action="member">個人資料</button><button type="button" data-account-label="密碼修改">密碼修改</button><button type="button" data-account-label="維護時間">維護時間</button><button class="personal-mobile-only" type="button" data-action="about">關於我們</button><a href="app-guide.html">APP 下載</a>
 </nav>
 </div>
 
@@ -765,6 +807,8 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <script src="site-2.js?v=48" defer></script>
 <script src="site-3.js" defer></script>
 <script src="deposit.js?v=54" defer></script>
+<script src="vip-data.js?v=55" defer></script>
+<script src="account-profile.js?v=55" defer></script>
 <script src="desktop-games.js?v=45" defer></script>
 <script src="back-to-top.js" defer></script>
 <script src="account-inbox.js?v=54" defer></script>

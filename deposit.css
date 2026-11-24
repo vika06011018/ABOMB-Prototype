@@ -107,3 +107,44 @@
 }
 
 @media (max-width:899px) { .deposit-layout .personal-links .personal-desktop-only { display:none; } }
+
+.personal-desktop-profile { display:none; }
+@media (min-width:900px) {
+  #personalView { position:relative; }
+  #personalView > h1 { padding-inline-end:min(45%,320px); min-height:38px; }
+  .personal-desktop-profile { display:block; }
+  .profile-tabs { display:flex; flex-wrap:wrap; gap:6px; justify-content:flex-end; position:absolute; top:0; right:0; }
+  .deposit-layout .profile-tabs button { border:1px solid #805064; background:#2f162a; padding:7px 10px; }
+  .deposit-layout .profile-tabs [aria-pressed="true"] { color:#231225; background:#eac477; font-weight:800; }
+  .profile-panel { margin-top:14px; min-width:0; }
+  .profile-panel h2 { color:#ffdb8a; font-size:17px; margin:0 0 9px; }
+  .profile-tier-header { display:flex; align-items:center; gap:20px; padding:17px; border:1px solid #805064; border-radius:12px; background:#270e26; }
+  .profile-tier-header p { margin:4px 0; }
+  .profile-tier-header strong { color:#ffdb8a; }
+  .profile-tier-badge { display:grid; place-items:center; flex:none; width:85px; height:74px; border-radius:14px; border:2px solid #d5ced6; background:linear-gradient(145deg,#ebe3ec,#89828c); color:#302635; font-size:22px; font-weight:900; }
+  .profile-levels { display:grid; grid-template-columns:repeat(10,minmax(0,1fr)); padding:0; margin:14px 0; list-style:none; gap:3px; text-align:center; color:#d5baca; font-size:12px; }
+  .profile-levels li { padding:7px 0; border-top:3px solid #664054; }
+  .profile-levels [aria-current] { color:#ffdb8a; border-color:#eac477; font-weight:800; }
+  .profile-benefits { border:1px solid #664054; background:#270e26; border-radius:10px; padding:12px; margin:10px 0; }
+  .profile-benefits dl { margin:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(76px,1fr)); gap:8px; text-align:center; }
+  .profile-benefits dl div { display:flex; flex-direction:column-reverse; gap:5px; padding:7px 3px; font-size:13px; }
+  .profile-benefits dd { margin:0; font-weight:800; color:#ffdb8a; font-size:18px; }
+  .profile-rules { margin-bottom:16px; border:1px solid #664054; border-radius:8px; padding:10px; }
+  .profile-rules summary { cursor:pointer; color:#ffdb8a; }
+  .profile-rules ol { padding-left:24px; }
+  .vip-selects { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
+  .vip-selects select, #profile-email { min-height:36px; padding:5px; background:#270e26; color:#fff5ec; border:1px solid #805064; border-radius:7px; }
+  .vip-comparison { width:100%; border-collapse:collapse; table-layout:fixed; font-size:14px; overflow-wrap:anywhere; }
+  .vip-comparison :is(th,td) { padding:8px; border:1px solid #664054; text-align:center; }
+  .vip-comparison th[scope="row"], .vip-comparison th[scope="rowgroup"] { text-align:left; }
+  .vip-comparison thead th:first-child { width:48%; }
+  .vip-comparison :is(thead,th[scope="rowgroup"]) { background:#4a263c; color:#ffdb8a; }
+  .profile-details { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+  .profile-details dl { margin:0; }
+  .profile-details dl div { display:flex; justify-content:space-between; gap:8px; border-bottom:1px solid #664054; padding:12px 0; }
+  .profile-details dd { margin:0; color:#e5d3dc; }
+  #profile-email-form { display:grid; gap:7px; margin-top:10px; }
+}
+@media (min-width:900px) {
+  #personalView > .personal-mobile-only { display:none; }
+}
