@@ -48,3 +48,9 @@
   .deposit-quick button { font-size:clamp(11px,3.2vw,14px); }
 }
 @media (max-width:360px) { .deposit-channels { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
+.deposit-page [hidden] { display:none !important; }
+#depositAmountFields { display:grid; gap:10px; }
+.deposit-unbound { display:grid; justify-items:center; gap:12px; padding:18px 0 30px; }
+.deposit-unbound svg { display:block; max-width:100%; }
+.deposit-bind-button { display:inline-flex; justify-content:center; align-items:center; min-width:160px; min-height:40px; text-decoration:none; }

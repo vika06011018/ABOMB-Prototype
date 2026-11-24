@@ -593,7 +593,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 @media (max-width:899px) { .top-actions .notification-bell { width:clamp(20px,5.8vw,25px); height:auto; } }
 </style>
 <link rel="stylesheet" href="bomb-final.css?v=44">
-<link rel="stylesheet" href="deposit.css?v=50">
+<link rel="stylesheet" href="deposit.css?v=51">
 </head>
 <body class="deposit-page">
 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
@@ -629,17 +629,17 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <main class="main site-width" id="top">
 <div class="deposit-layout">
 <aside class="deposit-side"><h2>帳務中心</h2><nav aria-label="帳務中心選單">
-<a href="#deposit-title" aria-current="page">儲值</a><button type="button" data-action="withdraw">託售</button>
-<button type="button" data-account-label="轉點">轉點</button><button type="button" data-account-label="遊戲紀錄">遊戲紀錄</button><button type="button" data-account-label="綁定銀行卡">綁定銀行卡</button>
+<a href="#deposit-title" data-deposit-view="deposit" aria-current="page">儲值</a><button type="button" data-action="withdraw">託售</button>
+<button type="button" data-account-label="轉點">轉點</button><button type="button" data-account-label="遊戲紀錄">遊戲紀錄</button><a href="#bind-bank-card" data-deposit-view="binding">綁定銀行卡</a>
 <h2>個人中心</h2><button type="button" data-action="promo">優惠申請</button><button type="button" data-action="notifications">消息公告</button><button type="button" data-action="member">個人資料</button><button type="button" data-account-label="密碼修改">密碼修改</button><button type="button" data-account-label="維護時間">維護時間</button><button type="button" data-action="about">關於我們</button><a href="app-guide.html">APP 下載</a>
 </nav></aside>
 <section class="deposit-content" aria-labelledby="deposit-title">
 <details class="deposit-mobile-menu"><summary>帳務中心</summary><nav aria-label="帳務中心選單">
-<a href="#deposit-title" aria-current="page">儲值</a><button type="button" data-action="withdraw">託售</button>
-<button type="button" data-account-label="轉點">轉點</button><button type="button" data-account-label="遊戲紀錄">遊戲紀錄</button><button type="button" data-account-label="綁定銀行卡">綁定銀行卡</button>
+<a href="#deposit-title" data-deposit-view="deposit" aria-current="page">儲值</a><button type="button" data-action="withdraw">託售</button>
+<button type="button" data-account-label="轉點">轉點</button><button type="button" data-account-label="遊戲紀錄">遊戲紀錄</button><a href="#bind-bank-card" data-deposit-view="binding">綁定銀行卡</a>
 <h2>個人中心</h2><button type="button" data-action="promo">優惠申請</button><button type="button" data-action="notifications">消息公告</button><button type="button" data-action="member">個人資料</button><button type="button" data-account-label="密碼修改">密碼修改</button><button type="button" data-account-label="維護時間">維護時間</button><button type="button" data-action="about">關於我們</button><a href="app-guide.html">APP 下載</a>
 </nav></details>
-<h1 id="deposit-title">儲值</h1>
+<div id="depositView"><h1 id="deposit-title" tabindex="-1">儲值</h1>
 <form id="depositForm" autocomplete="off">
 <fieldset><legend>選擇儲值方式</legend><div class="deposit-channels"><label class="deposit-tile"><input type="radio" name="channel" value="銀行轉帳-09" checked><img class="deposit-icon" src="assets/deposit/bank.webp" alt="" width="112" height="76"><strong>銀行轉帳-09</strong></label>
 <label class="deposit-tile"><input type="radio" name="channel" value="銀行轉帳-14"><img class="deposit-icon" src="assets/deposit/bank.webp" alt="" width="112" height="76"><strong>銀行轉帳-14</strong></label>
@@ -655,8 +655,32 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <label class="deposit-tile"><input type="radio" name="channel" value="USDT轉帳-02"><img class="deposit-icon" src="assets/deposit/usdt.webp" alt="" width="112" height="76"><strong>USDT轉帳-02</strong></label>
 <label class="deposit-tile"><input type="radio" name="channel" value="711超商專用代碼-04"><img class="deposit-icon" src="assets/deposit/7-eleven.webp" alt="" width="112" height="76"><strong>711超商專用代碼-04</strong></label>
 <label class="deposit-tile"><input type="radio" name="channel" value="全家超商專用代碼-02"><img class="deposit-icon" src="assets/deposit/familymart.webp" alt="" width="112" height="76"><strong>全家超商專用代碼-02</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="銀行轉帳-00" data-binding-required><img class="deposit-icon" src="assets/deposit/bank.webp" alt="" width="112" height="76"><strong>銀行轉帳-00</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="小額轉帳-00" data-binding-required><img class="deposit-icon" src="assets/deposit/transfer.webp" alt="" width="112" height="76"><strong>小額轉帳-00</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="信用卡通道-00" data-binding-required><img class="deposit-icon" src="assets/deposit/card.webp" alt="" width="112" height="76"><strong>信用卡通道-00</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="Apple Pay / Google Pay 專用通道-00" data-binding-required><img class="deposit-icon" src="assets/deposit/mobile-pay.webp" alt="" width="112" height="76"><strong>Apple Pay / Google Pay 專用通道-00</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="支付寶信用卡-00" data-binding-required><img class="deposit-icon" src="assets/deposit/alipay.webp" alt="" width="112" height="76"><strong>支付寶信用卡-00</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="USDT轉帳-00" data-binding-required><img class="deposit-icon" src="assets/deposit/usdt.webp" alt="" width="112" height="76"><strong>USDT轉帳-00</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="711超商專用代碼-00" data-binding-required><img class="deposit-icon" src="assets/deposit/7-eleven.webp" alt="" width="112" height="76"><strong>711超商專用代碼-00</strong></label>
+<label class="deposit-tile"><input type="radio" name="channel" value="全家超商專用代碼-00" data-binding-required><img class="deposit-icon" src="assets/deposit/familymart.webp" alt="" width="112" height="76"><strong>全家超商專用代碼-00</strong></label>
 </div></fieldset>
-<h2>快速輸入儲值</h2>
+<div id="depositUnbound" class="deposit-unbound" hidden>
+  <svg width="142" height="112" viewBox="0 0 142 112" fill="none" aria-hidden="true">
+    <g stroke="#a48699" stroke-width="1.7" stroke-linecap="round">
+      <path d="M19 33l7 7m0-7-7 7m98-2 7 7m0-7-7 7M13 76l5 5m0-5-5 5"/>
+      <circle cx="69" cy="13" r="3"/><circle cx="110" cy="23" r="4"/><circle cx="125" cy="77" r="3"/>
+      <path d="M17 95h108m-95 7h80m-66 7h51"/>
+    </g>
+    <rect x="57" y="36" width="50" height="34" rx="5" transform="rotate(-27 57 36)" fill="#3e2037" stroke="#a48699" stroke-width="2.5"/>
+    <rect x="36" y="46" width="65" height="43" rx="7" fill="#291127" stroke="#e2b971" stroke-width="2.5"/>
+    <path d="m54 61 5 5-5 5m22-10-5 5 5 5m-14 4 5-3 5 3" stroke="#e2b971" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="86" y="63" width="21" height="14" rx="4" fill="#45253b" stroke="#e2b971" stroke-width="2"/>
+    <circle cx="97" cy="70" r="1.8" fill="#e2b971"/>
+  </svg>
+  <a class="goldbtn deposit-bind-button" href="#bind-bank-card" data-deposit-view="binding">前往綁定</a>
+</div>
+<fieldset id="depositAmountFields" aria-labelledby="deposit-quick-title">
+<h2 id="deposit-quick-title">快速輸入儲值</h2>
 <div class="deposit-quick"><button type="button" data-add="2000">+2,000</button><button type="button" data-add="3000">+3,000</button><button type="button" data-add="5000">+5,000</button><button type="button" data-add="10000">+10,000</button><button type="button" id="depositClear">清除</button></div>
 <label for="depositAmount">儲值金額</label>
 <input id="depositAmount" name="amount" type="number" inputmode="numeric" required min="5000" max="50000" step="1" placeholder="5,000 ～ 50,000">
@@ -673,7 +697,12 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <p>儲值前請先確認使用註冊本人帳戶，請勿使用他人資訊儲值。</p>
 </section>
 <div class="deposit-actions"><button type="reset">重填</button><button type="submit" class="goldbtn">送出</button></div>
-</form></section></div>
+</fieldset></form></div>
+<div id="depositBindingView" hidden>
+  <h1 id="bind-bank-card" tabindex="-1">綁定銀行卡</h1>
+  <div class="deposit-notes"><p>尚未綁定銀行卡</p></div>
+</div>
+</section></div>
 <section class="home-partners" aria-labelledby="partners-title">
   <h2 id="partners-title">合作商</h2>
   <picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/desktop-home/partners.webp"><img src="assets/desktop-home/partners.gif" width="900" height="60" alt="合作商標誌輪播"></picture>
@@ -708,7 +737,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <script src="site-1.js?v=49" defer></script>
 <script src="site-2.js?v=48" defer></script>
 <script src="site-3.js" defer></script>
-<script src="deposit.js" defer></script>
+<script src="deposit.js?v=51" defer></script>
 <script src="desktop-games.js?v=45" defer></script>
 <script src="back-to-top.js" defer></script>
 </body>
