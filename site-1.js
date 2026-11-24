@@ -315,10 +315,6 @@ function openMenu(activeMenu) {
 }
 for (const [button, menu] of menus) {
   button.addEventListener('click', () => {
-    if (button.id === 'walletBtn' && matchMedia('(min-width:900px)').matches) {
-      actions.deposit();
-      return;
-    }
     openMenu(menu.classList.contains('open') ? null : menu);
   });
 }

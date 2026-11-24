@@ -168,7 +168,7 @@ for (const guide of guides) {
 }
 if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
 </script>
-<aside class="floating" aria-label="快速工具"><div id="floatActions" hidden><button data-action="help" aria-label="客服中心"><svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><path d="M6 24v-4a14 14 0 0 1 28 0v4m0 6c0 5-4 7-9 7"/><rect x="5" y="19" width="6" height="12" rx="2"/><rect x="29" y="19" width="6" height="12" rx="2"/></svg><span>客服中心</span></button><button data-action="promo" aria-label="優惠活動"><svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><rect x="5" y="15" width="30" height="8" rx="2"/><path d="M8 23v13h24V23M20 15v21m0-21c-15 0-12-12-5-8l5 8c15 0 12-12 5-8z"/></svg><span>優惠活動</span></button><button data-action="referral" aria-label="推薦好友"><svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="14" cy="13" r="6"/><circle cx="28" cy="12" r="6"/><path d="M4 33v-2a10 10 0 0 1 20 0v2zm22-12a9 9 0 0 1 10 9v3h-7"/></svg><span>推薦好友</span></button></div><button id="floatToggle" class="is-collapsed" aria-label="前往儲值"><img src="assets/desktop-home/gift.webp" alt="" aria-hidden="true" class="float-gift-icon"></button></aside><dialog id="guide-tools-dialog"><h3></h3><p></p><form method="dialog"><button>關閉</button></form></dialog>
+<aside class="floating" aria-label="快速工具"><div id="floatActions" hidden><button data-action="help" aria-label="客服中心"><svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><path d="M6 24v-4a14 14 0 0 1 28 0v4m0 6c0 5-4 7-9 7"/><rect x="5" y="19" width="6" height="12" rx="2"/><rect x="29" y="19" width="6" height="12" rx="2"/></svg><span>客服中心</span></button><button data-action="promo" aria-label="優惠活動"><svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><rect x="5" y="15" width="30" height="8" rx="2"/><path d="M8 23v13h24V23M20 15v21m0-21c-15 0-12-12-5-8l5 8c15 0 12-12 5-8z"/></svg><span>優惠活動</span></button><button data-action="referral" aria-label="推薦好友"><svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="14" cy="13" r="6"/><circle cx="28" cy="12" r="6"/><path d="M4 33v-2a10 10 0 0 1 20 0v2zm22-12a9 9 0 0 1 10 9v3h-7"/></svg><span>推薦好友</span></button></div><button id="floatToggle" class="is-collapsed" aria-expanded="false" aria-controls="floatActions" aria-label="展開工具列"><img src="assets/desktop-home/gift.webp" alt="" aria-hidden="true" class="float-gift-icon"></button></aside><dialog id="guide-tools-dialog"><h3></h3><p></p><form method="dialog"><button>關閉</button></form></dialog>
 <script>
 function showModal(title,message) {
   const panel = document.querySelector('#guide-tools-dialog');
@@ -176,5 +176,5 @@ function showModal(title,message) {
   panel.querySelector('p').textContent = message;
   panel.showModal();
 }
-</script><script src="site-2.js?v=46"></script><script src="site-3.js"></script></body>
+</script><script src="site-2.js?v=48"></script><script src="site-3.js"></script></body>
 </html>

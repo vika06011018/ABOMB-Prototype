@@ -1,8 +1,17 @@
-document.getElementById('floatToggle')?.addEventListener('click', () => {
-  if (!location.pathname.endsWith('/deposit.html')) location.assign('deposit.html');
+document.getElementById('floatToggle').addEventListener('click', (event) => {
+  const button = event.currentTarget;
+  const actionsPanel = document.getElementById('floatActions');
+  actionsPanel.hidden = !actionsPanel.hidden;
+  button.setAttribute('aria-expanded', String(!actionsPanel.hidden));
+  button.setAttribute('aria-label', actionsPanel.hidden ? '展開工具列' : '收合工具列');
+  button.classList.toggle('is-collapsed', actionsPanel.hidden);
+  button.innerHTML = actionsPanel.hidden
+    ? '<img src="assets/desktop-home/gift.webp" alt="" aria-hidden="true" class="float-gift-icon">'
+    : '−';
 });
 
-/* Drag & snap quick tools: a short tap opens the deposit page. */
+
+/* Drag & snap quick tools: a short tap keeps the original expand/collapse click. */
 (() => {
   const floating = document.querySelector('.floating');
   const toggle = document.getElementById('floatToggle');
@@ -77,13 +86,17 @@ document.getElementById('floatToggle')?.addEventListener('click', () => {
   }
   toggle.addEventListener('pointerup', release);
   toggle.addEventListener('pointercancel', release);
-  // Capture phase blocks the deposit navigation only following a drag.
+  // Capture phase blocks the normal expand/collapse handler only following a drag.
   toggle.addEventListener('click', event => {
     if (!swallowClick) return;
     event.preventDefault();
     event.stopImmediatePropagation();
     swallowClick = false;
   }, true);
+  // The panel becomes taller/shorter when toggled; keep the entire panel on-screen.
+  toggle.addEventListener('click', () => {
+    if (desktop.matches && saved) requestAnimationFrame(refresh);
+  });
   window.addEventListener('resize', refresh, {passive:true});
   refresh();
 })();
