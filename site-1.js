@@ -80,21 +80,34 @@ function homeProvider(game) {
   return mark ? {name:mark[0], logo:`assets/provider-marks/${mark[1]}`} : null;
 }
 
-function createCard(game, isFavorite) {
+const recentProviders = [
+  {id:'thor', title:'RSG 電子', art:'assets/desktop-lobby/1-0.webp', desktop:'slots', mobile:1},
+  {id:'seth', title:'ATG 電子', art:'assets/lobby-banners/atg-warrior.webp', desktop:'slots', mobile:1},
+  {id:'mahjong', title:'高登棋牌', art:'assets/desktop-lobby/3-1.webp', desktop:'table', mobile:3}
+];
+
+function openRecentProvider(provider) {
+  location.assign(matchMedia('(min-width: 900px)').matches
+    ? `desktop-games.html#games-${provider.desktop}`
+    : `all-games.html#catalog-${provider.mobile}`);
+}
+
+function createCard(game, isFavorite, provider) {
+  const title = provider?.title ?? game.name;
   const card = document.createElement('button');
   card.type = 'button';
   card.className = isFavorite ? 'favorite-card neon' : 'game-card neon';
   const action = isFavorite
     ? `<span class="goldbtn">${translate('快速進入')} ›</span>`
     : '<span class="play-dot" aria-hidden="true">▶</span>';
-  const art = originalFeaturedArt[game.id] ?? `assets/home-games/${game.id}.webp`;
+  const art = provider?.art ?? originalFeaturedArt[game.id] ?? `assets/home-games/${game.id}.webp`;
   const homeMark = homeProvider(game);
-  card.innerHTML = `<picture><img class="game-art" src="${art}" alt=""></picture><span class="game-info"><strong>${homeMark ? `<img class="home-provider-image" src="${homeMark.logo}" alt="${homeMark.name}">` : ''}<span>${game.name}</span></strong></span>${action}`;
+  card.innerHTML = `<picture><img class="game-art" src="${art}" alt=""></picture><span class="game-info"><strong>${homeMark ? `<img class="home-provider-image" src="${homeMark.logo}" alt="${homeMark.name}">` : ''}<span>${title}</span></strong></span>${action}`;
   if (isFavorite) {
     card.dataset.cover = game.id;
     card.style.setProperty('--cover', `url("${art}")`);
   }
-  card.addEventListener('click', () => openGame(game));
+  card.addEventListener('click', () => provider ? openRecentProvider(provider) : openGame(game));
   const wrap = document.createElement('div');
   wrap.className = 'home-card-wrap';
   const heart = document.createElement('button');
@@ -102,7 +115,7 @@ function createCard(game, isFavorite) {
   heart.className = 'home-heart';
   const saved = favorites.includes(game.id);
   heart.setAttribute('aria-pressed', String(saved));
-  heart.setAttribute('aria-label', (saved ? '取消收藏 ' : '收藏 ') + game.name);
+  heart.setAttribute('aria-label', (saved ? '取消收藏 ' : '收藏 ') + title);
   heart.textContent = saved ? '♥' : '♡';
   heart.addEventListener('click', () => {
     favorites = saved ? favorites.filter(id => id !== game.id) : [game.id, ...favorites];
@@ -112,7 +125,7 @@ function createCard(game, isFavorite) {
   });
   const play = document.createElement('span');
   play.className = 'home-play';
-  play.textContent = translate('立即遊玩');
+  play.textContent = provider ? '前往館別' : translate('立即遊玩');
   wrap.append(card, heart, play);
   return wrap;
 }
@@ -129,8 +142,8 @@ function renderFavorites() {
 }
 
 function renderRecent() {
-  const cards = homeGameIds.map(id => games.find(game => game.id === id));
-  $('#recentGrid')?.replaceChildren(...cards.map(game => createCard(game, false)));
+  const cards = recentProviders.map(provider => createCard(games.find(game => game.id === provider.id), false, provider));
+  $('#recentGrid')?.replaceChildren(...cards);
 }
 function setLanguage(language) {
   locale = language;
@@ -190,12 +203,33 @@ function openGame(game) {
   });
 }
 
-function openHomeGameList(title, ids) {
+function openHomeGameList(title, ids, isRecent = false) {
   const items = ids.map(id => games.find(game => game.id === id)).filter(Boolean);
-  showModal(translate(title), items.length ? '選擇遊戲可查看入口。' : '目前沒有收藏的遊戲。', items.map(game => [
-    game.name,
-    () => openGame(game)
-  ]));
+  showModal(translate(title), isRecent ? '近 7 天遊戲過' : (items.length ? '' : '目前沒有收藏的遊戲。'));
+  if (!items.length) return;
+
+  const grid = document.createElement('div');
+  grid.className = 'home-modal-cards';
+  for (const game of items) {
+    const provider = isRecent ? recentProviders.find(item => item.id === game.id) : null;
+    const name = provider?.title ?? game.name;
+    const art = provider?.art ?? originalFeaturedArt[game.id] ?? `assets/home-games/${game.id}.webp`;
+    const mark = homeProvider(game);
+    const card = document.createElement('article');
+    card.className = 'home-modal-card';
+    card.innerHTML = `<img class="home-modal-art" src="${art}" alt="">
+      <div class="home-modal-card-copy">
+        ${mark ? `<img class="home-modal-logo" src="${mark.logo}" alt="">` : ''}
+        <strong>${name}</strong>
+        <button type="button" aria-label="${provider ? '前往館別' : '立即遊戲'} ${name}">${provider ? '前往館別' : '立即遊戲'} ›</button>
+      </div>`;
+    card.querySelector('button').addEventListener('click', () => {
+      if (provider) openRecentProvider(provider);
+      else openGame(game);
+    });
+    grid.append(card);
+  }
+  $('#modalContent').replaceChildren(grid);
 }
 
 function openCatalog(category) {
@@ -243,7 +277,7 @@ if (isCatalogPage) {
 const actions = {
   home: () => (isCatalogPage || document.querySelector('#desktop-games')) ? location.assign('index.html') : window.scrollTo({top:0, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}),
   all: () => { if (!isCatalogPage) location.assign("all-games.html"); },
-  recent: () => openHomeGameList('玩過', homeGameIds),
+  recent: () => openHomeGameList('玩過', recentProviders.map(provider => provider.id), true),
   favorites: () => openHomeGameList('收藏', favorites),
   referral: () => showModal('推薦好友', '依序取得推薦資訊、分享給好友並確認活動條件。', [
     ['1　取得推薦資訊', placeholder('取得推薦資訊', '正式推薦連結等待會員服務提供。')],

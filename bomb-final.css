@@ -221,7 +221,7 @@ button.favorite > span { display: none; }
 #sports-event-details [data-sports-event-play] {background:#f3cf82;color:#241128;font-weight:800}
 
 /* Activity sections share a banner and two stacked game cards. */
-#desktop-games :is(#games-live,#games-slots,#games-fish,#games-sports) > h2::after {
+#desktop-games :is(#games-live,#games-slots,#games-lottery,#games-table,#games-fish,#games-sports) > h2::after {
   display:block;content:"";flex:1;height:1px;background:linear-gradient(90deg,#e8bd72,#e8bd7240);
 }
 #desktop-games .activity-mosaic {display:grid;grid-template-columns:3fr 2fr;gap:12px;margin-bottom:18px}
@@ -719,4 +719,128 @@ img:is([src$="/zg-symbol.png"],[src$="/we.png"],[src$="/gc.png"]) {
     from { opacity: .5; transform: scale(.93); }
     to { opacity: 1; transform: scale(1.1); }
   }
+}
+
+@media (min-width: 900px) {
+  #desktop-games :is(.game, .lobby-feature) {
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  #desktop-games :is(.game, .lobby-feature) :is(.room-art, .lobby-feature-art img) {
+    transition: filter .2s ease;
+  }
+  #desktop-games :is(.game, .lobby-feature):is(:hover, :focus-within) {
+    border-color: #ffd985;
+    box-shadow: 0 5px 18px #dda75155;
+  }
+  #desktop-games :is(.game, .lobby-feature):is(:hover, :focus-within) :is(.room-art, .lobby-feature-art img) {
+    filter: brightness(1.13);
+  }
+}
+@media (min-width: 900px) and (hover: hover) and (prefers-reduced-motion: no-preference) {
+  #desktop-games :is(.game, .lobby-feature):hover { transform: translateY(-3px); }
+}
+
+#modalWrap:has(.home-modal-cards) {
+  box-sizing: border-box;
+  width: min(790px, calc(100vw - 28px));
+  max-width: none;
+  max-height: 86vh;
+  overflow: auto;
+}
+#modalWrap:has(.home-modal-cards) > .modal {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  padding: clamp(12px, 3.2vw, 22px);
+}
+#modalWrap:has(.home-modal-cards) #modalContent { min-width: 0; }
+#modalWrap:has(.home-modal-cards) #modalText:empty { display: none; }
+.home-modal-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.home-modal-card {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  width: 100%;
+  min-height: 132px;
+  aspect-ratio: 1.48;
+  overflow: hidden;
+  border: 1px solid #d7ad696e;
+  border-radius: 11px;
+  background: #231129;
+}
+.home-modal-art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.home-modal-card-copy {
+  position: absolute;
+  inset: auto 0 0;
+  display: grid;
+  gap: 4px;
+  justify-items: start;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 16px 8px 8px;
+  background: linear-gradient(transparent, #170b1aed 54%);
+  color: #fff5e3;
+}
+.home-modal-card-copy strong { font-size: clamp(12px, 3vw, 16px); overflow-wrap: anywhere; }
+.home-modal-logo { width: 58px; height: 26px; object-fit: contain; object-position: left center; }
+.home-modal-card-copy button {
+  min-height: 32px;
+  max-width: 100%;
+  border: 1px solid #ffdd8c;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: linear-gradient(#ffe4a0, #d9a14e);
+  color: #291707;
+  font-weight: 800;
+  cursor: pointer;
+}
+@media (max-width: 600px) {
+  .home-modal-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 900px) {
+  #desktop-games :is(.game, .lobby-feature) :is(.room-caption, .lobby-feature-copy) button {
+    transition: box-shadow .22s ease, filter .22s ease, transform .22s ease;
+  }
+  #desktop-games :is(.game, .lobby-feature):is(:hover, :focus-within) :is(.room-caption, .lobby-feature-copy) {
+    inset: 0;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 44px;
+    text-align: center;
+    background: radial-gradient(ellipse at center, #160918ed, #1609183d);
+  }
+  #desktop-games :is(.game, .lobby-feature):is(:hover, :focus-within) :is(.room-caption strong, .lobby-feature-copy h3) {
+    align-items: center;
+    justify-content: center;
+    line-height: 1.1;
+  }
+  #desktop-games :is(.game, .lobby-feature):is(:hover, :focus-within) :is(.room-caption .room-logo, .live-exclusive-logo) {
+    object-position: center;
+    filter: drop-shadow(0 0 9px #ffce7c80);
+  }
+  #desktop-games .lobby-feature:is(:hover, :focus-within) .lobby-feature-copy p { display: none; }
+  #desktop-games :is(.game, .lobby-feature):is(:hover, :focus-within) :is(.room-caption, .lobby-feature-copy) button {
+    filter: brightness(1.14);
+    box-shadow: 0 0 0 1px #ffe8a1, 0 0 14px #ffb54fac;
+  }
+  #desktop-games :is(.room-caption, .lobby-feature-copy) button:hover { transform: scale(1.06); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #desktop-games :is(.room-caption, .lobby-feature-copy) button { transition: none; }
+  #desktop-games :is(.room-caption, .lobby-feature-copy) button:hover { transform: none; }
 }
