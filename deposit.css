@@ -14,12 +14,17 @@
 #depositForm fieldset { min-width:0; margin:0 0 4px; padding:0; border:0; }
 #depositForm :is(legend,h2,label[for]) { margin:0; font-size:16px; font-weight:800; color:#ffdb8a; }
 #depositForm legend { margin-bottom:9px; }
-.deposit-channels { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; }
-.deposit-tile { display:grid; align-content:center; justify-items:center; position:relative; min-height:91px; gap:6px; padding:7px 4px; border:1px solid #805064; border-radius:10px; background:linear-gradient(#351429,#240f25); text-align:center; cursor:pointer; overflow-wrap:anywhere; }
+.deposit-channels { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; }
+.deposit-tile { display:grid; align-content:center; justify-items:center; position:relative; min-height:108px; gap:5px; padding:8px 5px; border:1px solid #805064; border-radius:10px; background:linear-gradient(150deg,#351426,#230c20); text-align:center; cursor:pointer; overflow-wrap:anywhere; }
 .deposit-tile input { position:absolute; width:1px; height:1px; opacity:0; }
-.deposit-tile > span { font-size:29px; line-height:1.1; }
+.deposit-icon { display:block; width:min(100%,112px); height:55px; object-fit:contain; filter:drop-shadow(0 3px 4px #10050cbc); }
 .deposit-tile strong { font-size:clamp(12px,1.25vw,14px); line-height:1.25; }
-.deposit-tile:has(input:checked) { border-color:#ffd47b; box-shadow:inset 0 0 12px #f8b65940,0 0 5px #f8b65980; }
+.deposit-tile:has(input:checked) { border-color:#ffd47b; box-shadow:inset 0 0 0 1px #ffe1a1,inset 0 0 15px #f8b65940,0 0 9px #f8b65980; }
+.deposit-tile:has(input:checked)::after {
+  content:"✓"; position:absolute; top:0; right:0; width:24px; height:21px;
+  display:grid; place-items:center; color:#271506; background:#ffd47b;
+  border-radius:0 9px 0 8px; font-weight:900; pointer-events:none;
+}
 .deposit-tile:has(input:focus-visible) { outline:2px solid #fff2ae; outline-offset:2px; }
 .deposit-quick { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:6px; }
 .deposit-quick button, .deposit-actions button { min-height:40px; border:1px solid #d3a94f; border-radius:9px; background:#2f162a; color:#ffe2a0; cursor:pointer; padding:5px; }
@@ -37,7 +42,9 @@
   .deposit-mobile-menu summary { padding:10px 12px; font-weight:800; color:#ffe2a0; cursor:pointer; }
   .deposit-mobile-menu nav { padding:0 8px 8px; grid-template-columns:repeat(2,minmax(0,1fr)); }
   .deposit-mobile-menu h2 { grid-column:1/-1; }
-  .deposit-channels { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .deposit-channels { grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; }
+  .deposit-tile { min-height:92px; }
+  .deposit-icon { height:42px; }
   .deposit-quick button { font-size:clamp(11px,3.2vw,14px); }
 }
 @media (max-width:360px) { .deposit-channels { grid-template-columns:repeat(2,minmax(0,1fr)); } }
