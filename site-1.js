@@ -40,7 +40,7 @@ let favorites = [...new Set(readPreference(favoritesKey, homeGameIds, Array.isAr
 const labels = [
   '首頁', '視訊', '電子', '彩票', '棋牌', '捕魚', '體育', '優惠',
   '全部遊戲', '儲值', '優惠活動', '會員中心', '平台獨家', '玩過', '收藏',
-  '推薦好友', '查看更多', '立即遊玩', '快速進入', '查看詳情', '最近遊玩', '關閉'
+  '推薦好友', '查看更多', '立即遊戲', '快速進入', '查看詳情', '最近遊玩', '關閉'
 ];
 
 const languages = {
@@ -125,7 +125,17 @@ function createCard(game, isFavorite, provider) {
   });
   const play = document.createElement('span');
   play.className = 'home-play';
-  play.textContent = provider ? '前往館別' : translate('立即遊玩');
+  if (provider) {
+    const desktopLabel = document.createElement('span');
+    desktopLabel.className = 'home-play-desktop';
+    desktopLabel.textContent = translate('立即遊戲');
+    const mobileLabel = document.createElement('span');
+    mobileLabel.className = 'home-play-mobile';
+    mobileLabel.textContent = '前往館別';
+    play.append(desktopLabel, mobileLabel);
+  } else {
+    play.textContent = translate('立即遊戲');
+  }
   wrap.append(card, heart, play);
   return wrap;
 }
@@ -247,18 +257,6 @@ const announcements = [
 ];
 
 const placeholder = (title, text) => () => showModal(title, '原型互動。' + text);
-
-const installStrip = document.querySelector('.app-install-strip');
-const installDismissKey = 'bomb-app-install-dismissed';
-try {
-  installStrip.hidden = sessionStorage.getItem(installDismissKey) === 'yes';
-} catch (error) {
-  // The close button remains available when storage is disabled.
-}
-installStrip.querySelector('.app-install-dismiss').addEventListener('click', () => {
-  installStrip.hidden = true;
-  try { sessionStorage.setItem(installDismissKey, 'yes'); } catch (error) {}
-});
 
 function openAppGuide(os) {
   location.href = os ? `app-guide.html#${os}` : 'app-guide.html';
