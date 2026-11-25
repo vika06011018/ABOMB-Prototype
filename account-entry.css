@@ -1,0 +1,94 @@
+.desktop-account-entry { display:none; }
+#walletMenu.open { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; min-width:220px; }
+#walletMenu p { grid-column:1/-1; }
+#walletMenu button { white-space:nowrap; }
+@media (min-width:900px) {
+  .top-actions .desktop-account-entry {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    color:#fff4ff;
+    text-decoration:none;
+    white-space:nowrap;
+    font-size:13px;
+  }
+  #walletBtn .wallet-account-mobile { display:none; }
+  .top .top-actions { gap:clamp(6px,1vw,16px); }
+}
+
+.inbox-drop { display:contents; }
+.inbox-menu[hidden], .inbox-dot[hidden], .inbox-sr[hidden] { display:none !important; }
+.inbox-dot { display:inline-block; flex:none; width:7px; height:7px; margin-inline-start:7px; border-radius:50%; background:#ff3757; vertical-align:middle; }
+.inbox-sr { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+@media (min-width:900px) {
+  .top-actions .inbox-drop { display:block; position:relative; }
+  .top-actions #inboxBell .notification-bell { width:32px; height:32px; }
+  .inbox-menu a { display:block; color:#fff5ec; padding:9px 12px; border-radius:6px; text-decoration:none; white-space:nowrap; }
+  .inbox-menu a:is(:hover,:focus-visible) { background:#503043; }
+}
+
+.top-actions .member-drop { display:none; }
+.top-actions .wallet-avatar { display:block; flex:none; }
+.demo-guest .top-actions :is(.member-drop, .deposit-mini, .top-drop:has(#walletBtn), .inbox-drop) {
+  display:none !important;
+}
+.demo-login { color:#f7dfaa; }
+
+@media (min-width:900px) {
+  .top-actions .member-drop { display:block; }
+  .top-actions .desktop-account-entry {
+    padding:0;
+    border:0;
+    background:transparent;
+    font-family:inherit;
+    cursor:pointer;
+  }
+  .top-actions .desktop-account-entry .avatar {
+    width:40px;
+    height:40px;
+    border:0;
+    background:none;
+    box-shadow:0 2px 8px #0009;
+  }
+  .top-actions .member-menu {
+    min-width:164px;
+    background:linear-gradient(145deg,#2c2219,#151110);
+    border-color:#a17a45;
+    box-shadow:0 10px 28px #000a;
+  }
+  .member-menu :is(a,button) {
+    display:block;
+    padding:10px 12px;
+    border-radius:7px;
+    color:#fff1d4;
+    font:inherit;
+    text-decoration:none;
+  }
+  .member-menu :is(a,button):is(:hover,:focus-visible) { background:#49402e; }
+}
+
+@media (max-width:899px) {
+  #walletBtn .wallet-account-mobile { display:flex; align-items:center; gap:4px; }
+  .deposit-page .main:has(#personalView:not([hidden])) {
+    padding-bottom:calc(max(95px, 125 * var(--u) + 16px) + var(--safe-bottom));
+  }
+  #personalView .personal-account {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:linear-gradient(135deg,#392a1e,#1c1516);
+    border-color:#88663d;
+    font-weight:700;
+  }
+  .deposit-layout .personal-links .mobile-logout {
+    min-height:44px;
+    margin-top:4px;
+    border-color:#a17a45;
+    background:#241a16;
+    color:#ffe2a0;
+    text-align:center;
+  }
+}
+@media (min-width:900px) {
+  .top-actions .desktop-account-entry .avatar { width:44px; height:44px; }
+}

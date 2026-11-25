@@ -1,0 +1,13 @@
+/* V8: entire original referral panel, no cropped bottom. Last-loaded authority. */
+#referral .promo { position:relative!important;display:block!important; width:100%!important;height:auto!important; min-height:0!important; aspect-ratio:973/181!important; padding:0!important; margin:0!important; overflow:visible!important; box-sizing:border-box!important; border:0!important;border-radius:0!important;box-shadow:none!important; isolation:isolate!important; background: url("assets/referral_desktop_full.png") center / 100% 100% no-repeat!important; }
+#referral .promo:before,#referral .promo:after {display:none!important;content:none!important;}
+#referral .promo>.gift-art,#referral .promo>.steps{display:none!important;}
+#referral .promo-copy{position:absolute!important;inset:0!important;display:block!important;max-width:none!important;margin:0!important;padding:0!important;opacity:1!important;pointer-events:none!important;}
+#referral .promo-copy h3,#referral .promo-copy p{display:none!important;}
+#referral .promo-copy>.gold-btn{position:absolute!important;left:19.1%!important;top:69%!important;width:17.7%!important;height:21%!important;opacity:0!important;border:0!important;cursor:pointer!important;pointer-events:auto!important;padding:0!important;margin:0!important;}
+#referral .promo-copy>.gold-btn:focus-visible{opacity:.35!important;outline:3px solid white!important;outline-offset:2px!important;}
+#referral .promo-copy>.gold-btn:hover{opacity:.16!important;}
+@media(max-width:850px){
+ #referral .promo{aspect-ratio:864/182!important;background-image:url("assets/referral_mobile_full.png")!important;}
+ #referral .promo-copy>.gold-btn{left:26.2%!important;top:62%!important;width:27%!important;height:24%!important;}
+}
