@@ -8,6 +8,8 @@
   const flow = view.querySelector('#bind-flow');
   const notice = view.querySelector('#bind-notice');
   const identity = view.querySelector('#bind-identity');
+  const nationalId = view.querySelector('#bind-id');
+  const addImage = view.querySelector('#bind-add-image');
   const forms = [...view.querySelectorAll('[data-bind-form]')];
   const tabs = [...view.querySelectorAll('[data-bind-tab]')];
   const store = view.querySelector('#bind-store-select');
@@ -19,11 +21,12 @@
     usdt: ['綁定USDT','USDT','錢包地址末五碼'],
     store: ['綁定超商','超商','店家代號'],
   };
+  const addImages = {bank:'bank', credit:'card', usdt:'usdt', store:'7-eleven'};
   let kind = 'bank';
   let completedIdentity = false;
   let selectedChannel = null;
   const completed = new Set();
-  const stateKey = 'bomb-demo-binding-identity-v1';
+  const stateKey = 'bomb-demo-binding-identity-v2';
 
   try { completedIdentity = sessionStorage.getItem(stateKey) === 'complete'; } catch {}
 
@@ -36,6 +39,7 @@
   function showList(nextKind) {
     kind = Object.hasOwn(methods,nextKind) ? nextKind : 'bank';
     [heading.textContent,caption.textContent,column.textContent] = methods[kind];
+    addImage.src = `assets/deposit/${addImages[kind]}.webp`;
     for (const tab of tabs) tab.setAttribute('aria-pressed',String(tab.dataset.bindTab === kind));
     list.hidden = false;
     flow.hidden = true;
@@ -54,6 +58,7 @@
   function syncRoute() {
     const [route, search] = location.hash.slice(1).split('?');
     identity.reset();
+    nationalId.setCustomValidity('');
     for (const form of forms) form.reset();
     if (route !== 'bind-bank-card') return;
     const nextKind = new URLSearchParams(search).get('type');
@@ -96,9 +101,33 @@
   });
   view.querySelector('#bind-back').addEventListener('click', () => {
     identity.reset();
+    nationalId.setCustomValidity('');
     for (const form of forms) form.reset();
     showList(kind);
     view.querySelector('#bind-add').focus();
+  });
+  function validateNationalId() {
+    const value = nationalId.value.trim().replace(/[a-z]/g, letter => letter.toUpperCase());
+    nationalId.value = value;
+    if (!/^[A-Z][0-9]{9}$/.test(value)) {
+      nationalId.setCustomValidity('請輸入 1 個英文字母及 9 位數字的國民身分證字號。');
+      return false;
+    }
+    if (!/^[12]$/.test(value[1])) {
+      nationalId.setCustomValidity('國民身分證字號的第一位數字須為 1 或 2。');
+      return false;
+    }
+    const areaCode = 'ABCDEFGHJKLMNPQRSTUVXYWZIO'.indexOf(value[0]) + 10;
+    let sum = Math.floor(areaCode / 10) + (areaCode % 10) * 9;
+    for (let i = 1; i < 9; i++) sum += Number(value[i]) * (9 - i);
+    const valid = (sum + Number(value[9])) % 10 === 0;
+    nationalId.setCustomValidity(valid ? '' : '身分證字號檢查碼不符，請確認後再試。');
+    return valid;
+  }
+
+  nationalId.addEventListener('input', () => {
+    nationalId.setCustomValidity('');
+    nationalId.value = nationalId.value.replace(/[a-z]/g, letter => letter.toUpperCase());
   });
   identity.addEventListener('submit', event => {
     event.preventDefault();
@@ -108,9 +137,14 @@
       name.reportValidity();
       return;
     }
+    if (!validateNationalId()) {
+      nationalId.reportValidity();
+      return;
+    }
     completedIdentity = true;
     try { sessionStorage.setItem(stateKey,'complete'); } catch {}
     identity.reset();
+    nationalId.setCustomValidity('');
     showStep(2);
   });
   view.querySelector('#bind-name').addEventListener('input', event => event.target.setCustomValidity(''));

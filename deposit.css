@@ -193,3 +193,10 @@
 .bind-stores a { border:1px solid #a17a43; border-radius:8px; color:#ffe2a0; padding:8px 10px; text-decoration:none; }
 .bind-stores a:is(:hover,:focus-visible) { background:#503043; }
 @media(max-width:480px) { .bind-form label { grid-template-columns:1fr; } }
+
+.bind-add { align-content:center; gap:7px; }
+.bind-add-visual { display:inline-grid; position:relative; place-items:center; padding:0 15px; }
+.bind-add-visual img { width:112px; height:65px; object-fit:contain; }
+.bind-add-visual strong { display:grid; place-items:center; position:absolute; right:0; bottom:0; width:27px; height:27px; font-size:18px; border-radius:50%; background:#eac477; color:#231225; }
+.bind-overseas { margin:0; text-align:center; color:#dfc5d5; }
+.bind-overseas button { padding:0; border:0; color:#ffe1a1; background:transparent; text-decoration:underline; cursor:pointer; }

@@ -593,7 +593,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 @media (max-width:899px) { .top-actions .notification-bell { width:clamp(20px,5.8vw,25px); height:auto; } }
 </style>
 <link rel="stylesheet" href="bomb-final.css?v=44">
-<link rel="stylesheet" href="deposit.css?v=57">
+<link rel="stylesheet" href="deposit.css?v=58">
 <link rel="stylesheet" href="account-entry.css?v=54">
 <link rel="stylesheet" href="shared-footer.css?v=56">
 </head>
@@ -707,7 +707,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
    <table class="bind-table"><caption id="bind-caption">點數帳戶</caption>
    <thead><tr><th scope="col">名稱</th><th scope="col" id="bind-column">帳號後五碼</th><th scope="col">驗證狀態</th></tr></thead>
    <tbody id="bind-rows"><tr><td colspan="3">尚未綁定</td></tr></tbody></table>
-   <button class="bind-add" type="button" id="bind-add"><strong aria-hidden="true">＋</strong>新增綁定</button>
+   <button class="bind-add" type="button" id="bind-add"><span class="bind-add-visual" aria-hidden="true"><img id="bind-add-image" src="assets/deposit/bank.webp" alt="" width="112" height="76"><strong>＋</strong></span>新增綁定</button>
    <p id="bind-notice" role="status"></p>
  </div>
  <div id="bind-flow" hidden>
@@ -716,7 +716,8 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
    <p class="bind-demo">此為示範流程，請使用測試資料。內容不會傳送或保存。</p>
    <form id="bind-identity" class="bind-form" autocomplete="off">
       <label>姓名<input id="bind-name" required placeholder="示範會員" maxlength="40"></label>
-      <label>身分證字號<input id="bind-id" required placeholder="DEMO001" pattern="DEMO[0-9]{3}" title="請輸入 DEMO 加三位數字" maxlength="7"></label>
+      <label>身分證字號<input id="bind-id" required placeholder="請輸入 1 個英文字母＋9 位數字" maxlength="10" autocapitalize="characters" spellcheck="false"></label>
+      <p class="bind-overseas">海外華人或境外客戶請<button type="button" data-action="help">聯繫客服</button>。</p>
       <button type="submit" class="goldbtn">繼續</button>
    </form>
    <form id="bind-bank" data-bind-form class="bind-form" autocomplete="off" hidden>
@@ -872,6 +873,6 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <script src="back-to-top.js" defer></script>
 <script src="account-inbox.js?v=54" defer></script>
 <script src="account-referral.js?v=56" defer></script>
-<script src="account-binding.js?v=57" defer></script>
+<script src="account-binding.js?v=58" defer></script>
 </body>
 </html>
