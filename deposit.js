@@ -62,7 +62,7 @@ const depositTab = dock.querySelector('[data-action="deposit"]');
 const memberTab = dock.querySelector('[data-action="personal"]');
 
 function updateAccountView(focusHeading) {
-  const [view, key, label] = accountViews[location.hash] ?? accountViews['#deposit-title'];
+  const [view, key, label] = accountViews[location.hash.split('?')[0]] ?? accountViews['#deposit-title'];
   for (const [panel] of Object.values(accountViews)) panel.hidden = panel !== view;
   for (const link of accountLinks) {
     if (link.dataset.depositView === key) link.setAttribute('aria-current', 'page');
