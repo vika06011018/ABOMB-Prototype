@@ -36,23 +36,17 @@
     }
   }
 
-  const selects = [document.querySelector('#vip-left'), document.querySelector('#vip-right')];
-  const headings = [document.querySelector('#vip-left-title'), document.querySelector('#vip-right-title')];
   const table = profile.querySelector('.vip-comparison');
-  for (const [index, select] of selects.entries()) {
-    select.replaceChildren(...levels.map(level => new Option(level,level)));
-    select.selectedIndex = index;
-    select.addEventListener('change', renderComparison);
+  for (const level of levels) {
+    const heading = textElement('th', level);
+    heading.scope = 'col';
+    table.tHead.rows[0].append(heading);
   }
-
-  function renderComparison() {
-    const selected = selects.map(select => select.value);
-    headings.forEach((heading,index) => { heading.textContent = selected[index]; });
-    for (const body of [...table.tBodies]) body.remove();
+  {
     for (const group of groups) {
       const body = table.createTBody();
       const title = textElement('th',group.title);
-      title.colSpan = 3;
+      title.colSpan = levels.length + 1;
       title.scope = 'rowgroup';
       body.insertRow().append(title);
       for (const [label,...values] of group.rows) {
@@ -60,13 +54,12 @@
         const name = textElement('th',label);
         name.scope = 'row';
         row.append(name);
-        for (const level of selected) {
+        for (const level of levels) {
           row.append(textElement('td', invitationOnly.includes(level) ? '邀請制' : values[levels.indexOf(level)] ?? '—'));
         }
       }
     }
   }
-  renderComparison();
   for (const [title, description] of rules) {
     const item = document.createElement('li');
     item.append(textElement('strong',title),textElement('p',description));

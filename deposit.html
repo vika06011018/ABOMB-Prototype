@@ -523,7 +523,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 }
 </style>
 <link rel="apple-touch-icon" href="assets/app_logo.png">
-<link rel="stylesheet" href="catalog.css?v=43">
+<link rel="stylesheet" href="catalog.css?v=56">
 <link rel="stylesheet" href="desktop-games.css" media="(min-width:900px)">
 <script>
   const previousPage = new URLSearchParams(location.search).get('page');
@@ -593,8 +593,9 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 @media (max-width:899px) { .top-actions .notification-bell { width:clamp(20px,5.8vw,25px); height:auto; } }
 </style>
 <link rel="stylesheet" href="bomb-final.css?v=44">
-<link rel="stylesheet" href="deposit.css?v=55">
+<link rel="stylesheet" href="deposit.css?v=56">
 <link rel="stylesheet" href="account-entry.css?v=54">
+<link rel="stylesheet" href="shared-footer.css?v=56">
 </head>
 <body class="deposit-page">
 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
@@ -632,7 +633,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <aside class="deposit-side"><h2>帳務中心</h2><nav aria-label="帳務中心選單">
 <a href="#deposit-title" data-deposit-view="deposit" aria-current="page">儲值</a><a href="#withdraw" data-deposit-view="withdraw">託售</a>
 <a href="#transfer" data-deposit-view="transfer">轉點</a><button type="button" data-account-label="遊戲紀錄">遊戲紀錄</button><a href="#bind-bank-card" data-deposit-view="binding">綁定銀行卡</a>
-<h2>個人中心</h2><a href="#announcements" data-deposit-view="announcements" data-unread-link="announcements">消息公告<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="#messages" data-deposit-view="messages" data-unread-link="messages">個人訊息<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="#personal-center" data-deposit-view="personal">個人資料</a><button type="button" data-account-label="密碼修改">密碼修改</button><button type="button" data-account-label="維護時間">維護時間</button><a href="app-guide.html">APP 下載</a>
+<h2>公會中心</h2><button type="button" data-account-label="公會推廣">公會推廣</button><button type="button" data-account-label="公會成員">公會成員</button><h2>個人中心</h2><a href="#announcements" data-deposit-view="announcements" data-unread-link="announcements">消息公告<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="#messages" data-deposit-view="messages" data-unread-link="messages">個人訊息<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="#referral" data-deposit-view="referral">推薦好友</a><a href="#personal-center" data-deposit-view="personal">個人資料</a><button type="button" data-account-label="密碼修改">密碼修改</button><button type="button" data-account-label="維護時間">維護時間</button><a href="app-guide.html">APP 下載</a>
 </nav></aside>
 <section class="deposit-content">
 <details class="deposit-mobile-menu"><summary id="accountMenuSummary">帳務中心</summary><nav aria-label="帳務中心選單">
@@ -714,7 +715,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 </div>
 <div id="withdrawView" hidden><h1 id="withdraw" tabindex="-1">託售</h1><div class="deposit-notes">正式託售服務待串接。</div></div>
 <div id="personalView" hidden>
-  <h1 id="personal-center" tabindex="-1"><span class="desktop-personal-title">個人中心</span><span class="mobile-personal-title">會員中心</span></h1>
+  <h1 id="personal-center" tabindex="-1"><span class="desktop-personal-title">個人資料</span><span class="mobile-personal-title">會員中心</span></h1>
   <p class="personal-account personal-mobile-only">demo001</p>
 <div class="personal-desktop-profile">
   <nav class="profile-tabs" aria-label="個人中心標籤">
@@ -735,13 +736,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
   <section id="profile-vip" class="profile-panel" aria-label="VIP詳情" hidden>
     <details class="profile-rules"><summary>升級、保級與活動規則</summary><ol id="vip-rule-list"></ol></details>
     <h2>活動表格</h2>
-    <div class="vip-selects">
-      <label>比較等級一 <select id="vip-left"></select></label>
-      <label>比較等級二 <select id="vip-right"></select></label>
-    </div>
-    <table class="vip-comparison" aria-label="VIP 等級權益比較">
-      <thead><tr><th scope="col">比較項目</th><th scope="col" id="vip-left-title"></th><th scope="col" id="vip-right-title"></th></tr></thead>
-    </table>
+    <div class="vip-scroll" tabindex="0" role="region" aria-label="VIP 權益表，可橫向捲動"><table class="vip-comparison" aria-label="VIP 等級權益比較"><thead><tr><th scope="col">比較項目</th></tr></thead></table></div>
   </section>
   <section id="profile-details" class="profile-panel profile-details" aria-label="個人資料" hidden>
     <section><h2>個人資訊</h2><dl>
@@ -762,6 +757,31 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 </nav>
 </div>
 
+<div id="referralView" hidden>
+<header class="ref-heading"><h1 id="referral" tabindex="-1">推薦好友</h1>
+<div class="inbox-filters" role="group" aria-label="推薦好友頁籤">
+<button type="button" data-ref="invite" aria-pressed="true">推薦好友</button>
+<button type="button" data-ref="records" aria-pressed="false">推薦紀錄</button>
+<button type="button" data-ref="rewards" aria-pressed="false">推薦回饋</button>
+</div></header>
+<div id="ref-invite" class="ref-grid">
+<div class="deposit-notes ref-values">
+<label for="ref-code">我的推薦碼</label><div><input id="ref-code" readonly value="DEMO001"><button type="button" data-copy="ref-code">複製</button></div>
+<label for="ref-url">我的推薦連結</label><div><input id="ref-url" readonly value="https://example.com/?ref=demo001"><button type="button" data-copy="ref-url">複製連結</button></div>
+</div>
+<div class="deposit-notes ref-qr"><h2>推薦 QR Code</h2><img src="assets/demo-referral-qr.png" width="176" height="176" alt="示範推薦連結 QR Code">
+<div><a href="assets/demo-referral-qr.png" download="BOMB-DEMO001-QR.png">下載 QR Code</a><button type="button" id="ref-share">分享</button></div></div>
+<p id="ref-status" role="status"></p>
+</div>
+<div id="ref-records" hidden><div class="ref-results"><table><thead><tr><th scope="col">好友帳號</th><th scope="col">加入日期</th><th scope="col">狀態</th></tr></thead><tbody><tr><td colspan="3">目前沒有推薦紀錄</td></tr></tbody></table></div></div>
+<div id="ref-rewards" hidden>
+<form id="ref-dates">
+<div class="ref-date-row"><input required type="date" id="ref-start" aria-label="起始日期"><span>至</span><input required type="date" id="ref-end" aria-label="結束日期"><button type="submit">搜尋</button></div>
+<div class="ref-shortcuts"><button type="button" data-range="yesterday">昨天</button><button type="button" data-range="today">今天</button><button type="button" data-range="last-week">上週</button><button type="button" data-range="week">本週</button><button type="button" data-range="month">本月</button></div>
+</form>
+<p id="ref-search-status" role="status"></p>
+<div class="ref-results"><table><thead><tr><th scope="col">會員帳號</th><th scope="col">有效投注額</th><th scope="col">返水金額</th></tr></thead><tbody><tr><td colspan="3">無資料</td></tr></tbody></table></div>
+</div></div>
 <div id="announcementsView" hidden>
   <h1 id="announcements" tabindex="-1">消息公告</h1>
   <div class="inbox-filters" role="group" aria-label="公告分類"><button type="button" data-inbox-filter="all" aria-pressed="true">全部公告</button><button type="button" data-inbox-filter="site" aria-pressed="false">網站公告</button><button type="button" data-inbox-filter="game" aria-pressed="false">遊戲維護</button><button type="button" data-inbox-filter="bank" aria-pressed="false">銀行維護</button></div>
@@ -772,12 +792,9 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
   <details class="inbox-item" data-notice="personal-1" data-category="personal"><summary>會員通知<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></summary><p>這是一則示範個人訊息。</p></details>
 </div>
 </section></div>
-<section class="home-partners" aria-labelledby="partners-title">
-  <h2 id="partners-title">合作商</h2>
-  <picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/desktop-home/partners.webp"><img src="assets/desktop-home/partners.gif" width="900" height="60" alt="合作商標誌輪播"></picture>
-</section>
+
 </main>
-<footer class="footer"><span>BOMB 娛樂平台</span><div><button data-action="about">關於我們</button><button data-action="terms">使用條款</button><button data-action="privacy">隱私政策</button><button data-action="help">幫助中心</button></div><span>18+　未滿18歲不得進入</span></footer>
+<footer class="footer shared-footer"><span>BOMB 娛樂平台</span><div><button data-action="about">關於我們</button><button data-action="terms">使用條款</button><button data-action="privacy">隱私政策</button><button data-action="help">幫助中心</button></div><picture class="footer-partners"><source media="(prefers-reduced-motion: reduce)" srcset="assets/desktop-home/partners.webp"><img src="assets/desktop-home/partners.gif" width="900" height="60" alt="合作商"></picture><span>18+　未滿18歲不得進入</span></footer>
 <aside class="floating" aria-label="快速工具"><div id="floatActions" hidden><button data-action="help" aria-label="客服中心"><svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><path d="M6 24v-4a14 14 0 0 1 28 0v4m0 6c0 5-4 7-9 7"/><rect x="5" y="19" width="6" height="12" rx="2"/><rect x="29" y="19" width="6" height="12" rx="2"/></svg><span>客服中心</span></button><button data-action="promo" aria-label="優惠活動"><svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><rect x="5" y="15" width="30" height="8" rx="2"/><path d="M8 23v13h24V23M20 15v21m0-21c-15 0-12-12-5-8l5 8c15 0 12-12 5-8z"/></svg><span>優惠活動</span></button><button data-action="referral" aria-label="推薦好友"><svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="14" cy="13" r="6"/><circle cx="28" cy="12" r="6"/><path d="M4 33v-2a10 10 0 0 1 20 0v2zm22-12a9 9 0 0 1 10 9v3h-7"/></svg><span>推薦好友</span></button></div><button id="floatToggle" class="is-collapsed" aria-expanded="false" aria-controls="floatActions" aria-label="展開工具列"><img src="assets/desktop-home/gift.webp" alt="" aria-hidden="true" class="float-gift-icon"></button></aside>
 <nav class="mobile-bottom" aria-label="手機底部導覽"><svg class="dock-surface" viewBox="0 0 900 118" preserveAspectRatio="none" aria-hidden="true">
 <defs>
@@ -806,11 +823,12 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <script src="site-1.js?v=53" defer></script>
 <script src="site-2.js?v=48" defer></script>
 <script src="site-3.js" defer></script>
-<script src="deposit.js?v=54" defer></script>
+<script src="deposit.js?v=56" defer></script>
 <script src="vip-data.js?v=55" defer></script>
-<script src="account-profile.js?v=55" defer></script>
+<script src="account-profile.js?v=56" defer></script>
 <script src="desktop-games.js?v=45" defer></script>
 <script src="back-to-top.js" defer></script>
 <script src="account-inbox.js?v=54" defer></script>
+<script src="account-referral.js?v=56" defer></script>
 </body>
 </html>

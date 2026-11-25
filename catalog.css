@@ -1,5 +1,4 @@
 .catalog-route main > :not(.hero,.marquee,.catalog),
-.catalog-route .footer,
 .catalog-route .floating { display:none !important; }
 
 .catalog { margin:14px auto 0; max-width:680px; min-height:75vh; padding-bottom:20px; color:#fff5ff; }
