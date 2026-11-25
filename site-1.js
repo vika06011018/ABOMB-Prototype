@@ -87,7 +87,7 @@ const recentProviders = [
 ];
 
 function openRecentProvider(provider) {
-  location.assign(matchMedia('(min-width: 900px)').matches
+  demoMember.navigate(matchMedia('(min-width: 900px)').matches
     ? `desktop-games.html#games-${provider.desktop}`
     : `all-games.html#catalog-${provider.mobile}`);
 }
@@ -259,7 +259,7 @@ const announcements = [
 const placeholder = (title, text) => () => showModal(title, '原型互動。' + text);
 
 function openAppGuide(os) {
-  location.href = os ? `app-guide.html#${os}` : 'app-guide.html';
+  demoMember.navigate(os ? `app-guide.html#${os}` : 'app-guide.html');
 }
 
 const isCatalogPage = document.documentElement.classList.contains('catalog-route');
@@ -283,8 +283,8 @@ function openAccountView(hash = '#deposit-title') {
 }
 
 const actions = {
-  home: () => (isDepositPage || isCatalogPage || document.querySelector('#desktop-games')) ? location.assign('index.html') : window.scrollTo({top:0, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}),
-  all: () => { if (!isCatalogPage) location.assign("all-games.html"); },
+  home: () => (isDepositPage || isCatalogPage || document.querySelector('#desktop-games')) ? demoMember.navigate('index.html') : window.scrollTo({top:0, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}),
+  all: () => { if (!isCatalogPage) demoMember.navigate('all-games.html'); },
   recent: () => openHomeGameList('玩過', recentProviders.map(provider => provider.id), true),
   favorites: () => openHomeGameList('收藏', favorites),
   referral: () => showModal('推薦好友', '依序取得推薦資訊、分享給好友並確認活動條件。', [
@@ -296,6 +296,7 @@ const actions = {
   withdraw: () => openAccountView('#withdraw'),
   transfer: () => openAccountView('#transfer'),
   personal: () => openAccountView('#personal-center'),
+  logout: () => demoMember.logout(),
   promo: () => showModal('優惠活動', '活動內容為原型示範。', announcements.slice(1).map(([title, message]) => [title, () => showModal(title, message)])),
   notifications: () => showModal('通知中心', '未讀通知為原型示範。', [[announcements[0][0], () => showModal(...announcements[0])]]),
   announcements: () => showModal('最新公告', '選擇要閱讀的公告。', announcements.map(([title, message]) => [title, () => showModal(title,message)])),
@@ -313,9 +314,10 @@ const actions = {
 };
 
 const menus = [
+  ['#memberMenuButton', '#memberMenu'],
   ['#walletBtn', '#walletMenu'],
   ['#languageBtn', '#languageMenu']
-].map(([button, menu]) => [$(button), $(menu)]);
+].map(([button, menu]) => [$(button), $(menu)]).filter(([button, menu]) => button && menu);
 
 function openMenu(activeMenu) {
   for (const [button, menu] of menus) {
@@ -328,6 +330,14 @@ for (const [button, menu] of menus) {
     openMenu(menu.classList.contains('open') ? null : menu);
   });
 }
+
+document.addEventListener('keydown', event => {
+  const activeMenu = menus.find(([, menu]) => menu.classList.contains('open'));
+  if (event.key === 'Escape' && activeMenu) {
+    openMenu(null);
+    activeMenu[0].focus();
+  }
+});
 
 document.addEventListener('click', (event) => {
   const target = event.target.closest('[data-game], [data-action], [data-category], [data-lang]');
