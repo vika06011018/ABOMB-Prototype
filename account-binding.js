@@ -8,6 +8,7 @@
   const flow = view.querySelector('#bind-flow');
   const notice = view.querySelector('#bind-notice');
   const identity = view.querySelector('#bind-identity');
+  const identityStatus = view.querySelector('#bind-identity-status');
   const nationalId = view.querySelector('#bind-id');
   const addImage = view.querySelector('#bind-add-image');
   const forms = [...view.querySelectorAll('[data-bind-form]')];
@@ -24,6 +25,7 @@
   const addImages = {bank:'bank', credit:'card', usdt:'usdt', store:'7-eleven'};
   let kind = 'bank';
   let completedIdentity = false;
+  let identityOnly = false;
   let selectedChannel = null;
   const completed = new Set();
   const stateKey = 'bomb-demo-binding-identity-v2';
@@ -43,6 +45,7 @@
     for (const tab of tabs) tab.setAttribute('aria-pressed',String(tab.dataset.bindTab === kind));
     list.hidden = false;
     flow.hidden = true;
+    identityOnly = false;
     notice.textContent = '';
     rows.replaceChildren();
     const row = rows.insertRow();
@@ -70,6 +73,7 @@
     list.hidden = true;
     flow.hidden = false;
     identity.hidden = step !== 1;
+    identityStatus.hidden = !completedIdentity;
     for (const form of forms) form.hidden = step !== 2 || form.id !== 'bind-' + kind;
     const [one,two] = view.querySelectorAll('.bind-steps li');
     one.removeAttribute('aria-current');
@@ -91,6 +95,11 @@
     if (location.hash === nextHash) showList(nextKind);
     else location.hash = nextHash;
   });
+  view.querySelector('#bind-identity-entry').addEventListener('click', () => {
+    identityOnly = true;
+    showStep(1);
+  });
+  view.querySelector('#bind-review-identity').addEventListener('click', () => showStep(1));
   view.querySelector('#bind-add').addEventListener('click', () => {
     for (const form of forms) form.reset();
     if (kind === 'store' && selectedChannel) {
@@ -143,14 +152,21 @@
     }
     completedIdentity = true;
     try { sessionStorage.setItem(stateKey,'complete'); } catch {}
-    identity.reset();
-    nationalId.setCustomValidity('');
-    showStep(2);
+    if (identityOnly) {
+      identity.reset();
+      showList(kind);
+      notice.textContent = '示範身分資料已確認。';
+      view.querySelector('#bind-identity-entry').focus();
+    } else {
+      showStep(2);
+    }
   });
   view.querySelector('#bind-name').addEventListener('input', event => event.target.setCustomValidity(''));
   for (const form of forms) form.addEventListener('submit', event => {
     event.preventDefault();
     completed.add(kind);
+    identity.reset();
+    nationalId.setCustomValidity('');
     form.reset();
     showList(kind);
     notice.textContent = '示範綁定完成。';

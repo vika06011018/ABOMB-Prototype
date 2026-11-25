@@ -89,3 +89,6 @@
     text-align:center;
   }
 }
+@media (min-width:900px) {
+  .top-actions .desktop-account-entry .avatar { width:44px; height:44px; }
+}

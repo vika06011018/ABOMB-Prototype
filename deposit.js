@@ -45,24 +45,23 @@ updateChannel();
 
 
 const accountViews = {
-  '#deposit-title': [depositView, 'deposit', '儲值'],
-  '#bind-bank-card': [bindingView, 'binding', '綁定銀行卡'],
-  '#transfer': [document.querySelector('#transferView'), 'transfer', '轉點'],
-  '#withdraw': [document.querySelector('#withdrawView'), 'withdraw', '託售'],
-  '#announcements': [document.querySelector('#announcementsView'), 'announcements', ''],
-  '#messages': [document.querySelector('#messagesView'), 'messages', ''],
-  '#referral': [document.querySelector('#referralView'), 'referral', ''],
-  '#personal-center': [document.querySelector('#personalView'), 'personal', ''],
+  '#deposit-title': [depositView, 'deposit'],
+  '#bind-bank-card': [bindingView, 'binding'],
+  '#transfer': [document.querySelector('#transferView'), 'transfer'],
+  '#withdraw': [document.querySelector('#withdrawView'), 'withdraw'],
+  '#announcements': [document.querySelector('#announcementsView'), 'announcements'],
+  '#messages': [document.querySelector('#messagesView'), 'messages'],
+  '#referral': [document.querySelector('#referralView'), 'referral'],
+  '#personal-center': [document.querySelector('#personalView'), 'personal'],
 };
 const accountMenu = document.querySelector('.deposit-mobile-menu');
-const menuSummary = document.querySelector('#accountMenuSummary');
 const accountLinks = document.querySelectorAll('.deposit-layout nav [data-deposit-view]');
 const dock = document.querySelector('.mobile-bottom');
 const depositTab = dock.querySelector('[data-action="deposit"]');
 const memberTab = dock.querySelector('[data-action="personal"]');
 
 function updateAccountView(focusHeading) {
-  const [view, key, label] = accountViews[location.hash.split('?')[0]] ?? accountViews['#deposit-title'];
+  const [view, key] = accountViews[location.hash.split('?')[0]] ?? accountViews['#deposit-title'];
   for (const [panel] of Object.values(accountViews)) panel.hidden = panel !== view;
   for (const link of accountLinks) {
     if (link.dataset.depositView === key) link.setAttribute('aria-current', 'page');
@@ -70,13 +69,13 @@ function updateAccountView(focusHeading) {
   }
   const personal = ['personal','announcements','messages','referral'].includes(key);
   accountMenu.hidden = personal;
-  menuSummary.textContent = label ? `帳務中心 · ${label}` : '帳務中心';
+  const profileTab = new URLSearchParams(location.hash.split('?')[1]).get('tab');
+  document.querySelector('#personalView').classList.toggle('profile-is-open', key === 'personal' && Boolean(profileTab));
   memberTab.classList.toggle('active', personal);
   depositTab.removeAttribute('aria-current');
   memberTab.removeAttribute('aria-current');
   (personal ? memberTab : depositTab).setAttribute('aria-current', 'page');
   if (focusHeading) {
-    accountMenu.open = false;
     view.querySelector('h1').focus({preventScroll:true});
     window.scrollTo(0, 0);
   }
