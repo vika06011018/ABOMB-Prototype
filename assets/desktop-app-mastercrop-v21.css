@@ -1,0 +1,16 @@
+/* V21: desktop APP banner re-cropped directly from approved master image */
+@media (min-width:851px){
+ #download .promo{
+  width:100%!important;height:auto!important;aspect-ratio:994/185!important;
+  background-image:url("assets/app_full_frame.png")!important;
+  background-size:100% 100%!important;background-position:center center!important;background-repeat:no-repeat!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important;overflow:hidden!important;
+ }
+ #download .promo:before,#download .promo:after{display:none!important;content:none!important;}
+ #download .promo>.app-symbol,#download .promo>.phone-art,#download .promo>.download-icon{opacity:0!important;pointer-events:none!important;}
+ #download .promo-copy{position:absolute!important;inset:0!important;margin:0!important;padding:0!important;pointer-events:none!important;}
+ #download .promo-copy h3,#download .promo-copy p{opacity:0!important;}
+ #download .btns{position:absolute!important;left:19.3%!important;top:66.0%!important;width:39.4%!important;height:23.5%!important;display:flex!important;gap:4.6%!important;pointer-events:none!important;}
+ #download .btns button{width:47.2%!important;height:100%!important;opacity:0!important;padding:0!important;pointer-events:auto!important;}
+ #download .btns button:focus-visible{opacity:.3!important;outline:2px solid #fff!important;}
+}

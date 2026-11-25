@@ -1,0 +1,17 @@
+/* V18: exact full-height desktop APP ribbon from approved source, including bottom border. */
+@media (min-width:851px){
+ #download .promo{
+  width:100%!important;height:auto!important;aspect-ratio:965/178!important;
+  background-image:url("assets/app_full_frame.png")!important;
+  background-size:100% 100%!important;background-position:center!important;background-repeat:no-repeat!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;
+  padding:0!important;overflow:hidden!important;
+ }
+ #download .promo:before,#download .promo:after{display:none!important;content:none!important;}
+ #download .promo>.app-symbol,#download .promo>.phone-art,#download .promo>.download-icon{opacity:0!important;pointer-events:none!important;}
+ #download .promo-copy{position:absolute!important;inset:0!important;margin:0!important;padding:0!important;pointer-events:none!important;}
+ #download .promo-copy h3,#download .promo-copy p{opacity:0!important;}
+ #download .btns{position:absolute!important;left:19.15%!important;top:64.3%!important;width:39.5%!important;height:25.5%!important;display:flex!important;gap:3.7%!important;pointer-events:none!important;}
+ #download .btns button{width:47.7%!important;height:100%!important;opacity:0!important;padding:0!important;pointer-events:auto!important;}
+ #download .btns button:focus-visible{opacity:.3!important;outline:2px solid #fff!important;}
+}
