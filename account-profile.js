@@ -9,11 +9,18 @@
     }
   }
   for (const tab of tabs) tab.addEventListener('click', () => selectTab(tab));
-  document.querySelector('.desktop-account-entry').addEventListener('click', () => selectTab(tabs[0]));
   document.querySelector('.deposit-side [data-deposit-view="personal"]').addEventListener('click', () => selectTab(tabs[0]));
-  window.addEventListener('hashchange', () => {
-    if (location.hash === '#personal-center') selectTab(tabs[0]);
+  function selectTabFromHash() {
+    const [route, query] = location.hash.split('?');
+    if (route !== '#personal-center') return;
+    const requested = new URLSearchParams(query).get('tab');
+    selectTab([...tabs].find(tab => tab.dataset.profileTab === requested) ?? tabs[0]);
+  }
+  document.querySelector('#memberMenu a[href$="?tab=details"]').addEventListener('click', () => {
+    if (location.hash === '#personal-center?tab=details') selectTabFromHash();
   });
+  window.addEventListener('hashchange', selectTabFromHash);
+  selectTabFromHash();
 
   const {levels, groups, invitationOnly, rules} = vipProgram;
   const textElement = (tag, text) => Object.assign(document.createElement(tag), {textContent:text});

@@ -82,9 +82,9 @@
     if (index < 0 && !(isLobby && button === home)) return;
     event.stopPropagation();
     if (button === home) {
-      location.assign('index.html');
+      demoMember.navigate('index.html');
     } else if (!isLobby) {
-      location.assign('desktop-games.html' + (index ? '#games-' + ids[index] : ''));
+      demoMember.navigate('desktop-games.html' + (index ? '#games-' + ids[index] : ''));
     } else {
       activate(index);
       history.replaceState(null, '', '#games-' + ids[index]);

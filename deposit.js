@@ -82,8 +82,23 @@ function updateAccountView(focusHeading) {
   }
 }
 
-window.addEventListener('hashchange', () => updateAccountView(true));
+function openGuildPromotion() {
+  document.querySelector('[data-account-label="公會推廣"]').click();
+}
+
+window.addEventListener('hashchange', event => {
+  if (location.hash === '#guild-promotion') {
+    history.replaceState(history.state, '', new URL(event.oldURL).hash || '#deposit-title');
+    openGuildPromotion();
+    return;
+  }
+  updateAccountView(true);
+});
 updateAccountView(false);
+if (location.hash === '#guild-promotion') {
+  history.replaceState(history.state, '', '#deposit-title');
+  openGuildPromotion();
+}
 
 const transferStatus = document.querySelector('#transferStatus');
 document.querySelector('[data-transfer-action="refresh"]').addEventListener('click', () => {
