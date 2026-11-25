@@ -23,19 +23,58 @@
 @media (max-width:899px) {
   .deposit-layout .deposit-mobile-menu {
     display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:4px;
-    padding:6px; margin:8px 0 15px; background:#25171d; border-color:#88663d;
+    padding:6px; margin:8px 0 15px; border:1px solid #c7459a; border-radius:13px;
+    background:radial-gradient(ellipse at 50% 0,#7e185d 0,transparent 78%),
+      linear-gradient(180deg,#461038,#19091e);
+    box-shadow:inset 0 1px 0 #ffacf681,0 3px 10px #da39904d;
   }
   .deposit-layout .account-tiles :is(a,button) {
     position:relative; display:grid; justify-items:center; align-content:center; gap:4px;
     text-align:center; min-width:0; padding:5px 1px; min-height:54px; color:#fff3d7;
   }
-  .deposit-mobile-menu :is(a,button) { font-size:clamp(10px,2.85vw,15px); }
+  .deposit-layout .deposit-mobile-menu :is(a,button) {
+    min-height:60px; border:1px solid #a94789; border-radius:9px;
+    font-size:clamp(10px,2.85vw,15px); font-weight:700; line-height:1.15;
+    background:linear-gradient(165deg,#752255,#421133 52%,#290c28);
+    box-shadow:inset 0 1px 0 #ffb5e861,inset 0 -2px 0 #1b061c,0 2px 3px #190819a6;
+  }
+  .deposit-layout .deposit-mobile-menu :is(a,button):is(:hover,:focus-visible) {
+    border-color:#ff9ede;
+    background:linear-gradient(165deg,#912960,#531437 55%,#340c2d);
+  }
+  .deposit-layout .deposit-mobile-menu :is(a,button):focus-visible {
+    outline:2px solid #fff0bc; outline-offset:-3px;
+  }
+  .deposit-layout .deposit-mobile-menu [aria-current="page"] {
+    color:#fff3cf; border-color:#ffe18b;
+    background:radial-gradient(ellipse at 50% 0,#db5d16,#8a2617 55%,#55112a);
+    box-shadow:inset 0 1px 0 #fff3bc,inset 0 -2px 0 #572414,0 0 8px #ffb838a3;
+  }
+  .deposit-layout .deposit-mobile-menu :is(a,button):active {
+    transform:translateY(1px);
+  }
   .deposit-layout .account-tiles [aria-current="page"] { color:#28150a; }
   .account-tile-icon {
     width:24px; height:24px; color:#e6ba75;
     fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;
   }
   .account-tiles [aria-current="page"] .account-tile-icon { color:#513017; }
+  .deposit-layout .deposit-mobile-menu .account-tile-icon {
+    width:30px; height:30px; padding:4px; color:#ffda8c;
+    border:1px solid #edbb668c; border-radius:9px;
+    background:linear-gradient(155deg,#873450,#43182e 65%,#2a0d24);
+    box-shadow:inset 0 1px 0 #ffe2a959,0 2px 3px #1d081c9c;
+    filter:drop-shadow(0 1px 1px #250d14a6);
+  }
+  .deposit-layout .deposit-mobile-menu [aria-current="page"] .account-tile-icon {
+    color:#622707; border-color:#fff4bb;
+    background:linear-gradient(145deg,#fff3bf,#ffc45a 54%,#d77b24);
+    box-shadow:inset 0 1px 0 #fff9d4,0 1px 5px #ffca5677;
+  }
+  .deposit-layout .deposit-mobile-menu [aria-current="page"]:is(:hover,:focus-visible) {
+    border-color:#fff1ae;
+    background:radial-gradient(ellipse at 50% 0,#e8711a,#983117 55%,#611533);
+  }
   #personalView .personal-account {
     gap:clamp(7px,2.7vw,14px); padding:10px;
     margin-bottom:12px; border-radius:13px;
