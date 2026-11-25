@@ -12,7 +12,7 @@
   const behavior = () => motion.matches ? 'instant' : 'smooth';
 
   function activate(index) {
-    home.classList.toggle('selected', index < 0 && !document.body.classList.contains('deposit-page'));
+    home.classList.toggle('selected', index < 0);
     buttons.forEach((button, position) => {
       button.classList.toggle('selected', position === index);
       if (position === index) button.setAttribute('aria-current', 'location');
@@ -82,9 +82,9 @@
     if (index < 0 && !(isLobby && button === home)) return;
     event.stopPropagation();
     if (button === home) {
-      demoMember.navigate('index.html');
+      location.assign('index.html');
     } else if (!isLobby) {
-      demoMember.navigate('desktop-games.html' + (index ? '#games-' + ids[index] : ''));
+      location.assign('desktop-games.html' + (index ? '#games-' + ids[index] : ''));
     } else {
       activate(index);
       history.replaceState(null, '', '#games-' + ids[index]);
