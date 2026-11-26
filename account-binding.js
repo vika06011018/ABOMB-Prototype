@@ -105,9 +105,33 @@
     previews.delete(input);
   }
 
+  const proofType = bankForm.elements.accountType;
+  function updateProofLabels() {
+    const digital = proofType.value === 'digital';
+    const labels = digital
+      ? ['身分證正面＋反面＋提款卡有銀行帳戶那面', '身分證正面＋反面＋數位帳戶存摺封面']
+      : ['身分證正面＋反面', '身分證正面＋反面＋實體存摺封面'];
+    for (const [index, name] of ['identity-proof','bank-proof'].entries()) {
+      const input = bankForm.elements[name];
+      const upload = input.closest('.bank-upload');
+      upload.querySelector('[data-proof-label]').textContent = labels[index];
+      upload.querySelector('img').alt = labels[index] + '預覽';
+    }
+  }
+  proofType.addEventListener('change', () => {
+    for (const name of ['identity-proof','bank-proof']) {
+      const input = bankForm.elements[name];
+      clearPreview(input);
+      input.value = '';
+      input.setCustomValidity('');
+    }
+    updateProofLabels();
+  });
+
   function resetBankForm() {
     for (const input of bankFiles) clearPreview(input);
     bankForm.reset();
+    updateProofLabels();
     for (const field of [bankName, bankId, ...bankFiles]) field.setCustomValidity('');
   }
 
@@ -163,9 +187,6 @@
     });
     editButton.hidden = !verified;
     view.querySelector('#bank-identity-verified').hidden = !verified;
-    bankForm.elements.front.required = !verified;
-    bankForm.elements.back.required = !verified;
-    view.querySelector('#bank-id-documents-note').hidden = !verified;
     const panel = panels.find(item => item.dataset.bindPanel === kind);
     for (const item of panels) item.disabled = item.hidden = item !== panel;
     if (kind === 'store' && selectedChannel) {

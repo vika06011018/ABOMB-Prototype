@@ -273,23 +273,27 @@
 .bank-examples section img { display:block; width:100%; height:auto; border-radius:10px; }
 
 #bank-account-title { margin:0 0 14px; color:#ffe1a1; font-size:clamp(20px,2.3vw,28px); }
-#bank-account-cards { display:grid; justify-items:center; gap:14px; }
+#bank-account-cards {
+  width:min(100%,720px); margin-inline:auto;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));
+  justify-items:center; gap:10px;
+}
 .bank-account-card {
-  width:min(100%,505px); min-height:clamp(160px,24vw,240px);
-  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; align-items:start;
-  padding:clamp(12px,3vw,24px); border:1px solid #a27449; border-radius:20px;
+  width:min(100%,355px); min-height:106px;
+  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; align-items:center;
+  padding:12px 14px; border:1px solid #a27449; border-radius:20px;
   background:
     radial-gradient(ellipse at 100% -40%,#130a17 58%,#915c2d 59%,#211320 60%,transparent 74%),
     radial-gradient(ellipse at 96% -35%, transparent 62%,#d09e56 63%,#32202a 65%,#160d17 78%);
   background-color:#160d17; box-shadow:0 5px 16px #11061199;
 }
-.bank-account-card h3 { margin:0; font-size:clamp(17px,2.2vw,24px); color:#ffe1a1; }
+.bank-account-card h3 { margin:0; font-size:clamp(15px,2.2vw,19px); color:#ffe1a1; }
 .bank-account-card .bank-status { justify-self:end; font-size:clamp(11px,2.7vw,14px); }
 .bank-card-number {
-  grid-column:1/-1; margin:0; align-self:center; text-align:right;
-  font-size:clamp(22px,5vw,32px); font-weight:800; letter-spacing:.04em; color:#fff5e1;
+  grid-area:2 / 2; margin:0; text-align:right;
+  font-size:clamp(15px,3.8vw,21px); font-weight:800; color:#fff5e1;
 }
-.bank-card-date { grid-column:1/-1; align-self:end; margin:0; font-size:13px; color:#f6e4cf; }
+.bank-card-date { grid-area:2 / 1; margin:0; font-size:12px; color:#f6e4cf; }
 .bank-account-notes {
   width:min(100%,505px); margin:16px auto 0; padding:12px 16px;
   border:1px solid #775141; border-radius:10px; color:#f2dce6;
@@ -316,4 +320,29 @@
 }
 @media (max-width:899px) {
   .wallet-address-field [role="status"] { grid-column:1; }
+}
+
+.withdraw-turnover {
+  margin:0 0 14px; padding:12px 16px; border:1px solid #9c5e2d; border-radius:10px;
+  background:linear-gradient(140deg,#492616,#301923); color:#ffe1a1; font-weight:800;
+}
+.withdraw-form {
+  margin:0; max-width:none; padding:clamp(12px,2vw,22px); border:1px solid #805064;
+  border-radius:12px; background:linear-gradient(150deg,#33182e,#1d0c21);
+}
+.withdraw-row { display:grid; grid-template-columns:minmax(100px,1fr) minmax(0,3fr); gap:8px; align-items:center; min-height:34px; }
+.withdraw-row :is(strong,output) { color:#ffdda1; font-weight:800; }
+.withdraw-form small { display:block; color:#e0c4d8; }
+.withdraw-error { margin:0; color:#ffacb5; }
+.withdraw-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; }
+.withdraw-actions button { min-height:42px; min-width:110px; }
+.withdraw-actions button:disabled { opacity:.48; cursor:not-allowed; }
+.proof-instructions { margin:5px 0 10px; padding-inline-start:1.4em; }
+.bank-examples .proof-photo { margin:10px 0; padding:8px; border:1px solid #8c6655; border-radius:10px; background:#160e19; }
+.proof-photo figcaption { margin:0 0 7px; color:#ffe2a0; font-size:14px; font-weight:700; }
+.proof-photo div { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; }
+.bank-examples .proof-photo img { width:30%; min-width:82px; max-height:145px; object-fit:contain; }
+@media (max-width:480px) {
+  .withdraw-row { grid-template-columns:1fr 1fr; }
+  .withdraw-row :is(strong,output) { text-align:right; }
 }

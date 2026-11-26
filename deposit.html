@@ -593,7 +593,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 @media (max-width:899px) { .top-actions .notification-bell { width:clamp(20px,5.8vw,25px); height:auto; } }
 </style>
 <link rel="stylesheet" href="bomb-final.css?v=44">
-<link rel="stylesheet" href="deposit.css?v=67">
+<link rel="stylesheet" href="deposit.css?v=69">
 <link rel="stylesheet" href="account-entry.css?v=60">
 <link rel="stylesheet" href="member-layout.css?v=61">
 <link rel="stylesheet" href="shared-footer.css?v=56">
@@ -748,13 +748,12 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
      </section>
      <fieldset class="bank-form-section" data-bind-panel="bank" aria-labelledby="bank-verification-title">
        <div class="bank-verification-heading"><h2 id="bank-verification-title">實名認證</h2><button type="button" id="bank-examples-open" class="outline-gold" aria-haspopup="dialog">查看範例</button></div>
-       <p id="bank-id-documents-note" class="bind-demo" hidden>身分已驗證，加開銀行卡時可選擇補充身分證圖片。</p>
-       <div class="bank-document-grid" id="bank-id-documents">
-         <label class="bank-upload"><span>身分證正面</span><span class="bank-upload-frame"><span>選擇圖片</span><img alt="身分證正面預覽" hidden></span><input name="front" type="file" required accept="image/jpeg,image/png,image/webp"></label>
-         <label class="bank-upload"><span>身分證反面</span><span class="bank-upload-frame"><span>選擇圖片</span><img alt="身分證反面預覽" hidden></span><input name="back" type="file" required accept="image/jpeg,image/png,image/webp"></label>
+       <label>帳戶類型<select name="accountType"><option value="physical">實體帳戶</option><option value="digital">數位帳戶</option></select></label>
+       <div class="bank-document-grid">
+         <label class="bank-upload"><span data-proof-label>身分證正面＋反面</span><span class="bank-upload-frame"><span>選擇圖片</span><img alt="身分證正面＋反面預覽" hidden></span><input name="identity-proof" type="file" required accept="image/jpeg,image/png,image/webp"></label>
+         <label class="bank-upload"><span data-proof-label>身分證正面＋反面＋實體存摺封面</span><span class="bank-upload-frame"><span>選擇圖片</span><img alt="身分證正面＋反面＋實體存摺封面預覽" hidden></span><input name="bank-proof" type="file" required accept="image/jpeg,image/png,image/webp"></label>
        </div>
        <h3>銀行帳戶</h3>
-       <div class="bank-document-grid"><label class="bank-upload"><span>銀行帳戶證明（存摺封面）</span><span class="bank-upload-frame"><span>選擇圖片</span><img alt="銀行帳戶證明（存摺封面）預覽" hidden></span><input name="bank-proof" type="file" required accept="image/jpeg,image/png,image/webp"></label></div>
        <label>銀行名稱<select name="bank" required><option value="">請選擇示範銀行</option><option>示範銀行 A</option><option>示範銀行 B</option></select></label>
        <label>分行代碼<input required inputmode="numeric" pattern="[0-9]{3,4}" maxlength="4" placeholder="000"></label>
        <label>銀行帳號<input name="account" required placeholder="DEMO-12345" pattern="DEMO-[0-9]{5}" maxlength="10" title="請輸入 DEMO- 加五位數字"></label>
@@ -806,21 +805,8 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
    </dialog>
    <dialog class="bank-examples" id="bank-examples" aria-labelledby="bank-examples-title">
       <header><h2 id="bank-examples-title">實名認證上傳範例</h2><form method="dialog"><button class="outline-gold">關閉</button></form></header>
-      <p>請拍攝完整四角，保持清楚並避免反光。</p>
-      <section aria-labelledby="bank-example-separate">
-        <h3 id="bank-example-separate">範例一｜身分證正反面＋銀行存摺</h3>
-        <p>身分證正面、背面和銀行存摺各拍一張。</p>
-        <a href="assets/deposit/BOMB-Verification-Samples.png" target="_blank" rel="noopener" aria-label="放大範例一（另開分頁）">
-          <img src="assets/deposit/BOMB-Verification-Samples.png" alt="身分證正面、身分證背面與銀行存摺分開拍攝的範例" width="1560" height="750" loading="lazy">
-        </a>
-      </section>
-      <section aria-labelledby="bank-example-combined">
-        <h3 id="bank-example-combined">範例二｜身分證正面＋提款卡＋銀行存摺</h3>
-        <p>身分證正面與提款卡背面同框，銀行存摺另外拍攝。</p>
-        <a href="assets/deposit/BOMB-ID-Debit-Passbook.png" target="_blank" rel="noopener" aria-label="放大範例二（另開分頁）">
-          <img src="assets/deposit/BOMB-ID-Debit-Passbook.png" alt="身分證正面與提款卡背面同框，銀行存摺另拍的範例" width="1560" height="740" loading="lazy">
-        </a>
-      </section>
+<section><h3>實名認證範例 1（綁定實體帳戶）</h3><p>綁定實體帳戶需提供 2 張照片</p><ol class="proof-instructions"><li>身分證正面＋身分證反面</li><li>身分證正面＋身分證反面＋實體存摺封面</li></ol><p>請維持文件完整性，不能切角或切邊、反光、模糊不清或遮住個人資料。</p><figure class="proof-photo"><figcaption>照片 1｜身分證正面＋身分證反面</figcaption><div><img src="assets/deposit/proof-id-front.webp" alt="身分證正面" loading="lazy"><img src="assets/deposit/proof-id-back.webp" alt="身分證反面" loading="lazy"></div></figure><figure class="proof-photo"><figcaption>照片 2｜身分證正面＋身分證反面＋實體存摺封面</figcaption><div><img src="assets/deposit/proof-id-front.webp" alt="身分證正面" loading="lazy"><img src="assets/deposit/proof-id-back.webp" alt="身分證反面" loading="lazy"><img src="assets/deposit/proof-physical-passbook.webp" alt="實體存摺封面" loading="lazy"></div></figure></section>
+<section><h3>實名認證範例 2（綁定數位帳戶）</h3><p>綁定數位帳戶需提供 2 張照片</p><ol class="proof-instructions"><li>身分證正面＋反面＋提款卡有銀行帳戶那面</li><li>身分證正面＋反面＋數位帳戶存摺封面</li></ol><p>請維持文件完整性，不能切角或切邊、反光、模糊不清或遮住個人資料。</p><figure class="proof-photo"><figcaption>照片 1｜身分證正面＋反面＋提款卡有銀行帳戶那面</figcaption><div><img src="assets/deposit/proof-id-front.webp" alt="身分證正面" loading="lazy"><img src="assets/deposit/proof-id-back.webp" alt="身分證反面" loading="lazy"><img src="assets/deposit/proof-debit-account.webp" alt="提款卡有銀行帳戶那面" loading="lazy"></div></figure><figure class="proof-photo"><figcaption>照片 2｜身分證正面＋反面＋數位帳戶存摺封面</figcaption><div><img src="assets/deposit/proof-id-front.webp" alt="身分證正面" loading="lazy"><img src="assets/deposit/proof-id-back.webp" alt="身分證反面" loading="lazy"><img src="assets/deposit/proof-digital-passbook.webp" alt="數位帳戶存摺封面" loading="lazy"></div></figure></section>
    </dialog>
 
  </div>
@@ -834,7 +820,27 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
   <p id="transferStatus" role="status" hidden></p>
   <ul class="transfer-grid" aria-label="館別餘額"><li><img src="assets/catalog/logo-0.webp" alt="" width="96" height="40"><strong>BOMB 真人百家</strong><span>0</span></li><li><img src="assets/catalog/logo-1.webp" alt="" width="96" height="40"><strong>BOMB 柏青 SLOT</strong><span>0</span></li><li><img src="assets/catalog/logo-2.webp" alt="" width="96" height="40"><strong>MT 真人</strong><span>0</span></li><li><img src="assets/catalog/logo-3.webp" alt="" width="96" height="40"><strong>DG 真人</strong><span>0</span></li><li><img src="assets/catalog/logo-4.webp" alt="" width="96" height="40"><strong>T9 真人</strong><span>0</span></li><li><img src="assets/catalog/logo-5.webp" alt="" width="96" height="40"><strong>WM 真人</strong><span>0</span></li><li><img src="assets/catalog/logo-6.webp" alt="" width="96" height="40"><strong>WINNER 真人</strong><span>0</span></li><li><img src="assets/catalog/logo-7.webp" alt="" width="96" height="40"><strong>OG 真人</strong><span>0</span></li><li><img src="assets/catalog/logo-8.webp" alt="" width="96" height="40"><strong>SA 真人</strong><span>0</span></li><li><img src="assets/provider-marks/rsg-official.svg" alt="" width="96" height="40"><strong>RSG 電子</strong><span>0</span></li><li><img src="assets/provider-marks/qt-paw.svg" alt="" width="96" height="40"><strong>QT 電子</strong><span>0</span></li><li><img src="assets/provider-marks/bng-official.png" alt="" width="96" height="40"><strong>BNG 電子</strong><span>0</span></li><li><img src="assets/provider-marks/zg-symbol.png" alt="" width="96" height="40"><strong>ZG 電子</strong><span>0</span></li><li><img src="assets/provider-marks/tag-official.png" alt="" width="96" height="40"><strong>TAG 電子</strong><span>0</span></li><li><img src="assets/provider-marks/atg-official.png" alt="" width="96" height="40"><strong>ATG 電子</strong><span>0</span></li><li><img src="assets/catalog/logo-6.webp" alt="" width="96" height="40"><strong>WINNER 彩票</strong><span>0</span></li><li><img src="assets/provider-marks/gc.png" alt="" width="96" height="40"><strong>GC 彩票</strong><span>0</span></li><li><img src="assets/provider-marks/db-symbol.png" alt="" width="96" height="40"><strong>DB 彩票</strong><span>0</span></li><li><img src="assets/provider-marks/db-symbol.png" alt="" width="96" height="40"><strong>DB 棋牌</strong><span>0</span></li><li><img src="assets/provider-marks/provider-20.png" alt="" width="96" height="40"><strong>高登棋牌</strong><span>0</span></li><li><img src="assets/provider-marks/gr.png" alt="" width="96" height="40"><strong>GR 棋牌</strong><span>0</span></li><li><img src="assets/provider-marks/boyaa-official.png" alt="" width="96" height="40"><strong>BOYAA 棋牌</strong><span>0</span></li><li><img src="assets/provider-marks/provider-18.png" alt="" width="96" height="40"><strong>熊貓體育</strong><span>0</span></li><li><img src="assets/provider-marks/super-official.png" alt="" width="96" height="40"><strong>SUPER 體育</strong><span>0</span></li><li><img src="assets/provider-marks/provider-19.png" alt="" width="96" height="40"><strong>鑫寶體育</strong><span>0</span></li><li><img src="assets/provider-marks/live.png" alt="" width="96" height="40"><strong>Live 體育</strong><span>0</span></li><li><img src="assets/provider-marks/we.png" alt="" width="96" height="40"><strong>WE 體育</strong><span>0</span></li><li><img src="assets/provider-marks/zg-symbol.png" alt="" width="96" height="40"><strong>ZG 捕魚</strong><span>0</span></li><li><img src="assets/provider-marks/rsg-official.svg" alt="" width="96" height="40"><strong>RSG 捕魚</strong><span>0</span></li><li><img src="assets/provider-marks/db-symbol.png" alt="" width="96" height="40"><strong>DB 捕魚</strong><span>0</span></li><li><img src="assets/provider-marks/gr.png" alt="" width="96" height="40"><strong>GR 捕魚</strong><span>0</span></li><li><img src="assets/provider-marks/boya-fishing-white.png" alt="" width="96" height="40"><strong>博雅捕魚</strong><span>0</span></li><li><img src="assets/provider-marks/s-plus.png" alt="" width="96" height="40"><strong>S PLUS 捕魚</strong><span>0</span></li><li><img src="assets/provider-marks/tag-official.png" alt="" width="96" height="40"><strong>TAG 捕魚</strong><span>0</span></li></ul>
 </div>
-<div id="withdrawView" hidden><h1 id="withdraw" tabindex="-1">託售</h1><div class="deposit-notes">正式託售服務待串接。</div></div>
+<div id="withdrawView" hidden>
+  <header class="bind-header"><h1 id="withdraw" tabindex="-1">託售</h1>
+    <div class="inbox-filters" role="group" aria-label="託售方式">
+      <button type="button" data-withdraw-method="bank" aria-pressed="true">銀行卡</button>
+      <button type="button" data-withdraw-method="usdt" aria-pressed="false">USDT/TRC20</button>
+    </div>
+  </header>
+  <p class="withdraw-turnover" id="withdraw-turnover" role="status"></p>
+  <form id="withdraw-form" class="bind-form withdraw-form">
+    <div class="withdraw-row"><span>主錢包</span><strong id="withdraw-wallet"></strong></div>
+    <label for="withdraw-amount"><span>託售點數 <small>（請輸入單位百元的金額）</small></span>
+      <input id="withdraw-amount" type="number" inputmode="numeric" min="1000" max="100000" step="100" placeholder="1,000 ～ 100,000" aria-describedby="withdraw-amount-error" required></label>
+    <p class="withdraw-error" id="withdraw-amount-error" role="status" hidden></p>
+    <div class="withdraw-row" id="withdraw-rate" hidden><span>當前匯率</span><strong>32 點／USDT（示範）</strong></div>
+    <div class="withdraw-row"><span>再次確認</span><output id="withdraw-confirm" for="withdraw-amount">—</output></div>
+    <label id="withdraw-destination-label">銀行帳戶
+      <select id="withdraw-destination" required><option value="">請選擇銀行帳戶</option><option value="demo-bank">示範銀行 A（末五碼 12345）</option></select>
+    </label>
+    <div class="withdraw-actions"><button type="reset" class="outline-gold">重填</button><button id="withdraw-submit" type="submit" class="goldbtn" disabled>確認託售</button></div>
+  </form>
+</div>
 <div id="personalView" hidden>
   <h1 id="personal-center" tabindex="-1"><span class="desktop-personal-title">個人資料</span><span class="mobile-personal-title">會員中心</span></h1>
   <div class="personal-account personal-mobile-only"><img class="portrait-avatar" data-member-avatar src="assets/member-avatar.svg" alt="" width="76" height="76"><span>demo001</span><button type="button" class="outline-gold" data-avatar-picker>更換頭像</button></div>
@@ -973,7 +979,8 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <script src="back-to-top.js" defer></script>
 <script src="account-inbox.js?v=54" defer></script>
 <script src="account-referral.js?v=56" defer></script>
-<script src="account-binding.js?v=67" defer></script>
+<script src="account-binding.js?v=69" defer></script>
 <script src="avatar-picker.js" defer></script>
+<script src="account-withdraw.js" defer></script>
 </body>
 </html>
