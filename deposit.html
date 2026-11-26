@@ -593,7 +593,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 @media (max-width:899px) { .top-actions .notification-bell { width:clamp(20px,5.8vw,25px); height:auto; } }
 </style>
 <link rel="stylesheet" href="bomb-final.css?v=44">
-<link rel="stylesheet" href="deposit.css?v=69">
+<link rel="stylesheet" href="deposit.css?v=70">
 <link rel="stylesheet" href="account-entry.css?v=60">
 <link rel="stylesheet" href="member-layout.css?v=61">
 <link rel="stylesheet" href="shared-footer.css?v=56">
@@ -748,15 +748,14 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
      </section>
      <fieldset class="bank-form-section" data-bind-panel="bank" aria-labelledby="bank-verification-title">
        <div class="bank-verification-heading"><h2 id="bank-verification-title">實名認證</h2><button type="button" id="bank-examples-open" class="outline-gold" aria-haspopup="dialog">查看範例</button></div>
-       <label>帳戶類型<select name="accountType"><option value="physical">實體帳戶</option><option value="digital">數位帳戶</option></select></label>
        <div class="bank-document-grid">
-         <label class="bank-upload"><span data-proof-label>身分證正面＋反面</span><span class="bank-upload-frame"><span>選擇圖片</span><img alt="身分證正面＋反面預覽" hidden></span><input name="identity-proof" type="file" required accept="image/jpeg,image/png,image/webp"></label>
-         <label class="bank-upload"><span data-proof-label>身分證正面＋反面＋實體存摺封面</span><span class="bank-upload-frame"><span>選擇圖片</span><img alt="身分證正面＋反面＋實體存摺封面預覽" hidden></span><input name="bank-proof" type="file" required accept="image/jpeg,image/png,image/webp"></label>
+         <label class="bank-upload"><span data-proof-label>身分證正反面／數位帳戶提款卡合照</span><span class="bank-upload-frame"><span>選擇圖片</span><img alt="身分證文件預覽" hidden></span><input name="identity-proof" type="file" required accept="image/jpeg,image/png,image/webp"></label>
+         <label class="bank-upload"><span data-proof-label>銀行帳戶證明（身分證正反面＋存摺封面）</span><span class="bank-upload-frame"><span>選擇圖片</span><img alt="銀行帳戶證明預覽" hidden></span><input name="bank-proof" type="file" required accept="image/jpeg,image/png,image/webp"></label>
        </div>
        <h3>銀行帳戶</h3>
-       <label>銀行名稱<select name="bank" required><option value="">請選擇示範銀行</option><option>示範銀行 A</option><option>示範銀行 B</option></select></label>
-       <label>分行代碼<input required inputmode="numeric" pattern="[0-9]{3,4}" maxlength="4" placeholder="000"></label>
-       <label>銀行帳號<input name="account" required placeholder="DEMO-12345" pattern="DEMO-[0-9]{5}" maxlength="10" title="請輸入 DEMO- 加五位數字"></label>
+       <label>銀行名稱<select name="bank" required><option value="">請選擇銀行</option></select></label>
+       <label>分行代碼<input name="branch" required inputmode="numeric" pattern="[0-9]{3,4}|[0-9]{7}" maxlength="7" placeholder="輸入分行代碼或使用查詢"></label>
+       <label>銀行帳號<input name="account" type="text" inputmode="numeric" required pattern="[0-9]{12}" minlength="12" maxlength="12" placeholder="請輸入 12 位數字" title="請輸入 12 位數字"></label>
        <button type="button" id="bind-branch" class="outline-gold">代碼查詢</button>
      </fieldset>
      <fieldset class="bank-form-section" data-bind-panel="usdt" aria-labelledby="bind-usdt-title" hidden disabled>
@@ -791,6 +790,14 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
      </fieldset>
      <button type="submit" id="bind-submit" class="goldbtn bank-submit">送出認證</button>
    </form>
+   <dialog class="bank-examples bank-code-dialog" id="bank-code-dialog" aria-labelledby="bank-code-title">
+     <header><h2 id="bank-code-title">銀行與分行代碼查詢</h2><form method="dialog"><button class="outline-gold">關閉</button></form></header>
+     <p>金管會開放資料（公告日期 2024-12-02）。最新資料請查 <a href="https://www.cbc.gov.tw/tw/sp-bank-qform-1.html" target="_blank" rel="noopener">中央銀行全國金融機構查詢</a>。</p>
+     <label>搜尋銀行或分行 <input id="bank-code-search" type="search" placeholder="輸入銀行名稱、分行名稱或代碼"></label>
+     <p id="bank-code-count" role="status"></p>
+     <div class="bank-code-results"><table><thead><tr><th scope="col">銀行代號與名稱</th><th scope="col">分行</th><th scope="col">分行代碼</th></tr></thead><tbody id="bank-code-rows"></tbody></table></div>
+     <button class="outline-gold" type="button" id="bank-code-more">顯示更多</button>
+   </dialog>
    <dialog class="bank-examples bank-identity-editor" id="bank-identity-editor" aria-labelledby="bank-editor-title">
      <h2 id="bank-editor-title">編輯身分資料</h2>
      <form class="bind-form" autocomplete="off">
@@ -829,6 +836,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
   </header>
   <p class="withdraw-turnover" id="withdraw-turnover" role="status"></p>
   <form id="withdraw-form" class="bind-form withdraw-form">
+    <div class="withdraw-row"><span>單筆最高提領金額</span><strong>100,000</strong></div>
     <div class="withdraw-row"><span>主錢包</span><strong id="withdraw-wallet"></strong></div>
     <label for="withdraw-amount"><span>託售點數 <small>（請輸入單位百元的金額）</small></span>
       <input id="withdraw-amount" type="number" inputmode="numeric" min="1000" max="100000" step="100" placeholder="1,000 ～ 100,000" aria-describedby="withdraw-amount-error" required></label>
@@ -979,7 +987,8 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <script src="back-to-top.js" defer></script>
 <script src="account-inbox.js?v=54" defer></script>
 <script src="account-referral.js?v=56" defer></script>
-<script src="account-binding.js?v=69" defer></script>
+<script src="bank-code-directory.js" defer></script>
+<script src="account-binding.js?v=70" defer></script>
 <script src="avatar-picker.js" defer></script>
 <script src="account-withdraw.js" defer></script>
 </body>

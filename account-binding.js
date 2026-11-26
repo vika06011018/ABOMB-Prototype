@@ -105,33 +105,9 @@
     previews.delete(input);
   }
 
-  const proofType = bankForm.elements.accountType;
-  function updateProofLabels() {
-    const digital = proofType.value === 'digital';
-    const labels = digital
-      ? ['身分證正面＋反面＋提款卡有銀行帳戶那面', '身分證正面＋反面＋數位帳戶存摺封面']
-      : ['身分證正面＋反面', '身分證正面＋反面＋實體存摺封面'];
-    for (const [index, name] of ['identity-proof','bank-proof'].entries()) {
-      const input = bankForm.elements[name];
-      const upload = input.closest('.bank-upload');
-      upload.querySelector('[data-proof-label]').textContent = labels[index];
-      upload.querySelector('img').alt = labels[index] + '預覽';
-    }
-  }
-  proofType.addEventListener('change', () => {
-    for (const name of ['identity-proof','bank-proof']) {
-      const input = bankForm.elements[name];
-      clearPreview(input);
-      input.value = '';
-      input.setCustomValidity('');
-    }
-    updateProofLabels();
-  });
-
   function resetBankForm() {
     for (const input of bankFiles) clearPreview(input);
     bankForm.reset();
-    updateProofLabels();
     for (const field of [bankName, bankId, ...bankFiles]) field.setCustomValidity('');
   }
 
@@ -264,7 +240,7 @@
     }
     const fields = bankForm.elements;
     if (kind === 'bank') {
-      bankAccounts.unshift({bank:fields.bank.value, suffix:fields.account.value.slice(-5), verified:false, date:new Date()});
+      bankAccounts.unshift({bank:bankCodeDirectory[fields.bank.value].name, suffix:fields.account.value.slice(-5), verified:false, date:new Date()});
     } else {
       const summaries = {
         usdt: () => [fields.walletName.value.trim(), '••••• ' + fields.walletAddress.value.slice(-5), '示範完成'],
@@ -280,9 +256,59 @@
   for (const link of view.querySelectorAll('[data-store-link]')) {
     link.addEventListener('click', () => { store.value = link.dataset.storeLink; });
   }
+  const directory = view.querySelector('#bank-code-dialog');
+  const search = view.querySelector('#bank-code-search');
+  const results = view.querySelector('#bank-code-rows');
+  const count = view.querySelector('#bank-code-count');
+  const more = view.querySelector('#bank-code-more');
+  const directoryRows = [];
+  for (const [code, bank] of Object.entries(bankCodeDirectory).sort()) {
+    bankForm.elements.bank.add(new Option(code + ' ' + bank.name, code));
+    for (const [branch, name] of bank.branches) directoryRows.push({code, bank:bank.name, branch, name});
+  }
+  let matches = [];
+  let shown = 0;
+
+  function showDirectoryRows() {
+    const batch = matches.slice(shown, shown + 100);
+    for (const record of batch) {
+      const row = results.insertRow();
+      row.insertCell().textContent = record.code + ' ' + record.bank;
+      row.insertCell().textContent = record.name;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'outline-gold';
+      button.textContent = record.branch;
+      button.addEventListener('click', () => {
+        bankForm.elements.bank.value = record.code;
+        bankForm.elements.branch.value = record.branch;
+        directory.close();
+      });
+      row.insertCell().append(button);
+    }
+    shown += batch.length;
+    count.textContent = `共 ${matches.length.toLocaleString()} 筆分行或分支資料，已顯示 ${shown.toLocaleString()} 筆。點代碼帶入表單。`;
+    more.hidden = shown >= matches.length;
+  }
+
+  function filterDirectory() {
+    const query = search.value.trim().replaceAll('台','臺').toLowerCase();
+    matches = directoryRows.filter(row =>
+      [row.code,row.bank,row.branch,row.name].some(value => value.replaceAll('台','臺').toLowerCase().includes(query))
+    );
+    shown = 0;
+    results.replaceChildren();
+    showDirectoryRows();
+  }
+
   view.querySelector('#bind-branch').addEventListener('click', () => {
-    showModal('分行代碼查詢','原型請使用示範代碼 000。');
+    search.value = bankForm.elements.bank.value;
+    filterDirectory();
+    directory.showModal();
+    search.focus();
   });
+  search.addEventListener('input', filterDirectory);
+  more.addEventListener('click', showDirectoryRows);
   syncEntry();
   syncRoute();
 })();

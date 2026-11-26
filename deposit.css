@@ -346,3 +346,14 @@
   .withdraw-row { grid-template-columns:1fr 1fr; }
   .withdraw-row :is(strong,output) { text-align:right; }
 }
+
+.bank-code-dialog a { color:#ffe1a0; }
+.bank-code-dialog input {
+  width:min(100%,360px); margin:4px 0; padding:9px; border:1px solid #805064;
+  border-radius:8px; background:#1e0e20; color:#fff0c9;
+}
+.bank-code-results { overflow:auto; max-height:48dvh; margin-bottom:10px; }
+.bank-code-results table { width:100%; border-collapse:collapse; font-size:13px; }
+.bank-code-results th, .bank-code-results td { padding:6px 5px; border-bottom:1px solid #664054; text-align:left; }
+.bank-code-results th { position:sticky; top:0; background:#351d32; }
+.bank-code-results button { font-variant-numeric:tabular-nums; }
