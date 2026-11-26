@@ -7,9 +7,6 @@
   const list = view.querySelector('#bind-list');
   const flow = view.querySelector('#bind-flow');
   const notice = view.querySelector('#bind-notice');
-  const identity = view.querySelector('#bind-identity');
-  const identityStatus = view.querySelector('#bind-identity-status');
-  const nationalId = view.querySelector('#bind-id');
   const addImage = view.querySelector('#bind-add-image');
   const bankForm = view.querySelector('#bind-bank');
   const bankName = bankForm.querySelector('#bank-name');
@@ -19,7 +16,6 @@
   const examples = view.querySelector('#bank-examples');
   view.querySelector('#bank-examples-open').addEventListener('click', () => examples.showModal());
   const bankAdd = view.querySelector('#bind-add-bank');
-  const steps = view.querySelector('#bind-steps');
   const bankList = view.querySelector('#bank-account-list');
   const bankCards = view.querySelector('#bank-account-cards');
   const bankAccounts = [{bank:'示範銀行 A', suffix:'12345', verified:true, date:new Date(2024,8,10,12,58,20)}];
@@ -29,7 +25,9 @@
   const editForm = identityEditor.querySelector('form');
   const editButton = view.querySelector('#bank-edit-identity');
   const dateFormat = new Intl.DateTimeFormat('sv-SE',{dateStyle:'short',timeStyle:'medium'});
-  const forms = [...view.querySelectorAll('[data-bind-form]')];
+  const panels = [...view.querySelectorAll('[data-bind-panel]')];
+  const add = view.querySelector('#bind-add');
+  const submit = view.querySelector('#bind-submit');
   const tabs = [...view.querySelectorAll('[data-bind-tab]')];
   const store = view.querySelector('#bind-store-select');
   const channels = document.querySelector('#depositForm');
@@ -42,13 +40,9 @@
   };
   const addImages = {bank:'bank', credit:'card', usdt:'usdt', store:'7-eleven'};
   let kind = 'bank';
-  let completedIdentity = false;
-  let identityOnly = false;
   let selectedChannel = null;
-  const completed = new Set();
-  const stateKey = 'bomb-demo-binding-identity-v2';
+  const completed = new Map();
 
-  try { completedIdentity = sessionStorage.getItem(stateKey) === 'complete'; } catch {}
 
   function syncEntry() {
     const selected = channels.querySelector('[name="channel"]:checked');
@@ -65,12 +59,10 @@
     rows.closest('table').hidden = bank;
     bankList.hidden = !bank;
     view.querySelector('#bind-add').hidden = bank;
-    view.querySelector('#bind-identity-entry').hidden = bank;
     addImage.src = `assets/deposit/${addImages[kind]}.webp`;
     for (const tab of tabs) tab.setAttribute('aria-pressed',String(tab.dataset.bindTab === kind));
     list.hidden = false;
     flow.hidden = true;
-    identityOnly = false;
     notice.textContent = '';
     rows.replaceChildren();
     if (bank) {
@@ -96,7 +88,7 @@
     }
     const row = rows.insertRow();
     if (completed.has(kind)) {
-      for (const value of ['示範綁定','•••••','示範完成']) row.insertCell().textContent = value;
+      for (const value of completed.get(kind)) row.insertCell().textContent = value;
     } else {
       const cell = row.insertCell();
       cell.colSpan = 3;
@@ -122,29 +114,10 @@
   function syncRoute() {
     const [route, search] = location.hash.slice(1).split('?');
     resetBankForm();
-    identity.reset();
-    nationalId.setCustomValidity('');
-    for (const form of forms) form.reset();
     if (route !== 'bind-bank-card') return;
     const nextKind = new URLSearchParams(search).get('type');
     if (!nextKind || channels.querySelector('[name="channel"]:checked')?.dataset.bindKind !== nextKind) selectedChannel = null;
     showList(nextKind);
-  }
-
-  function showStep(step) {
-    list.hidden = true;
-    flow.hidden = false;
-    bankForm.hidden = true;
-    steps.hidden = false;
-    identity.hidden = step !== 1;
-    identityStatus.hidden = !completedIdentity;
-    for (const form of forms) form.hidden = step !== 2 || form.id !== 'bind-' + kind;
-    const [one,two] = view.querySelectorAll('.bind-steps li');
-    one.removeAttribute('aria-current');
-    two.removeAttribute('aria-current');
-    (step === 1 ? one : two).setAttribute('aria-current','step');
-    const activeForm = step === 1 ? identity : view.querySelector('#bind-' + kind);
-    activeForm.querySelector('input,select').focus();
   }
 
   channels.addEventListener('change', syncEntry);
@@ -159,11 +132,6 @@
     if (location.hash === nextHash) showList(nextKind);
     else location.hash = nextHash;
   });
-  view.querySelector('#bind-identity-entry').addEventListener('click', () => {
-    identityOnly = true;
-    showStep(1);
-  });
-  view.querySelector('#bind-review-identity').addEventListener('click', () => showStep(1));
   editButton.addEventListener('click', () => {
     for (const [index, key] of ['fullName','nationalId','phone'].entries()) {
       editForm.elements[key].value = verifiedIdentity[index];
@@ -183,13 +151,10 @@
       }]
     ]);
   });
-  bankAdd.addEventListener('click', () => {
+  function openBindingForm() {
     resetBankForm();
     list.hidden = true;
     flow.hidden = false;
-    steps.hidden = true;
-    identity.hidden = true;
-    for (const form of forms) form.hidden = true;
     bankForm.hidden = false;
     const verified = bankAccounts.some(account => account.verified);
     identityFields.forEach((field,index) => {
@@ -201,20 +166,24 @@
     bankForm.elements.front.required = !verified;
     bankForm.elements.back.required = !verified;
     view.querySelector('#bank-id-documents-note').hidden = !verified;
-    (verified ? bankForm.elements.bank : bankName).focus();
-  });
-  view.querySelector('#bind-add').addEventListener('click', () => {
-    for (const form of forms) form.reset();
+    const panel = panels.find(item => item.dataset.bindPanel === kind);
+    for (const item of panels) item.disabled = item.hidden = item !== panel;
     if (kind === 'store' && selectedChannel) {
       if (selectedChannel.value.startsWith('711')) store.value = '711';
       if (selectedChannel.value.startsWith('全家')) store.value = 'family';
     }
-    showStep(completedIdentity ? 2 : 1);
-  });
+    submit.textContent = kind === 'bank' ? '送出認證' : kind === 'usdt' ? '確認新增' : '確定';
+    (verified ? panel.querySelector('input:not([type="file"]):not([readonly]),select') : bankName).focus({preventScroll:true});
+    window.scrollTo(0, 0);
+  }
+  bankAdd.addEventListener('click', openBindingForm);
+  add.addEventListener('click', openBindingForm);
+  const address = view.querySelector('#bind-wallet-address');
+  const addressHint = view.querySelector('#wallet-address-hint');
+  address.addEventListener('focus', () => { addressHint.hidden = false; });
+  address.addEventListener('blur', () => { addressHint.hidden = true; });
+
   view.querySelector('#bind-back').addEventListener('click', () => {
-    identity.reset();
-    nationalId.setCustomValidity('');
-    for (const form of forms) form.reset();
     showList(kind);
     (kind === 'bank' ? bankAdd : view.querySelector('#bind-add')).focus();
   });
@@ -237,34 +206,6 @@
     return valid;
   }
 
-  nationalId.addEventListener('input', () => {
-    nationalId.setCustomValidity('');
-    nationalId.value = nationalId.value.replace(/[a-z]/g, letter => letter.toUpperCase());
-  });
-  identity.addEventListener('submit', event => {
-    event.preventDefault();
-    const name = view.querySelector('#bind-name');
-    if (!name.value.trim()) {
-      name.setCustomValidity('請填寫示範姓名。');
-      name.reportValidity();
-      return;
-    }
-    if (!validateNationalId(nationalId)) {
-      nationalId.reportValidity();
-      return;
-    }
-    completedIdentity = true;
-    try { sessionStorage.setItem(stateKey,'complete'); } catch {}
-    if (identityOnly) {
-      identity.reset();
-      showList(kind);
-      notice.textContent = '示範身分資料已確認。';
-      view.querySelector('#bind-identity-entry').focus();
-    } else {
-      showStep(2);
-    }
-  });
-  view.querySelector('#bind-name').addEventListener('input', event => event.target.setCustomValidity(''));
   for (const field of [bankName, bankId]) field.addEventListener('input', () => field.setCustomValidity(''));
   for (const fileInput of bankFiles) {
     fileInput.addEventListener('change', () => {
@@ -300,21 +241,20 @@
       bankId.reportValidity();
       return;
     }
-    const bank = bankForm.elements.bank.value;
-    const suffix = bankForm.elements.account.value.slice(-5);
-    bankAccounts.unshift({bank, suffix, verified:false, date:new Date()});
-    showList('bank');
-    notice.textContent = '示範認證已送出，可在清單查看待審核狀態。';
-    bankAdd.focus();
-  });
-  for (const form of forms) form.addEventListener('submit', event => {
-    event.preventDefault();
-    completed.add(kind);
-    identity.reset();
-    nationalId.setCustomValidity('');
-    form.reset();
+    const fields = bankForm.elements;
+    if (kind === 'bank') {
+      bankAccounts.unshift({bank:fields.bank.value, suffix:fields.account.value.slice(-5), verified:false, date:new Date()});
+    } else {
+      const summaries = {
+        usdt: () => [fields.walletName.value.trim(), '••••• ' + fields.walletAddress.value.slice(-5), '示範完成'],
+        store: () => [store.selectedOptions[0].textContent, fields.storeCode.value, '示範完成'],
+        credit: () => ['示範信用卡', '••••• ' + fields.creditNumber.value.slice(-5), '示範完成'],
+      };
+      completed.set(kind,summaries[kind]());
+    }
     showList(kind);
-    notice.textContent = '示範綁定完成。';
+    notice.textContent = kind === 'bank' ? '示範認證已送出，可在清單查看待審核狀態。' : '示範綁定完成。';
+    (kind === 'bank' ? bankAdd : add).focus();
   });
   for (const link of view.querySelectorAll('[data-store-link]')) {
     link.addEventListener('click', () => { store.value = link.dataset.storeLink; });

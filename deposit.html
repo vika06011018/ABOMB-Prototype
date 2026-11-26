@@ -593,7 +593,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 @media (max-width:899px) { .top-actions .notification-bell { width:clamp(20px,5.8vw,25px); height:auto; } }
 </style>
 <link rel="stylesheet" href="bomb-final.css?v=44">
-<link rel="stylesheet" href="deposit.css?v=65">
+<link rel="stylesheet" href="deposit.css?v=67">
 <link rel="stylesheet" href="account-entry.css?v=60">
 <link rel="stylesheet" href="member-layout.css?v=61">
 <link rel="stylesheet" href="shared-footer.css?v=56">
@@ -714,9 +714,9 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 </fieldset></form></div>
 <div id="depositBindingView" hidden>
  <header class="bind-header"><h1 id="bind-bank-card" tabindex="-1">綁定銀行卡</h1>
- <div class="inbox-filters" role="group" aria-label="綁定方式"><button type="button" data-bind-tab="bank" aria-pressed="false">點數帳戶</button><button type="button" data-bind-tab="usdt" aria-pressed="false">USDT</button><button type="button" data-bind-tab="store" aria-pressed="false">超商</button><button type="button" data-bind-tab="credit" aria-pressed="false">信用卡</button></div></header>
+ <div class="inbox-filters" role="group" aria-label="綁定方式"><button type="button" data-bind-tab="bank" aria-pressed="false">銀行帳戶</button><button type="button" data-bind-tab="usdt" aria-pressed="false">USDT</button><button type="button" data-bind-tab="store" aria-pressed="false">超商</button><button type="button" data-bind-tab="credit" aria-pressed="false">信用卡</button></div></header>
  <div id="bind-list">
-   <table class="bind-table" role="table"><caption id="bind-caption">點數帳戶</caption>
+   <table class="bind-table" role="table"><caption id="bind-caption">銀行帳戶</caption>
    <thead role="rowgroup"><tr role="row"><th scope="col" id="bind-name-column" role="columnheader">銀行名稱</th><th scope="col" id="bind-column" role="columnheader">帳號後五碼</th><th scope="col" role="columnheader">驗證狀態</th></tr></thead>
    <tbody id="bind-rows" role="rowgroup"><tr><td colspan="3">尚未綁定</td></tr></tbody></table>
    <section id="bank-account-list" aria-labelledby="bank-account-title" hidden>
@@ -728,21 +728,12 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
        <ul><li>請綁定本人名下的銀行帳戶。</li><li>帳戶綁定供身分核對使用，儲值仍需自行操作轉帳。</li><li>首次出款前需完成實名認證。</li></ul>
      </aside>
    </section>
-   <button type="button" id="bind-identity-entry" class="outline-gold">身分資料</button>
    <button class="bind-add" type="button" id="bind-add"><span class="bind-add-visual" aria-hidden="true"><img id="bind-add-image" src="assets/deposit/bank.webp" alt="" width="112" height="76"><strong>＋</strong></span>新增綁定</button>
    <p id="bind-notice" role="status"></p>
  </div>
  <div id="bind-flow" hidden>
    <button type="button" id="bind-back" class="outline-gold">返回綁定清單</button>
-   <ol class="bind-steps" id="bind-steps"><li id="bind-step-one"><button type="button" id="bind-review-identity">1 身分資料</button></li><li id="bind-step-two">2 綁定資料</li></ol>
    <p class="bind-demo">此為示範流程，請使用測試資料。內容不會傳送或保存。</p>
-   <form id="bind-identity" class="bind-form" autocomplete="off">
-      <p id="bind-identity-status" role="status" hidden>本次預覽已完成身分資料確認。若資料有誤，可重新填寫。</p>
-      <label>姓名<input id="bind-name" required placeholder="示範會員" maxlength="40"></label>
-      <label>身分證字號<input id="bind-id" required placeholder="請輸入 1 個英文字母＋9 位數字" maxlength="10" autocapitalize="characters" spellcheck="false"></label>
-      <p class="bind-overseas">海外華人或境外客戶請<button type="button" data-action="help">聯繫客服</button>。</p>
-      <button type="submit" class="goldbtn">繼續</button>
-   </form>
    <form id="bind-bank" class="bind-form" autocomplete="off" hidden>
      <section class="bank-form-section" aria-labelledby="bank-identity-title">
        <div class="bank-verification-heading">
@@ -755,7 +746,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
        <label>手機號碼<input name="phone" type="tel" required pattern="09[0-9]{8}" maxlength="10" placeholder="09 開頭的 10 位數字"></label>
        <p class="bind-overseas">海外華人或境外客戶請<button type="button" data-action="help">聯繫客服</button>。</p>
      </section>
-     <section class="bank-form-section" aria-labelledby="bank-verification-title">
+     <fieldset class="bank-form-section" data-bind-panel="bank" aria-labelledby="bank-verification-title">
        <div class="bank-verification-heading"><h2 id="bank-verification-title">實名認證</h2><button type="button" id="bank-examples-open" class="outline-gold" aria-haspopup="dialog">查看範例</button></div>
        <p id="bank-id-documents-note" class="bind-demo" hidden>身分已驗證，加開銀行卡時可選擇補充身分證圖片。</p>
        <div class="bank-document-grid" id="bank-id-documents">
@@ -768,8 +759,38 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
        <label>分行代碼<input required inputmode="numeric" pattern="[0-9]{3,4}" maxlength="4" placeholder="000"></label>
        <label>銀行帳號<input name="account" required placeholder="DEMO-12345" pattern="DEMO-[0-9]{5}" maxlength="10" title="請輸入 DEMO- 加五位數字"></label>
        <button type="button" id="bind-branch" class="outline-gold">代碼查詢</button>
-     </section>
-     <button type="submit" class="goldbtn bank-submit">送出認證</button>
+     </fieldset>
+     <fieldset class="bank-form-section" data-bind-panel="usdt" aria-labelledby="bind-usdt-title" hidden disabled>
+       <h2 id="bind-usdt-title">綁定 USDT</h2>
+      <label>錢包名稱<input name="walletName" required maxlength="40" placeholder="請輸入錢包名稱"></label>
+      <label>幣種<input value="USDT" readonly></label>
+      <label>區塊鏈<select name="chain"><option value="tron">Tron (TRC20)</option></select></label>
+      <label class="wallet-address-field"><span>錢包地址</span><input id="bind-wallet-address" name="walletAddress" required autocomplete="off" spellcheck="false" placeholder="請輸入Tron (TRC20)區塊鏈錢包地址" aria-describedby="wallet-address-hint" maxlength="34" pattern="T[1-9A-HJ-NP-Za-km-z]{33}"><span id="wallet-address-hint" role="status" hidden>請輸入Tron (TRC20)區塊鏈錢包地址</span></label>
+      <div class="bank-document-grid">
+        <label class="bank-upload"><span>錢包地址截圖</span><span class="bank-upload-frame"><span>選擇圖片</span><img alt="錢包地址截圖預覽" hidden></span><input name="walletProof" type="file" required accept="image/jpeg,image/png,image/webp"></label>
+      </div>
+      <aside class="wallet-binding-notes"><h3>⚠ 注意事項</h3><ul>
+        <li>請新增本人開立的交易所虛擬錢包。</li>
+        <li>目前支援 Tron (TRC20) 區塊鏈錢包地址。</li>
+        <li>新增錢包地址後，請配合客服進行實名認證（KYC）。</li>
+        <li>請核對錢包地址與區塊鏈是否相符。選錯區塊鏈可能導致款項遺失。</li>
+      </ul></aside>
+     </fieldset>
+     <fieldset class="bank-form-section" data-bind-panel="store" aria-labelledby="bind-store-title" hidden disabled>
+       <h2 id="bind-store-title">綁定超商</h2>
+      <label>超商<select id="bind-store-select" required><option value="">請選擇超商</option><option value="711">7-ELEVEN</option><option value="family">全家</option><option value="ok" disabled>OK mart</option><option value="hilife" disabled>萊爾富</option></select></label>
+      <label>所在縣市<select required><option value="">請選擇縣市</option><option>臺北市</option><option>新北市</option><option>基隆市</option><option>桃園市</option><option>新竹市</option><option>新竹縣</option><option>苗栗縣</option><option>臺中市</option><option>彰化縣</option><option>南投縣</option><option>雲林縣</option><option>嘉義市</option><option>嘉義縣</option><option>臺南市</option><option>高雄市</option><option>屏東縣</option><option>宜蘭縣</option><option>花蓮縣</option><option>臺東縣</option><option>澎湖縣</option><option>金門縣</option><option>連江縣</option></select></label>
+      <label>超商店名<input required maxlength="40" placeholder="請輸入超商店名"></label>
+      <div class="store-code-row"><label>店家代號（號）<input name="storeCode" required inputmode="numeric" pattern="[0-9]{4,6}" maxlength="6" placeholder="請輸入超商代碼"></label>
+      <div class="bind-stores" aria-label="官方門市查詢"><a data-store-link="711" href="https://www.ibon.com.tw/retail_inquiry.aspx" target="_blank" rel="noopener noreferrer">7-ELEVEN</a><a data-store-link="family" href="https://www.family.com.tw/Marketing/StoreMap/" target="_blank" rel="noopener noreferrer">全家</a><button type="button" disabled>OK mart</button><button type="button" disabled>萊爾富</button></div></div>
+     </fieldset>
+     <fieldset class="bank-form-section" data-bind-panel="credit" aria-labelledby="bind-credit-title" hidden disabled>
+       <h2 id="bind-credit-title">綁定信用卡</h2>
+      <label>英文姓<input required placeholder="DEMO" maxlength="30"></label>
+      <label>英文名<input required placeholder="MEMBER" maxlength="30"></label>
+      <label>信用卡卡號<input name="creditNumber" required placeholder="DEMO-00001" pattern="DEMO-[0-9]{5}" maxlength="10" title="請輸入 DEMO- 加五位數字"></label>
+     </fieldset>
+     <button type="submit" id="bind-submit" class="goldbtn bank-submit">送出認證</button>
    </form>
    <dialog class="bank-examples bank-identity-editor" id="bank-identity-editor" aria-labelledby="bank-editor-title">
      <h2 id="bank-editor-title">編輯身分資料</h2>
@@ -801,24 +822,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
         </a>
       </section>
    </dialog>
-   <form id="bind-credit" data-bind-form class="bind-form" autocomplete="off" hidden>
-      <label>英文姓<input required placeholder="DEMO" maxlength="30"></label>
-      <label>英文名<input required placeholder="MEMBER" maxlength="30"></label>
-      <label>信用卡卡號<input required placeholder="DEMO-00001" pattern="DEMO-[0-9]{5}" maxlength="10" title="請輸入 DEMO- 加五位數字"></label>
-      <button type="submit" class="goldbtn">確定</button>
-   </form>
-   <form id="bind-usdt" data-bind-form class="bind-form" autocomplete="off" hidden>
-      <label>錢包地址<input required placeholder="DEMO 加 30 個數字" pattern="DEMO[0-9]{30}" maxlength="34"></label>
-      <button type="submit" class="goldbtn">確定</button>
-   </form>
-   <form id="bind-store" data-bind-form class="bind-form" autocomplete="off" hidden>
-      <label>超商<select id="bind-store-select" required><option value="">請選擇超商</option><option value="711">7-ELEVEN</option><option value="family">全家</option><option value="ok">OK mart</option><option value="hilife">萊爾富</option></select></label>
-      <label>所在縣市<select required><option value="">請選擇縣市</option><option>臺北市</option><option>新北市</option><option>基隆市</option><option>桃園市</option><option>新竹市</option><option>新竹縣</option><option>苗栗縣</option><option>臺中市</option><option>彰化縣</option><option>南投縣</option><option>雲林縣</option><option>嘉義市</option><option>嘉義縣</option><option>臺南市</option><option>高雄市</option><option>屏東縣</option><option>宜蘭縣</option><option>花蓮縣</option><option>臺東縣</option><option>澎湖縣</option><option>金門縣</option><option>連江縣</option></select></label>
-      <label>超商店名<input required maxlength="40" placeholder="請輸入超商店名"></label>
-      <label>店家代號（號）<input required inputmode="numeric" pattern="[0-9]{4,6}" maxlength="6" placeholder="請輸入超商代碼"></label>
-      <div class="bind-stores" aria-label="官方門市查詢"><a data-store-link="711" href="https://www.ibon.com.tw/retail_inquiry.aspx" target="_blank" rel="noopener noreferrer">7-ELEVEN</a><a data-store-link="family" href="https://www.family.com.tw/Marketing/StoreMap/" target="_blank" rel="noopener noreferrer">全家</a><a data-store-link="ok" href="https://www.okmart.com.tw/convenient_shopsearch" target="_blank" rel="noopener noreferrer">OK mart</a><a data-store-link="hilife" href="https://www.hilife.com.tw/filter" target="_blank" rel="noopener noreferrer">萊爾富</a></div>
-      <button type="submit" class="goldbtn">確定</button>
-   </form>
+
  </div>
 </div>
 
@@ -969,7 +973,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <script src="back-to-top.js" defer></script>
 <script src="account-inbox.js?v=54" defer></script>
 <script src="account-referral.js?v=56" defer></script>
-<script src="account-binding.js?v=66" defer></script>
+<script src="account-binding.js?v=67" defer></script>
 <script src="avatar-picker.js" defer></script>
 </body>
 </html>

@@ -301,3 +301,19 @@
 .bank-identity-editor { max-width:550px; }
 .bank-identity-editor .bind-form { margin-top:14px; }
 .bank-editor-actions { display:flex; justify-content:flex-end; gap:8px; }
+
+#bind-bank fieldset { margin:0; min-inline-size:0; }
+#bind-bank select { min-height:40px; }
+.wallet-address-field [role="status"] { grid-column:2; color:#ffdd8b; font-size:13px; }
+.wallet-binding-notes { border:1px solid #805064; border-radius:8px; padding:12px; }
+.wallet-binding-notes ul { margin:6px 0 0; padding-inline-start:1.25em; line-height:1.6; }
+.store-code-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.store-code-row > label { flex:1 1 270px; }
+.store-code-row .bind-stores { justify-content:flex-start; }
+.bind-stores button:disabled {
+  border:1px solid #70596d; border-radius:8px; padding:8px 10px;
+  color:#dbc9d9; background:#291c29; opacity:.58; cursor:not-allowed;
+}
+@media (max-width:899px) {
+  .wallet-address-field [role="status"] { grid-column:1; }
+}
