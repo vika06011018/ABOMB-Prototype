@@ -593,7 +593,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 @media (max-width:899px) { .top-actions .notification-bell { width:clamp(20px,5.8vw,25px); height:auto; } }
 </style>
 <link rel="stylesheet" href="bomb-final.css?v=44">
-<link rel="stylesheet" href="deposit.css?v=58">
+<link rel="stylesheet" href="deposit.css?v=62">
 <link rel="stylesheet" href="account-entry.css?v=60">
 <link rel="stylesheet" href="member-layout.css?v=61">
 <link rel="stylesheet" href="shared-footer.css?v=56">
@@ -716,16 +716,17 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
  <header class="bind-header"><h1 id="bind-bank-card" tabindex="-1">綁定銀行卡</h1>
  <div class="inbox-filters" role="group" aria-label="綁定方式"><button type="button" data-bind-tab="bank" aria-pressed="false">點數帳戶</button><button type="button" data-bind-tab="usdt" aria-pressed="false">USDT</button><button type="button" data-bind-tab="store" aria-pressed="false">超商</button><button type="button" data-bind-tab="credit" aria-pressed="false">信用卡</button></div></header>
  <div id="bind-list">
-   <table class="bind-table"><caption id="bind-caption">點數帳戶</caption>
-   <thead><tr><th scope="col">名稱</th><th scope="col" id="bind-column">帳號後五碼</th><th scope="col">驗證狀態</th></tr></thead>
-   <tbody id="bind-rows"><tr><td colspan="3">尚未綁定</td></tr></tbody></table>
+   <table class="bind-table" role="table"><caption id="bind-caption">點數帳戶</caption>
+   <thead role="rowgroup"><tr role="row"><th scope="col" id="bind-name-column" role="columnheader">銀行名稱</th><th scope="col" id="bind-column" role="columnheader">帳號後五碼</th><th scope="col" role="columnheader">驗證狀態</th></tr></thead>
+   <tbody id="bind-rows" role="rowgroup"><tr><td colspan="3">尚未綁定</td></tr></tbody></table>
+   <button type="button" id="bind-add-bank" class="outline-gold" hidden>＋ 新增綁定</button>
    <button type="button" id="bind-identity-entry" class="outline-gold">身分資料</button>
    <button class="bind-add" type="button" id="bind-add"><span class="bind-add-visual" aria-hidden="true"><img id="bind-add-image" src="assets/deposit/bank.webp" alt="" width="112" height="76"><strong>＋</strong></span>新增綁定</button>
    <p id="bind-notice" role="status"></p>
  </div>
  <div id="bind-flow" hidden>
    <button type="button" id="bind-back" class="outline-gold">返回綁定清單</button>
-   <ol class="bind-steps"><li id="bind-step-one"><button type="button" id="bind-review-identity">1 身分資料</button></li><li id="bind-step-two">2 綁定資料</li></ol>
+   <ol class="bind-steps" id="bind-steps"><li id="bind-step-one"><button type="button" id="bind-review-identity">1 身分資料</button></li><li id="bind-step-two">2 綁定資料</li></ol>
    <p class="bind-demo">此為示範流程，請使用測試資料。內容不會傳送或保存。</p>
    <form id="bind-identity" class="bind-form" autocomplete="off">
       <p id="bind-identity-status" role="status" hidden>本次預覽已完成身分資料確認。若資料有誤，可重新填寫。</p>
@@ -734,12 +735,27 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
       <p class="bind-overseas">海外華人或境外客戶請<button type="button" data-action="help">聯繫客服</button>。</p>
       <button type="submit" class="goldbtn">繼續</button>
    </form>
-   <form id="bind-bank" data-bind-form class="bind-form" autocomplete="off" hidden>
-      <label>銀行名稱<select required><option value="">請選擇示範銀行</option><option>示範銀行 A</option><option>示範銀行 B</option></select></label>
-      <label>銀行帳號<input required placeholder="DEMO-00001" pattern="DEMO-[0-9]{5}" maxlength="10" title="請輸入 DEMO- 加五位數字"></label>
-      <label>分行代碼<input required inputmode="numeric" pattern="[0-9]{3,4}" maxlength="4" placeholder="000"></label>
-      <button type="button" id="bind-branch" class="outline-gold">代碼查詢</button>
-      <button type="submit" class="goldbtn">確定</button>
+   <form id="bind-bank" class="bind-form" autocomplete="off" hidden>
+     <section class="bank-form-section" aria-labelledby="bank-identity-title">
+       <h2 id="bank-identity-title">身分資料驗證</h2>
+       <label>姓名<input id="bank-name" required maxlength="40" placeholder="示範會員"></label>
+       <label>身分證字號<input id="bank-id" required maxlength="10" placeholder="1 個英文字母＋9 位數字" autocapitalize="characters" spellcheck="false"></label>
+       <label>手機號碼<input name="phone" type="tel" required pattern="09[0-9]{8}" maxlength="10" placeholder="09 開頭的 10 位數字"></label>
+       <p class="bind-overseas">海外華人或境外客戶請<button type="button" data-action="help">聯繫客服</button>。</p>
+     </section>
+     <section class="bank-form-section" aria-labelledby="bank-verification-title">
+       <h2 id="bank-verification-title">實名認證</h2>
+       <div class="bank-document-grid">
+         <label><span>身分證正面</span><input name="front" type="file" required accept="image/jpeg,image/png,image/webp"></label>
+         <label><span>身分證反面</span><input name="back" type="file" required accept="image/jpeg,image/png,image/webp"></label>
+       </div>
+       <h3>銀行帳戶</h3>
+       <label>銀行名稱<select name="bank" required><option value="">請選擇示範銀行</option><option>示範銀行 A</option><option>示範銀行 B</option></select></label>
+       <label>分行代碼<input required inputmode="numeric" pattern="[0-9]{3,4}" maxlength="4" placeholder="000"></label>
+       <label>銀行帳號<input name="account" required placeholder="DEMO-12345" pattern="DEMO-[0-9]{5}" maxlength="10" title="請輸入 DEMO- 加五位數字"></label>
+       <button type="button" id="bind-branch" class="outline-gold">代碼查詢</button>
+     </section>
+     <button type="submit" class="goldbtn bank-submit">送出認證</button>
    </form>
    <form id="bind-credit" data-bind-form class="bind-form" autocomplete="off" hidden>
       <label>英文姓<input required placeholder="DEMO" maxlength="30"></label>
@@ -909,7 +925,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <script src="back-to-top.js" defer></script>
 <script src="account-inbox.js?v=54" defer></script>
 <script src="account-referral.js?v=56" defer></script>
-<script src="account-binding.js?v=60" defer></script>
+<script src="account-binding.js?v=62" defer></script>
 <script src="avatar-picker.js" defer></script>
 </body>
 </html>
