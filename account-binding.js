@@ -1,3 +1,7 @@
+const demoVerifiedBankAccount = Object.freeze({
+  bank:'示範銀行 A',
+  number:'000000012345',
+});
 (() => {
   const view = document.querySelector('#depositBindingView');
   const heading = view.querySelector('h1');
@@ -18,7 +22,7 @@
   const bankAdd = view.querySelector('#bind-add-bank');
   const bankList = view.querySelector('#bank-account-list');
   const bankCards = view.querySelector('#bank-account-cards');
-  const bankAccounts = [{bank:'示範銀行 A', suffix:'12345', verified:true, date:new Date(2024,8,10,12,58,20)}];
+  const bankAccounts = [{bank:demoVerifiedBankAccount.bank, suffix:demoVerifiedBankAccount.number.slice(-5), verified:true, date:new Date(2024,8,10,12,58,20)}];
   const verifiedIdentity = Object.freeze(['示範會員','A123456789','0900000000']);
   const identityFields = [bankName, bankId, bankForm.elements.phone];
   const identityEditor = view.querySelector('#bank-identity-editor');

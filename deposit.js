@@ -5,16 +5,31 @@ const unboundPanel = document.querySelector('#depositUnbound');
 const depositView = document.querySelector('#depositView');
 const bindingView = document.querySelector('#depositBindingView');
 const amountFormat = new Intl.NumberFormat('zh-TW');
+const unboundLimit = unboundPanel.querySelector('[data-deposit-limit]');
+const depositAmountError = document.querySelector('#deposit-input-error');
+
+function refreshDepositAmount() {
+  const {rangeUnderflow,rangeOverflow} = depositAmount.validity;
+  const error = rangeUnderflow ? '儲值金額最低為 NT$ ' + amountFormat.format(Number(depositAmount.min))
+    : rangeOverflow ? '儲值金額最高為 NT$ ' + amountFormat.format(Number(depositAmount.max)) : '';
+  depositAmountError.textContent = error;
+  depositAmountError.hidden = !error;
+  if (error) depositAmount.setAttribute('aria-invalid','true');
+  else depositAmount.removeAttribute('aria-invalid');
+}
+depositAmount.addEventListener('input', refreshDepositAmount);
 
 for (const button of depositForm.querySelectorAll('[data-add]')) {
   button.addEventListener('click', () => {
     depositAmount.value = (depositAmount.valueAsNumber || 0) + Number(button.dataset.add);
+    refreshDepositAmount();
     depositAmount.focus();
   });
 }
 
 document.querySelector('#depositClear').addEventListener('click', () => {
   depositAmount.value = '';
+  refreshDepositAmount();
   depositAmount.focus();
 });
 
@@ -32,10 +47,20 @@ for (const button of document.querySelectorAll('[data-account-label]')) {
 }
 
 function updateChannel() {
-  const requiresBinding = Boolean(depositForm.querySelector('[name="channel"]:checked[data-binding-required]'));
+  const channel = depositForm.querySelector('[name="channel"]:checked');
+  const requiresBinding = Boolean(channel?.hasAttribute('data-binding-required'));
+  if (channel) {
+    depositAmount.min = channel.dataset.min;
+    depositAmount.max = channel.dataset.max;
+    const min = amountFormat.format(Number(channel.dataset.min));
+    const max = amountFormat.format(Number(channel.dataset.max));
+    depositAmount.placeholder = min + ' ～ ' + max;
+    unboundLimit.textContent = '本通道儲值金額 NT$ ' + min + ' ～ ' + max;
+  }
   amountFields.hidden = requiresBinding;
   amountFields.disabled = requiresBinding;
   unboundPanel.hidden = !requiresBinding;
+  refreshDepositAmount();
 }
 
 depositForm.addEventListener('change', updateChannel);

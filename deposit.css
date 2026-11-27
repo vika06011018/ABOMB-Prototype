@@ -331,6 +331,7 @@
   border-radius:12px; background:linear-gradient(150deg,#33182e,#1d0c21);
 }
 .withdraw-row { display:grid; grid-template-columns:minmax(100px,1fr) minmax(0,3fr); gap:8px; align-items:center; min-height:34px; }
+.withdraw-row :is(strong,output), #withdraw-amount { font-size:inherit; }
 .withdraw-row :is(strong,output) { color:#ffdda1; font-weight:800; }
 .withdraw-form small { display:block; color:#e0c4d8; }
 .withdraw-error { margin:0; color:#ffacb5; }
@@ -357,3 +358,33 @@
 .bank-code-results th, .bank-code-results td { padding:6px 5px; border-bottom:1px solid #664054; text-align:left; }
 .bank-code-results th { position:sticky; top:0; background:#351d32; }
 .bank-code-results button { font-variant-numeric:tabular-nums; }
+
+.deposit-range { color:#ffdb98; line-height:1.2; font-size:clamp(10px,2.8vw,13px); font-variant-numeric:tabular-nums; }
+.withdraw-amount-group { display:grid; gap:6px; }
+.withdraw-amount-group label > span { font-size:inherit; }
+.withdraw-counts {
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:center;
+  padding:5px 0;
+}
+.withdraw-counts > div {
+  display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline;
+  gap:4px 10px; padding:4px clamp(8px,2vw,18px);
+  color:#ebcfdf; font-size:clamp(14px,3.8vw,17px); font-weight:650;
+}
+.withdraw-counts > div + div { border-inline-start:1px solid #c7997552; }
+.withdraw-counts strong {
+  color:#ffe0a1; font-size:clamp(20px,5vw,25px); font-variant-numeric:tabular-nums;
+}
+.deposit-selected-limit { margin:0; color:#ffde9c; font-size:14px; }
+.withdraw-form .withdraw-u-note { color:#ff777f; margin-top:3px; }
+.store-lookup p { margin:4px 0 8px; color:#ffdb98; }
+.store-lookup .bind-stores { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; }
+.store-lookup .bind-stores :is(a,button) { display:grid; place-items:center; align-content:center; gap:4px; text-align:center; min-height:50px; padding:5px 2px; }
+.store-lookup img { width:50px; height:35px; max-width:100%; object-fit:contain; }
+
+.store-binding-notes {
+  margin:12px 0 0; padding:12px 12px 12px 30px; border:1px solid #805064;
+  border-radius:9px; background:#261427; color:#f4dfee; font-size:14px; line-height:1.65;
+}
+.store-binding-notes li + li { margin-top:4px; }
+.store-refund-notice { color:#ffbabc; }
