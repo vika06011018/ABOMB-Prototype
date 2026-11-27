@@ -1,0 +1,1 @@
+V23 desktop APP banner: source / original design image, full four-side crop (994 x 185), includes both bottom and right rounded borders. CSS aspect matches source. All other sections retained from V22. Keep index.html, CSS, and assets folder together.

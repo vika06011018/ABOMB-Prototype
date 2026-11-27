@@ -1,0 +1,85 @@
+:root {
+  --button-face-dark: linear-gradient(180deg,#654049 0%,#482330 19%,#2e1420 53%,#210e18 100%);
+  --button-face-gold: linear-gradient(180deg,#fff1c1 0%,#f0cf8a 21%,#d6a657 57%,#b17b36 100%);
+  --button-face-selected: linear-gradient(180deg,#927047 0%,#684a2a 24%,#4c321c 60%,#392514 100%);
+  --button-depth-dark: inset 0 1px 0 #fff0d275,inset 0 -1px 0 #e7a68346,0 2px 0 #34121c,0 4px 5px #08040885;
+  --button-depth-gold: inset 0 1px 0 #fff8d9,inset 0 -1px 0 #ffe8a77a,0 2px 0 #754718,0 4px 6px #0b0609a0;
+  --button-depth-pressed: inset 0 1px 3px #1106108c,inset 0 -1px 0 #ffeab64a,0 1px 1px #0b060980;
+}
+
+/* Preserve illustrated surfaces and add depth to the controls that sit on them. */
+html body :is(button,input[type="button"],input[type="submit"],input[type="reset"],[role="button"],.goldbtn,.gold-btn,.outline-gold,.app-install-link,.deposit-side nav a,.account-tiles > a,.mobile-bottom > a) {
+  box-shadow:var(--button-relief,var(--button-depth-dark));
+}
+
+html body :is(.goldbtn,.gold-btn,.app-install-link,.room-transfer [data-enter]) {
+  --button-relief:var(--button-depth-gold);
+  background-image:var(--button-face-gold);
+  color:#281509;
+}
+
+html body :is(.outline-gold,.deposit-quick button,.room-transfer button:not([data-close],[data-favorite],[data-enter])) {
+  background-image:var(--button-face-dark);
+}
+
+html body :is(button,input[type="button"],input[type="submit"],input[type="reset"],[role="button"],.goldbtn,.gold-btn,.outline-gold,.app-install-link,.deposit-side nav a,.account-tiles > a,.mobile-bottom > a):active:not(:disabled,[aria-disabled="true"]) {
+  --button-relief:var(--button-depth-pressed);
+}
+
+html body :is(button,[role="button"],.goldbtn,.gold-btn,.outline-gold):focus-visible {
+  outline:2px solid #ffe7a9;
+  outline-offset:2px;
+}
+
+@media (max-width:899px) {
+  html body .deposit-layout .deposit-mobile-menu {
+    background:none;
+    border:0;
+    border-radius:0;
+    padding:0;
+    box-shadow:none;
+    column-gap:clamp(4px,1vw,8px);
+  }
+
+  html body .deposit-layout .deposit-mobile-menu[hidden] { display:none; }
+
+  html body .deposit-layout .deposit-mobile-menu > :is(a,button) {
+    --button-relief:var(--button-depth-dark);
+    min-height:60px;
+    border-color:#9f6a63;
+    color:#fff0d7;
+    font-size:clamp(10px,2.55vw,15px);
+    white-space:nowrap;
+    background:var(--button-face-dark);
+    box-shadow:var(--button-relief);
+  }
+
+  html body .deposit-layout .deposit-mobile-menu > :is(a,button):is(:hover,:focus-visible) {
+    border-color:#dfb37f;
+  }
+
+  html body .deposit-layout .deposit-mobile-menu > [aria-current="page"],
+  html body .deposit-layout .deposit-mobile-menu > [aria-current="page"]:is(:hover,:focus-visible) {
+    --button-relief:var(--button-depth-gold);
+    color:#fff5df;
+    border-color:#f6d69a;
+    background:var(--button-face-selected);
+  }
+
+  html body .deposit-layout .deposit-mobile-menu > :is(a,button):active {
+    --button-relief:var(--button-depth-pressed);
+  }
+
+  html body .deposit-layout .deposit-mobile-menu .account-tile-icon,
+  html body .deposit-layout .deposit-mobile-menu [aria-current="page"] .account-tile-icon {
+    width:24px;
+    height:24px;
+    padding:0;
+    color:#f4d59a;
+    border:0;
+    border-radius:0;
+    background:none;
+    box-shadow:none;
+    filter:drop-shadow(0 1px 1px #180c13bc);
+  }
+}
