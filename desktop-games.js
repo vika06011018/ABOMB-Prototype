@@ -94,7 +94,7 @@
 
   lobby?.addEventListener('click', event => {
     const button = event.target.closest('[data-desktop-entry]');
-    if (button) showModal(button.dataset.desktopEntry, '遊戲入口示意，正式連結待提供。');
+    if (button) roomTransfer.open(button.dataset.desktopEntry);
   });
   window.addEventListener('scroll', updateScroll, {passive:true});
   window.addEventListener('resize', updateScroll);

@@ -141,7 +141,7 @@ if (catalog) {
         title:card.dataset.entry,
         provider:{name:card.dataset.provider, logo:card.querySelector('.provider-image').src},
         art:card.querySelector('.catalog-art').src,
-        play:() => showModal(card.dataset.entry, '遊戲入口示意，正式連結待提供。'),
+        play:() => roomTransfer.open(card.dataset.entry),
         remove:() => savePreference(roomKey, entries.filter(entry => entry !== card.dataset.entry))
       }));
     const items = [...homeItems, ...roomItems];
@@ -203,7 +203,7 @@ if (catalog) {
       return;
     }
     if (entry === 'ATG 電子') openGame(games.find(game => game.id === 'seth'));
-    else showModal(entry, '遊戲入口示意，正式連結待提供。');
+    else roomTransfer.open(entry);
   });
   applySearch();
   const initialSection = groups.find(group => '#' + group.id === location.hash);

@@ -125,11 +125,58 @@ if (location.hash === '#guild-promotion') {
 }
 
 const transferStatus = document.querySelector('#transferStatus');
-document.querySelector('[data-transfer-action="refresh"]').addEventListener('click', () => {
+const transferGrid = document.querySelector('.transfer-grid');
+const roomCards = new Map();
+
+function addRoomReturn(card, name) {
+  const balance = card.querySelector('span');
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'outline-gold';
+  button.dataset.roomReturn = name;
+  button.textContent = '轉回';
+  button.setAttribute('aria-label', '從' + name + '轉回點數');
+  card.append(button);
+  roomCards.set(name, {balance, button});
+}
+
+for (const card of transferGrid.children) {
+  addRoomReturn(card, card.querySelector('strong').textContent);
+}
+
+function refreshTransferRooms() {
+  for (const name of roomTransfer.activeRooms()) {
+    if (roomCards.has(name)) continue;
+    const card = document.createElement('li');
+    const title = document.createElement('strong');
+    title.textContent = name;
+    card.append(title, document.createElement('span'));
+    transferGrid.append(card);
+    addRoomReturn(card, name);
+  }
+  for (const [name, {balance, button}] of roomCards) {
+    const points = roomTransfer.balance(name);
+    balance.textContent = roomTransfer.format(points) + ' 點';
+    button.disabled = points === 0;
+  }
+}
+
+transferGrid.addEventListener('click', event => {
+  const button = event.target.closest('[data-room-return]');
+  if (button) roomTransfer.open(button.dataset.roomReturn, true);
+});
+function showTransferStatus(message) {
   transferStatus.hidden = false;
-  transferStatus.textContent = '館別餘額已重新顯示（示範資料）。';
+  transferStatus.textContent = message;
+}
+document.querySelector('[data-transfer-action="refresh"]').addEventListener('click', () => {
+  refreshTransferRooms();
+  showTransferStatus('已更新館別餘額。');
 });
 document.querySelector('[data-transfer-action="return"]').addEventListener('click', () => {
-  transferStatus.hidden = false;
-  transferStatus.textContent = '目前沒有可轉回的示範點數。';
+  const points = roomTransfer.returnAll();
+  showTransferStatus(points ? '已轉回主錢包 ' + roomTransfer.format(points) + ' 點。' : '目前沒有可轉回的點數。');
 });
+window.addEventListener('bomb-room-balances', refreshTransferRooms);
+window.addEventListener('pageshow', refreshTransferRooms);
+refreshTransferRooms();

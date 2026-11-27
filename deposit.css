@@ -363,18 +363,15 @@
 .withdraw-amount-group { display:grid; gap:6px; }
 .withdraw-amount-group label > span { font-size:inherit; }
 .withdraw-counts {
-  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:center;
-  padding:5px 0;
+  display:flex; flex-wrap:wrap; align-items:baseline; column-gap:12px; row-gap:4px;
+  margin:0; color:#dfc28c; font-size:clamp(12px,3.2vw,14px);
 }
-.withdraw-counts > div {
-  display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline;
-  gap:4px 10px; padding:4px clamp(8px,2vw,18px);
-  color:#ebcfdf; font-size:clamp(14px,3.8vw,17px); font-weight:650;
+.withdraw-counts > span { white-space:nowrap; }
+.withdraw-counts > span + span::before {
+  content:""; display:inline-block; height:.85em; margin-inline-end:12px;
+  border-inline-start:1px solid #dfc28c80; vertical-align:-.04em;
 }
-.withdraw-counts > div + div { border-inline-start:1px solid #c7997552; }
-.withdraw-counts strong {
-  color:#ffe0a1; font-size:clamp(20px,5vw,25px); font-variant-numeric:tabular-nums;
-}
+.withdraw-counts strong { color:#ffe0a1; font-weight:750; font-variant-numeric:tabular-nums; }
 .deposit-selected-limit { margin:0; color:#ffde9c; font-size:14px; }
 .withdraw-form .withdraw-u-note { color:#ff777f; margin-top:3px; }
 .store-lookup p { margin:4px 0 8px; color:#ffdb98; }
