@@ -363,15 +363,17 @@
 .withdraw-amount-group { display:grid; gap:6px; }
 .withdraw-amount-group label > span { font-size:inherit; }
 .withdraw-counts {
-  display:flex; flex-wrap:wrap; align-items:baseline; column-gap:12px; row-gap:4px;
-  margin:0; color:#dfc28c; font-size:clamp(12px,3.2vw,14px);
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px; width:min(100%,330px); margin:0 0 3px; padding-block:1px 7px;
 }
-.withdraw-counts > span { white-space:nowrap; }
-.withdraw-counts > span + span::before {
-  content:""; display:inline-block; height:.85em; margin-inline-end:12px;
-  border-inline-start:1px solid #dfc28c80; vertical-align:-.04em;
+.withdraw-counts > span { display:grid; align-content:start; gap:4px; }
+.withdraw-counts > span + span { padding-inline-start:16px; border-inline-start:1px solid #be8b546b; }
+.withdraw-count-label { color:#f5d8b1; font-size:clamp(13px,3.7vw,15px); font-weight:650; line-height:1.35; }
+.withdraw-count-value { display:flex; align-items:baseline; gap:5px; color:#e0c6a5; font-size:12px; }
+.withdraw-count-value strong {
+  color:#ffdc90; font-size:clamp(20px,5.2vw,26px); line-height:1;
+  font-weight:800; font-variant-numeric:tabular-nums;
 }
-.withdraw-counts strong { color:#ffe0a1; font-weight:750; font-variant-numeric:tabular-nums; }
 .deposit-selected-limit { margin:0; color:#ffde9c; font-size:14px; }
 .withdraw-form .withdraw-u-note { color:#ff777f; margin-top:3px; }
 .store-lookup p { margin:4px 0 8px; color:#ffdb98; }

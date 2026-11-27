@@ -593,11 +593,12 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 @media (max-width:899px) { .top-actions .notification-bell { width:clamp(20px,5.8vw,25px); height:auto; } }
 </style>
 <link rel="stylesheet" href="bomb-final.css?v=44">
-<link rel="stylesheet" href="deposit.css?v=76">
+<link rel="stylesheet" href="deposit.css?v=78">
 <link rel="stylesheet" href="account-entry.css?v=60">
 <link rel="stylesheet" href="member-layout.css?v=61">
 <link rel="stylesheet" href="shared-footer.css?v=56">
 <link rel="stylesheet" href="room-transfer.css">
+<script src="site-settings.js"></script>
 </head>
 <body class="deposit-page">
 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
@@ -644,6 +645,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <a href="#deposit-title" data-deposit-view="deposit" aria-current="page">儲值</a><a href="#withdraw" data-deposit-view="withdraw">提領</a>
 <a href="#transfer" data-deposit-view="transfer">轉點</a><button type="button" data-account-label="遊戲紀錄">遊戲紀錄</button><a href="#bind-bank-card" data-deposit-view="binding">綁定銀行卡</a>
 <h2>公會中心</h2><button type="button" data-account-label="公會推廣">公會推廣</button><button type="button" data-account-label="公會成員">公會成員</button><h2>個人中心</h2><a href="#announcements" data-deposit-view="announcements" data-unread-link="announcements">消息公告<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="#messages" data-deposit-view="messages" data-unread-link="messages">個人訊息<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="#referral" data-deposit-view="referral">推薦好友</a><a href="#personal-center" data-deposit-view="personal">個人資料</a><button type="button" data-account-label="密碼修改">密碼修改</button><button type="button" data-account-label="維護時間">維護時間</button><a href="app-guide.html">APP 下載</a>
+<a href="#settings" data-deposit-view="settings">設定</a>
 </nav></aside>
 <section class="deposit-content">
 <nav class="deposit-mobile-menu account-tiles" aria-label="帳務中心">
@@ -850,8 +852,8 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
   <p class="withdraw-turnover" id="withdraw-turnover" role="status">流水未達標，還差 2,500 點</p>
   <form id="withdraw-form" class="bind-form withdraw-form">
     <p class="withdraw-counts" aria-live="polite">
-      <span>今日已提領 <strong id="withdraw-used">0/1</strong> 次</span>
-      <span>已使用免費提領 <strong id="withdraw-free">0/1</strong> 次</span>
+      <span><span class="withdraw-count-label">今日提領</span><span class="withdraw-count-value"><strong id="withdraw-used">0/1</strong> 次</span></span>
+      <span><span class="withdraw-count-label">免費提領已用</span><span class="withdraw-count-value"><strong id="withdraw-free">0/1</strong> 次</span></span>
     </p>
     <label id="withdraw-destination-label">銀行帳戶
       <select id="withdraw-destination" required></select>
@@ -923,12 +925,42 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
         <button type="button" data-account-label="公會成員"><svg class="account-tile-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2zm14 0h6v-2a4 4 0 0 0-4-4h-3"/></svg><span>公會成員</span></button>
       </nav>
     </section>
-    <nav class="member-tile-panel account-tiles member-app-tile" aria-label="APP 下載">
-      <a href="app-guide.html"><svg class="account-tile-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 15v5h16v-5"/></svg><span>APP 下載</span></a>
+    <nav class="member-tile-panel account-tiles member-app-tile" aria-label="設定">
+      <a href="#settings" data-deposit-view="settings"><svg class="account-tile-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16M8 4v4m8 2v4m-5 2v4"/></svg><span>設定</span></a>
     </nav>
   </div>
   <button class="outline-gold mobile-logout" type="button" data-action="logout">登出</button>
 </div>
+</div>
+
+
+<div id="settingsView" hidden>
+  <a class="outline-gold settings-back" href="#personal-center">‹ 返回會員中心</a>
+  <h1 id="settings" tabindex="-1">設定</h1>
+  <section class="settings-panel" aria-labelledby="site-theme-heading">
+    <h2 id="site-theme-heading">頁面顏色選擇</h2>
+    <fieldset class="settings-options" id="site-theme-options" aria-labelledby="site-theme-heading">
+      <label class="settings-option settings-original"><input type="radio" name="site-theme" value="original" checked><span><i aria-hidden="true"></i>原版<small>BOMB 原有配色</small></span></label>
+<label class="settings-option settings-d"><input type="radio" name="site-theme" value="d"><span><i aria-hidden="true"></i>D<small>象牙白 × 淡金</small></span></label>
+<label class="settings-option settings-e"><input type="radio" name="site-theme" value="e"><span><i aria-hidden="true"></i>E<small>鈦灰 × 銀金</small></span></label>
+<label class="settings-option settings-f"><input type="radio" name="site-theme" value="f"><span><i aria-hidden="true"></i>F<small>香檳砂金 × 黑</small></span></label>
+<label class="settings-option settings-g"><input type="radio" name="site-theme" value="g"><span><i aria-hidden="true"></i>G<small>珍珠灰 × 黑金</small></span></label>
+<label class="settings-option settings-h"><input type="radio" name="site-theme" value="h"><span><i aria-hidden="true"></i>H<small>黑曜灰 × 香檳金</small></span></label>
+    </fieldset>
+  </section>
+  <section class="settings-panel" aria-labelledby="site-volume-heading">
+    <h2 id="site-volume-heading"><label for="site-volume">音量</label></h2>
+    <div class="settings-volume">
+      <input type="range" id="site-volume" min="0" max="100" step="1" value="100">
+      <output id="site-volume-value" for="site-volume">100%</output>
+      <button type="button" class="outline-gold" id="site-volume-test">試聽</button>
+    </div>
+  </section>
+  <section class="settings-panel settings-haptics" aria-labelledby="site-haptic-heading">
+    <h2 id="site-haptic-heading">觸覺回饋</h2>
+    <label>按下按鈕時震動 <input type="checkbox" id="site-haptics" role="switch"></label>
+    <p id="site-haptic-status" role="status"></p>
+  </section>
 </div>
 
 <div id="referralView" hidden>
@@ -996,10 +1028,10 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <script src="app-install.js?v=43" defer></script>
 <script src="demo-member.js" defer></script><script src="member-avatar.js" defer></script>
 <script src="site-1.js?v=60" defer></script>
-<script src="room-transfer.js" defer></script>
+<script src="room-transfer.js?v=2" defer></script>
 <script src="site-2.js?v=48" defer></script>
 <script src="site-3.js" defer></script>
-<script src="deposit.js?v=74" defer></script>
+<script src="deposit.js?v=75" defer></script>
 <script src="vip-data.js?v=55" defer></script>
 <script src="account-profile.js?v=59" defer></script>
 <script src="desktop-games.js?v=60" defer></script>
@@ -1011,5 +1043,6 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <script src="avatar-picker.js" defer></script>
 <script src="account-withdraw.js?v=73" defer></script>
 <link rel="stylesheet" href="button-depth.css">
+<link rel="stylesheet" href="site-settings.css">
 </body>
 </html>

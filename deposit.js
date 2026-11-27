@@ -78,6 +78,7 @@ const accountViews = {
   '#messages': [document.querySelector('#messagesView'), 'messages'],
   '#referral': [document.querySelector('#referralView'), 'referral'],
   '#personal-center': [document.querySelector('#personalView'), 'personal'],
+  '#settings': [document.querySelector('#settingsView'), 'settings'],
 };
 const accountMenu = document.querySelector('.deposit-mobile-menu');
 const accountLinks = document.querySelectorAll('.deposit-layout nav [data-deposit-view]');
@@ -92,7 +93,7 @@ function updateAccountView(focusHeading) {
     if (link.dataset.depositView === key) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   }
-  const personal = ['personal','announcements','messages','referral'].includes(key);
+  const personal = ['personal','announcements','messages','referral','settings'].includes(key);
   accountMenu.hidden = personal;
   const profileTab = new URLSearchParams(location.hash.split('?')[1]).get('tab');
   document.querySelector('#personalView').classList.toggle('profile-is-open', key === 'personal' && Boolean(profileTab));
