@@ -625,6 +625,61 @@ html[data-site-theme] body :is(.settings-volume input,.settings-haptics input) {
   }
   html[data-site-theme] body .mobile-bottom svg.nav-art { color:inherit; }
 }
+
+html[data-site-theme] body header.top {
+  background:var(--site-bar) !important;
+  border-color:var(--site-edge) !important;
+  color:var(--site-bar-ink) !important;
+}
+html[data-site-theme] body header.top .primary-menu > button,
+html[data-site-theme] body header.top :is(#memberMenuButton,#walletBtn,.wallet-amount,[data-room-wallet],#languageLabel) {
+  color:var(--site-bar-ink) !important;
+}
+html[data-site-theme] body footer.shared-footer {
+  background:var(--site-bar) !important;
+  color:var(--site-bar-ink) !important;
+  border-color:var(--site-edge) !important;
+}
+html[data-site-theme] body footer.shared-footer > span,
+html[data-site-theme] body footer.shared-footer > div > button {
+  color:var(--site-bar-ink) !important;
+}
+html[data-site-theme] body footer.shared-footer > div > button {
+  background:none;
+  border:0;
+  box-shadow:none;
+}
+html[data-site-theme="white"] body footer.shared-footer .footer-partners {
+  background:#252426;
+  border-radius:5px;
+  overflow:hidden;
+}
+html[data-site-theme] body .floating,
+html[data-site-theme] body .floating #floatToggle.is-collapsed {
+  background:transparent !important;
+  box-shadow:none !important;
+}
+
+@media (min-width:900px) {
+  html[data-site-theme] body .deposit-layout .deposit-side {
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+  }
+  html[data-site-theme] body .deposit-layout .deposit-side nav > :is(a,button) {
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    color:var(--site-heading) !important;
+  }
+  html[data-site-theme] body .deposit-layout .deposit-side nav > :is(a,button):is(:hover,:focus-visible) {
+    background:color-mix(in srgb,var(--site-heading),transparent 92%) !important;
+  }
+  html[data-site-theme] body .deposit-layout .deposit-side nav > a[aria-current="page"] {
+    background:color-mix(in srgb,var(--site-accent),transparent 80%) !important;
+    box-shadow:inset 2px 0 var(--site-accent) !important;
+  }
+}
 </style>
 </body>
 </html>

@@ -715,6 +715,41 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
   else initControls();
 })();
 </script>
+<script id="bomb-account-entry">
+(() => {
+  document.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button !== 0 || document.documentElement.classList.contains('demo-guest')) return;
+    const control = event.target.closest('[data-action="deposit"], #walletBtn, #memberMenuButton');
+    if (!control) return;
+    if (control.id === 'walletBtn' && !matchMedia('(max-width:899px)').matches) return;
+
+    if (control.id === 'memberMenuButton') {
+      const menu = document.querySelector('#memberMenu');
+      if (!menu) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const open = !menu.classList.contains('open');
+      for (const field of document.querySelectorAll('.top-drop [aria-expanded="true"]')) {
+        if (field === control) continue;
+        field.setAttribute('aria-expanded','false');
+        field.parentElement.querySelector('.dropdown')?.classList.remove('open');
+      }
+      menu.classList.toggle('open',open);
+      control.setAttribute('aria-expanded',String(open));
+      return;
+    }
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (location.pathname.endsWith('/deposit.html')) {
+      if (location.hash === '#deposit-title') window.scrollTo(0,0);
+      else location.hash = '#deposit-title';
+    } else {
+      location.assign('deposit.html#deposit-title');
+    }
+  },true);
+})();
+</script>
 </head>
 <body class="deposit-page">
 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
@@ -1156,7 +1191,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 
 <script src="app-install.js?v=43" defer></script>
 <script src="demo-member.js" defer></script><script src="member-avatar.js" defer></script>
-<script src="site-1.js?v=60" defer></script>
+<script src="site-1.js?v=61" defer></script>
 <script src="room-transfer.js?v=2" defer></script>
 <script src="site-2.js?v=48" defer></script>
 <script src="site-3.js" defer></script>
@@ -1501,6 +1536,61 @@ html[data-site-theme] body :is(.settings-volume input,.settings-haptics input) {
     color:var(--site-bar-ink) !important; border-color:transparent; box-shadow:none;
   }
   html[data-site-theme] body .mobile-bottom svg.nav-art { color:inherit; }
+}
+
+html[data-site-theme] body header.top {
+  background:var(--site-bar) !important;
+  border-color:var(--site-edge) !important;
+  color:var(--site-bar-ink) !important;
+}
+html[data-site-theme] body header.top .primary-menu > button,
+html[data-site-theme] body header.top :is(#memberMenuButton,#walletBtn,.wallet-amount,[data-room-wallet],#languageLabel) {
+  color:var(--site-bar-ink) !important;
+}
+html[data-site-theme] body footer.shared-footer {
+  background:var(--site-bar) !important;
+  color:var(--site-bar-ink) !important;
+  border-color:var(--site-edge) !important;
+}
+html[data-site-theme] body footer.shared-footer > span,
+html[data-site-theme] body footer.shared-footer > div > button {
+  color:var(--site-bar-ink) !important;
+}
+html[data-site-theme] body footer.shared-footer > div > button {
+  background:none;
+  border:0;
+  box-shadow:none;
+}
+html[data-site-theme="white"] body footer.shared-footer .footer-partners {
+  background:#252426;
+  border-radius:5px;
+  overflow:hidden;
+}
+html[data-site-theme] body .floating,
+html[data-site-theme] body .floating #floatToggle.is-collapsed {
+  background:transparent !important;
+  box-shadow:none !important;
+}
+
+@media (min-width:900px) {
+  html[data-site-theme] body .deposit-layout .deposit-side {
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+  }
+  html[data-site-theme] body .deposit-layout .deposit-side nav > :is(a,button) {
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    color:var(--site-heading) !important;
+  }
+  html[data-site-theme] body .deposit-layout .deposit-side nav > :is(a,button):is(:hover,:focus-visible) {
+    background:color-mix(in srgb,var(--site-heading),transparent 92%) !important;
+  }
+  html[data-site-theme] body .deposit-layout .deposit-side nav > a[aria-current="page"] {
+    background:color-mix(in srgb,var(--site-accent),transparent 80%) !important;
+    box-shadow:inset 2px 0 var(--site-accent) !important;
+  }
 }
 </style>
 </body>
