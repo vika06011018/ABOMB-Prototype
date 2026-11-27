@@ -1,14 +1,15 @@
 (() => {
   const key = 'bomb-site-settings';
-  const themes = new Set(['original', 'd', 'e', 'f', 'g', 'h']);
+  const themes = new Set(['original', 'red', 'navy', 'indigo', 'bronze', 'white', 'gold']);
   let settings = { theme: 'original', volume: 100, haptics: false };
 
   function restore() {
     try {
       const stored = JSON.parse(localStorage.getItem(key));
       if (!stored) return;
+      const theme = { d:'white', e:'white', f:'bronze', g:'white', h:'gold' }[stored.theme] ?? stored.theme;
       settings = {
-        theme: themes.has(stored.theme) ? stored.theme : 'original',
+        theme: themes.has(theme) ? theme : 'original',
         volume: Number.isInteger(stored.volume) && stored.volume >= 0 && stored.volume <= 100 ? stored.volume : 100,
         haptics: stored.haptics === true
       };
