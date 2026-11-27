@@ -936,7 +936,7 @@ nav .account{margin-left:auto;display:flex;align-items:center;gap:8px;color:#ecd
     <a href="deposit.html#personal-center?tab=details">個人中心</a>
     <button type="button" data-action="logout">登出</button>
   </nav>
-</div><div class="top-drop"><button id="walletBtn" class="outline-gold" aria-haspopup="true" aria-expanded="false"><svg class="icon gold wallet-icon"><use href="#i-wallet"/></svg><span class="wallet-readout"><span class="wallet-account wallet-account-mobile"><img class="wallet-avatar" data-member-avatar src="assets/member-avatar.svg" alt="" width="23" height="23"> demo001</span><span class="wallet-amount"><span class="wallet-line-label">餘額</span><span data-room-wallet>$ 1,000,000.00</span></span></span><span class="gold wallet-chevron" aria-hidden="true">⌄</span></button><div class="dropdown" id="walletMenu"><p><strong>主錢包</strong></p><p>示範餘額：<span data-room-wallet>$ 1,000,000.00</span></p><button data-action="deposit">儲值</button><button data-action="withdraw">提領</button><button data-action="transfer">轉點</button></div></div>
+</div><div class="top-drop"><button id="walletBtn" class="outline-gold" aria-haspopup="true" aria-expanded="false"><svg class="icon gold wallet-icon"><use href="#i-wallet"/></svg><span class="wallet-readout"><span class="wallet-account wallet-account-mobile"><img class="wallet-avatar" data-member-avatar src="assets/member-avatar.svg" alt="" width="23" height="23"> demo001</span><span class="wallet-amount"><span class="wallet-line-label"><svg class="wallet-balance-icon" viewBox="0 0 24 24" width="16" height="16" role="img" aria-label="餘額"><path d="M3 7a2 2 0 0 1 2-2h13v3M3 7a2 2 0 0 0 2 2h16v10H5a2 2 0 0 1-2-2V7m14 7h1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-room-wallet>$ 1,000,000.00</span></span></span><span class="gold wallet-chevron" aria-hidden="true">⌄</span></button><div class="dropdown" id="walletMenu"><p><strong>主錢包</strong></p><p>示範餘額：<span data-room-wallet>$ 1,000,000.00</span></p><button data-action="deposit">儲值</button><button data-action="withdraw">提領</button><button data-action="transfer">轉點</button></div></div>
 <button class="outline-gold deposit-mini" data-action="deposit"><svg class="icon"><use href="#i-wallet"/></svg>儲值</button>
 <div class="top-drop inbox-drop"><button class="notification" data-action="notifications" id="inboxBell" aria-label="通知"><svg class="notification-bell" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="bell-metal" x2=".8" y2="1"><stop stop-color="#fff4cf"/><stop offset=".37" stop-color="#ffd477"/><stop offset=".72" stop-color="#ad631d"/><stop offset="1" stop-color="#ffdc8e"/></linearGradient></defs><path fill="#a86624" d="M14 6V4a2 2 0 1 1 4 0v2zm-2 21h8a4 4 0 0 1-8 0z"/><path fill="url(#bell-metal)" stroke="#ffdb8b" stroke-width=".75" d="M16 5c-5.1 0-8.4 4.5-8.4 9.1 0 4-1.2 7-3 9.2-.8 1 .1 2.3 1.5 2.3h19.8c1.4 0 2.3-1.3 1.5-2.3-1.8-2.2-3-5.2-3-9.2C24.4 9.5 21.1 5 16 5Z"/><path fill="none" stroke="#fff5cd" stroke-width="1.4" stroke-linecap="round" d="M11 15c0-3.7 1.6-6 4.1-6.8"/><path fill="none" stroke="#9a541f" stroke-width="1" stroke-linecap="round" d="M8 23.2h16"/></svg><span class="unread"></span></button><div class="dropdown inbox-menu" id="inboxMenu" hidden><a href="deposit.html#announcements" data-deposit-view="announcements" data-unread-link="announcements">消息中心<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="deposit.html#messages" data-deposit-view="messages" data-unread-link="messages">個人訊息<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a></div></div>
 <div class="top-drop"><button id="languageBtn" class="outline-gold" aria-expanded="false" aria-haspopup="true"><img class="language-flag" id="languageFlag" src="assets/flags/tw.svg" alt="" width="20" height="15"><span id="languageLabel">繁中</span> <span class="gold">⌄</span></button><div class="dropdown" id="languageMenu"><button data-lang="繁中"><img class="language-flag" src="assets/flags/tw.svg" alt="" width="20" height="15">繁體中文</button><button data-lang="简中"><img class="language-flag" src="assets/flags/cn.svg" alt="" width="20" height="15">简体中文</button><button data-lang="EN"><img class="language-flag" src="assets/flags/gb.svg" alt="" width="20" height="15">English</button><button data-lang="VI"><img class="language-flag" src="assets/flags/vn.svg" alt="" width="20" height="15">Tiếng Việt</button><button data-lang="日本語"><img class="language-flag" src="assets/flags/jp.svg" alt="" width="20" height="15">日本語</button><button data-lang="ไทย"><img class="language-flag" src="assets/flags/th.svg" alt="" width="20" height="15">ภาษาไทย</button></div></div>
@@ -986,7 +986,7 @@ nav .account{margin-left:auto;display:flex;align-items:center;gap:8px;color:#ecd
 
 <script src="app-install.js?v=43" defer></script>
 <script src="demo-member.js" defer></script><script src="member-avatar.js" defer></script>
-<script src="site-1.js?v=61" defer></script>
+<script src="site-1.js?v=62" defer></script>
 <script src="room-transfer.js?v=2" defer></script>
 <script src="site-2.js?v=48" defer></script>
 <script src="site-3.js" defer></script>
@@ -1591,6 +1591,11 @@ html body header.top #walletBtn :is(.wallet-icon,.wallet-chevron) { display:none
   html body header.top #walletBtn .wallet-amount { font-size:clamp(11px,3vw,15px); }
   html body header.top #walletBtn .wallet-line-label { display:none; }
 }
+
+html body header.top #walletBtn .wallet-amount { align-items:center; }
+html body header.top #walletBtn .wallet-line-label { display:inline-flex; align-items:center; }
+.wallet-balance-icon { width:16px; height:16px; display:block; flex:none; }
+@media (max-width:899px) { .wallet-balance-icon { width:14px; height:14px; } }
 </style>
 </body>
 </html>
