@@ -69,9 +69,22 @@ const roomTransfer = (() => {
     status.textContent = '';
   });
   input.addEventListener('input', () => { status.textContent = ''; });
-  field('[data-enter]').addEventListener('click', () => {
+  function showEntryPreview(message = '') {
     dialog.close();
-    showModal(room, '遊戲入口預覽，正式遊戲房網址待提供。');
+    showModal(room, message + '遊戲入口預覽，正式遊戲房網址待提供。');
+  }
+
+  field('[data-enter]').addEventListener('click', () => {
+    if (input.value.trim()) {
+      field('form').requestSubmit();
+      return;
+    }
+    if (pointsAt(read(), room) > 0) {
+      showEntryPreview();
+      return;
+    }
+    status.textContent = '請先輸入要轉入遊戲房的點數。';
+    input.focus();
   });
   field('[data-favorite]').addEventListener('click', () => favorite?.run());
   field('form').addEventListener('submit', event => {
@@ -94,7 +107,9 @@ const roomTransfer = (() => {
     save({ wallet: state.wallet - delta, rooms: { ...state.rooms, [room]: balance + delta } });
     input.value = '';
     update();
-    status.textContent = '已轉點 ' + format.format(amount) + ' 點。';
+    const points = format.format(amount) + ' 點。';
+    if (isReturn) status.textContent = '已轉回主錢包 ' + points;
+    else showEntryPreview('已轉入 ' + points);
   });
   window.addEventListener('storage', event => {
     if (event.key !== key) return;
