@@ -29,7 +29,27 @@
 
   restore();
   applyTheme();
+  const previewTheme = location.pathname.endsWith('/index.html') && window.parent !== window
+    ? new URLSearchParams(location.search).get('theme-preview') : null;
+  if (themes.has(previewTheme)) {
+    settings.theme = previewTheme;
+    applyTheme();
+    return;
+  }
+
   const initControls = () => {
+    const preview = document.querySelector('#site-home-preview');
+    const saveTheme = document.querySelector('#site-theme-save');
+    const themeStatus = document.querySelector('#site-theme-status');
+    let draftTheme = settings.theme;
+
+    function refreshPreview() {
+      if (!preview) return;
+      const src = 'index.html?theme-preview=' + encodeURIComponent(draftTheme);
+      if (preview.getAttribute('src') !== src) preview.setAttribute('src',src);
+      saveTheme.disabled = draftTheme === settings.theme;
+    }
+
     const volume = document.querySelector('#site-volume');
     const volumeOutput = document.querySelector('#site-volume-value');
     const haptics = document.querySelector('#site-haptics');
@@ -39,13 +59,14 @@
       applyTheme();
       applyVolume();
       for (const option of document.querySelectorAll('[name="site-theme"]')) {
-        option.checked = option.value === settings.theme;
+        option.checked = option.value === draftTheme;
       }
       if (volume) {
         volume.value = settings.volume;
         volumeOutput.textContent = settings.volume + '%';
       }
       if (haptics) haptics.checked = settings.haptics;
+      refreshPreview();
     }
 
     function save() {
@@ -56,8 +77,15 @@
 
     document.querySelector('#site-theme-options')?.addEventListener('change', event => {
       if (!event.target.matches('[name="site-theme"]')) return;
-      settings.theme = event.target.value;
+      if (!themes.has(event.target.value)) return;
+      draftTheme = event.target.value;
+      themeStatus.textContent = draftTheme === settings.theme ? '' : '預覽中，尚未儲存。';
+      refreshPreview();
+    });
+    saveTheme?.addEventListener('click', () => {
+      settings.theme = draftTheme;
       save();
+      themeStatus.textContent = '配色已儲存。';
     });
     volume?.addEventListener('input', () => {
       settings.volume = Number(volume.value);
@@ -100,11 +128,15 @@
     }, true);
     window.addEventListener('storage', event => {
       if (event.key !== key) return;
+      const wasSaved = draftTheme === settings.theme;
       restore();
+      if (wasSaved) draftTheme = settings.theme;
       refresh();
     });
     window.addEventListener('pageshow', () => {
+      const wasSaved = draftTheme === settings.theme;
       restore();
+      if (wasSaved) draftTheme = settings.theme;
       refresh();
     });
     refresh();
