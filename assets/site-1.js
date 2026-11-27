@@ -284,7 +284,7 @@ const actions = {
     ['2　分享給好友', placeholder('分享給好友', '可於取得正式連結後傳送給好友。')],
     ['3　確認活動條件', placeholder('確認活動條件', '獎勵及資格等待活動公告。')]
   ]),
-  deposit: placeholder('主錢包｜儲值','金流等待正式串接。此視窗展示入口。'),
+  deposit: () => location.assign('../deposit.html#deposit-title'),
   withdraw: placeholder('主錢包｜託售','正式託售服務等待串接。'),
   promo: () => showModal('優惠活動', '活動內容為原型示範。', announcements.slice(1).map(([title, message]) => [title, () => showModal(title, message)])),
   notifications: () => showModal('通知中心', '未讀通知為原型示範。', [[announcements[0][0], () => showModal(...announcements[0])]]),
