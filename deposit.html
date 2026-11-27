@@ -630,7 +630,27 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 
   restore();
   applyTheme();
+  const previewTheme = location.pathname.endsWith('/index.html') && window.parent !== window
+    ? new URLSearchParams(location.search).get('theme-preview') : null;
+  if (themes.has(previewTheme)) {
+    settings.theme = previewTheme;
+    applyTheme();
+    return;
+  }
+
   const initControls = () => {
+    const preview = document.querySelector('#site-home-preview');
+    const saveTheme = document.querySelector('#site-theme-save');
+    const themeStatus = document.querySelector('#site-theme-status');
+    let draftTheme = settings.theme;
+
+    function refreshPreview() {
+      if (!preview) return;
+      const src = 'index.html?theme-preview=' + encodeURIComponent(draftTheme);
+      if (preview.getAttribute('src') !== src) preview.setAttribute('src',src);
+      saveTheme.disabled = draftTheme === settings.theme;
+    }
+
     const volume = document.querySelector('#site-volume');
     const volumeOutput = document.querySelector('#site-volume-value');
     const haptics = document.querySelector('#site-haptics');
@@ -640,13 +660,14 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
       applyTheme();
       applyVolume();
       for (const option of document.querySelectorAll('[name="site-theme"]')) {
-        option.checked = option.value === settings.theme;
+        option.checked = option.value === draftTheme;
       }
       if (volume) {
         volume.value = settings.volume;
         volumeOutput.textContent = settings.volume + '%';
       }
       if (haptics) haptics.checked = settings.haptics;
+      refreshPreview();
     }
 
     function save() {
@@ -657,8 +678,15 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 
     document.querySelector('#site-theme-options')?.addEventListener('change', event => {
       if (!event.target.matches('[name="site-theme"]')) return;
-      settings.theme = event.target.value;
+      if (!themes.has(event.target.value)) return;
+      draftTheme = event.target.value;
+      themeStatus.textContent = draftTheme === settings.theme ? '' : '預覽中，尚未儲存。';
+      refreshPreview();
+    });
+    saveTheme?.addEventListener('click', () => {
+      settings.theme = draftTheme;
       save();
+      themeStatus.textContent = '配色已儲存。';
     });
     volume?.addEventListener('input', () => {
       settings.volume = Number(volume.value);
@@ -701,11 +729,15 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
     }, true);
     window.addEventListener('storage', event => {
       if (event.key !== key) return;
+      const wasSaved = draftTheme === settings.theme;
       restore();
+      if (wasSaved) draftTheme = settings.theme;
       refresh();
     });
     window.addEventListener('pageshow', () => {
+      const wasSaved = draftTheme === settings.theme;
       restore();
+      if (wasSaved) draftTheme = settings.theme;
       refresh();
     });
     refresh();
@@ -785,7 +817,7 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
     <a href="deposit.html#personal-center?tab=details">個人中心</a>
     <button type="button" data-action="logout">登出</button>
   </nav>
-</div><div class="top-drop"><button id="walletBtn" class="outline-gold" aria-haspopup="true" aria-expanded="false"><svg class="icon gold wallet-icon"><use href="#i-wallet"/></svg><span class="wallet-readout"><span class="wallet-account wallet-account-mobile"><img class="wallet-avatar" data-member-avatar src="assets/member-avatar.svg" alt="" width="23" height="23"> demo001</span><span class="wallet-amount"><span class="wallet-line-label"><svg class="icon" aria-label="餘額"><use href="#i-wallet"/></svg></span><span data-room-wallet>$ 1,000,000.00</span></span></span><span class="gold wallet-chevron" aria-hidden="true">⌄</span></button><div class="dropdown" id="walletMenu"><p><strong>主錢包</strong></p><p>示範餘額：<span data-room-wallet>$ 1,000,000.00</span></p><button data-action="deposit">儲值</button><button data-action="withdraw">提領</button><button data-action="transfer">轉點</button></div></div>
+</div><div class="top-drop"><button id="walletBtn" class="outline-gold" aria-haspopup="true" aria-expanded="false"><svg class="icon gold wallet-icon"><use href="#i-wallet"/></svg><span class="wallet-readout"><span class="wallet-account wallet-account-mobile"><img class="wallet-avatar" data-member-avatar src="assets/member-avatar.svg" alt="" width="23" height="23"> demo001</span><span class="wallet-amount"><span class="wallet-line-label">餘額</span><span data-room-wallet>$ 1,000,000.00</span></span></span><span class="gold wallet-chevron" aria-hidden="true">⌄</span></button><div class="dropdown" id="walletMenu"><p><strong>主錢包</strong></p><p>示範餘額：<span data-room-wallet>$ 1,000,000.00</span></p><button data-action="deposit">儲值</button><button data-action="withdraw">提領</button><button data-action="transfer">轉點</button></div></div>
 <button class="outline-gold deposit-mini" data-action="deposit"><svg class="icon"><use href="#i-wallet"/></svg>儲值</button>
 <div class="top-drop inbox-drop"><button class="notification" data-action="notifications" id="inboxBell" aria-label="通知"><svg class="notification-bell" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="bell-metal" x2=".8" y2="1"><stop stop-color="#fff4cf"/><stop offset=".37" stop-color="#ffd477"/><stop offset=".72" stop-color="#ad631d"/><stop offset="1" stop-color="#ffdc8e"/></linearGradient></defs><path fill="#a86624" d="M14 6V4a2 2 0 1 1 4 0v2zm-2 21h8a4 4 0 0 1-8 0z"/><path fill="url(#bell-metal)" stroke="#ffdb8b" stroke-width=".75" d="M16 5c-5.1 0-8.4 4.5-8.4 9.1 0 4-1.2 7-3 9.2-.8 1 .1 2.3 1.5 2.3h19.8c1.4 0 2.3-1.3 1.5-2.3-1.8-2.2-3-5.2-3-9.2C24.4 9.5 21.1 5 16 5Z"/><path fill="none" stroke="#fff5cd" stroke-width="1.4" stroke-linecap="round" d="M11 15c0-3.7 1.6-6 4.1-6.8"/><path fill="none" stroke="#9a541f" stroke-width="1" stroke-linecap="round" d="M8 23.2h16"/></svg><span class="unread"></span></button><div class="dropdown inbox-menu" id="inboxMenu" hidden><a href="deposit.html#announcements" data-deposit-view="announcements" data-unread-link="announcements">消息中心<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="deposit.html#messages" data-deposit-view="messages" data-unread-link="messages">個人訊息<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a></div></div>
 <div class="top-drop"><button id="languageBtn" class="outline-gold" aria-expanded="false" aria-haspopup="true"><img class="language-flag" id="languageFlag" src="assets/flags/tw.svg" alt="" width="20" height="15"><span id="languageLabel">繁中</span> <span class="gold">⌄</span></button><div class="dropdown" id="languageMenu"><button data-lang="繁中"><img class="language-flag" src="assets/flags/tw.svg" alt="" width="20" height="15">繁體中文</button><button data-lang="简中"><img class="language-flag" src="assets/flags/cn.svg" alt="" width="20" height="15">简体中文</button><button data-lang="EN"><img class="language-flag" src="assets/flags/gb.svg" alt="" width="20" height="15">English</button><button data-lang="VI"><img class="language-flag" src="assets/flags/vn.svg" alt="" width="20" height="15">Tiếng Việt</button><button data-lang="日本語"><img class="language-flag" src="assets/flags/jp.svg" alt="" width="20" height="15">日本語</button><button data-lang="ไทย"><img class="language-flag" src="assets/flags/th.svg" alt="" width="20" height="15">ภาษาไทย</button></div></div>
@@ -1103,14 +1135,14 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
       <label class="settings-option settings-white"><input type="radio" name="site-theme" value="white"><span><i aria-hidden="true"></i>白色＋黑色</span></label>
       <label class="settings-option settings-gold"><input type="radio" name="site-theme" value="gold"><span><i aria-hidden="true"></i>黑色＋金色</span></label>
     </fieldset>
-    <div class="settings-preview" aria-label="目前配色預覽">
-      <header><strong>BOMB 娛樂平台</strong><small>配色預覽</small></header>
-      <div class="settings-preview-body">
-        <strong>儲值</strong>
-        <div class="settings-preview-card"><span>銀行轉帳</span><span class="settings-preview-action">選擇通道</span></div>
-      </div>
+    <div class="settings-preview" aria-label="首頁配色預覽">
+      <header><strong>首頁預覽</strong></header>
+      <iframe id="site-home-preview" title="BOMB 首頁配色預覽" loading="lazy" tabindex="-1" sandbox="allow-scripts" inert></iframe>
     </div>
-
+    <div class="settings-theme-actions">
+      <button class="goldbtn" id="site-theme-save" type="button" disabled>儲存配色</button>
+      <p id="site-theme-status" role="status"></p>
+    </div>
   </section>
   <section class="settings-panel" aria-labelledby="site-volume-heading">
     <h2 id="site-volume-heading"><label for="site-volume">音量</label></h2>
@@ -1591,6 +1623,64 @@ html[data-site-theme] body .floating #floatToggle.is-collapsed {
     background:color-mix(in srgb,var(--site-accent),transparent 80%) !important;
     box-shadow:inset 2px 0 var(--site-accent) !important;
   }
+}
+
+.settings-preview { background:none; }
+.settings-preview > header { background:var(--site-surface,#421c35); color:var(--site-ink,#fff0d8); }
+.settings-preview iframe {
+  display:block; width:100%; height:clamp(220px,37vw,440px);
+  border:0; background:#1d081f; pointer-events:none;
+}
+.settings-theme-actions { display:flex; align-items:center; flex-wrap:wrap; gap:12px; margin-block-start:14px; }
+.settings-theme-actions button { min-height:40px; padding:6px 16px; }
+.settings-theme-actions button:disabled { opacity:.55; cursor:default; }
+.settings-theme-actions p { margin:0; font-size:.875rem; }
+
+html[data-site-theme="white"] body header.top {
+  background-color:#fbfaf8 !important;
+  background-image:none !important;
+  border-bottom:1px solid #d7d3cc !important;
+  color:#211f1d !important;
+  text-shadow:none !important;
+}
+html[data-site-theme="white"] body header.top :is(.primary-menu > button,#memberMenuButton,#languageBtn,#languageLabel) {
+  color:#211f1d !important;
+  text-shadow:none !important;
+  filter:none !important;
+}
+html[data-site-theme="white"] body header.top .primary-menu > button:is(.selected,[aria-current],:hover,:focus-visible) {
+  background:#eae7e2 !important;
+}
+html[data-site-theme="white"] body :is(.marquee,.marquee button,.marquee-motion,.marquee-window,.section-head h2) {
+  color:#302a24 !important;
+  text-shadow:none !important;
+}
+
+html body header.top .top-actions #walletBtn {
+  min-width:0; min-height:0; width:auto; height:auto;
+  display:inline-flex; justify-content:center; align-items:center;
+  padding:5px 7px; margin:0;
+  background:transparent !important; border:0 !important; border-radius:5px;
+  box-shadow:none !important; color:var(--site-bar-ink,#ffdf8d) !important;
+  text-shadow:none !important; white-space:nowrap;
+}
+html body header.top #walletBtn .wallet-amount {
+  display:flex; align-items:baseline; gap:5px; color:inherit !important;
+  line-height:1.2; font-weight:750; font-variant-numeric:tabular-nums;
+}
+html body header.top #walletBtn .wallet-line-label {
+  margin:0; font-size:.72em; font-weight:550; color:inherit;
+}
+html body header.top #walletBtn :is(.wallet-icon,.wallet-chevron) { display:none !important; }
+@media (min-width:900px) {
+  html body header.top #walletBtn .wallet-amount { font-size:clamp(15px,1.15vw,21px); }
+  html body header.top #walletBtn .wallet-account-mobile { display:none; }
+}
+@media (max-width:899px) {
+  html body header.top .top-actions #walletBtn { padding:3px 1px; }
+  html body header.top #walletBtn .wallet-readout { gap:2px; }
+  html body header.top #walletBtn .wallet-amount { font-size:clamp(11px,3vw,15px); }
+  html body header.top #walletBtn .wallet-line-label { display:none; }
 }
 </style>
 </body>
