@@ -40,7 +40,7 @@ let favorites = [...new Set(readPreference(favoritesKey, homeGameIds, Array.isAr
 const labels = [
   '首頁', '視訊', '電子', '彩票', '棋牌', '捕魚', '體育', '優惠',
   '全部遊戲', '儲值', '優惠活動', '會員中心', '平台獨家', '玩過', '收藏',
-  '推薦好友', '查看更多', '立即遊戲', '快速進入', '查看詳情', '最近遊玩', '關閉'
+  '推薦好友', '查看更多', '立即遊玩', '快速進入', '查看詳情', '最近遊玩', '關閉'
 ];
 
 const languages = {
@@ -87,7 +87,7 @@ const recentProviders = [
 ];
 
 function openRecentProvider(provider) {
-  demoMember.navigate(matchMedia('(min-width: 900px)').matches
+  location.assign(matchMedia('(min-width: 900px)').matches
     ? `desktop-games.html#games-${provider.desktop}`
     : `all-games.html#catalog-${provider.mobile}`);
 }
@@ -125,17 +125,7 @@ function createCard(game, isFavorite, provider) {
   });
   const play = document.createElement('span');
   play.className = 'home-play';
-  if (provider) {
-    const desktopLabel = document.createElement('span');
-    desktopLabel.className = 'home-play-desktop';
-    desktopLabel.textContent = translate('立即遊戲');
-    const mobileLabel = document.createElement('span');
-    mobileLabel.className = 'home-play-mobile';
-    mobileLabel.textContent = '前往館別';
-    play.append(desktopLabel, mobileLabel);
-  } else {
-    play.textContent = translate('立即遊戲');
-  }
+  play.textContent = provider ? '前往館別' : translate('立即遊玩');
   wrap.append(card, heart, play);
   return wrap;
 }
@@ -201,8 +191,7 @@ function showModal(title, message, items = [], secondaryAction) {
 
 function openGame(game) {
   const isFavorite = favorites.includes(game.id);
-  const room = {baccarat:'BOMB 真人百家', pachinko:'BOMB 柏青 SLOT', seth:'ATG 電子'}[game.id] ?? game.name;
-  roomTransfer.open(room, false, {
+  showModal(game.name, '原型互動。遊戲入口等待正式網址。', [], {
     label: isFavorite ? '取消最愛' : '加入最愛',
     run: () => {
       favorites = isFavorite ? favorites.filter((id) => id !== game.id) : [game.id, ...favorites];
@@ -216,7 +205,7 @@ function openGame(game) {
 
 function openHomeGameList(title, ids, isRecent = false) {
   const items = ids.map(id => games.find(game => game.id === id)).filter(Boolean);
-  showModal(translate(title), isRecent ? '近7天遊戲過' : (items.length ? '' : '目前沒有收藏的遊戲。'));
+  showModal(translate(title), isRecent ? '近 7 天遊戲過' : (items.length ? '' : '目前沒有收藏的遊戲。'));
   if (!items.length) return;
 
   const grid = document.createElement('div');
@@ -232,7 +221,7 @@ function openHomeGameList(title, ids, isRecent = false) {
       <div class="home-modal-card-copy">
         ${mark ? `<img class="home-modal-logo" src="${mark.logo}" alt="">` : ''}
         <strong>${name}</strong>
-        <button type="button" aria-label="立即遊戲 ${name}">立即遊戲 ›</button>
+        <button type="button" aria-label="${provider ? '前往館別' : '立即遊戲'} ${name}">${provider ? '前往館別' : '立即遊戲'} ›</button>
       </div>`;
     card.querySelector('button').addEventListener('click', () => {
       if (provider) openRecentProvider(provider);
@@ -259,8 +248,20 @@ const announcements = [
 
 const placeholder = (title, text) => () => showModal(title, '原型互動。' + text);
 
+const installStrip = document.querySelector('.app-install-strip');
+const installDismissKey = 'bomb-app-install-dismissed';
+try {
+  installStrip.hidden = sessionStorage.getItem(installDismissKey) === 'yes';
+} catch (error) {
+  // The close button remains available when storage is disabled.
+}
+installStrip.querySelector('.app-install-dismiss').addEventListener('click', () => {
+  installStrip.hidden = true;
+  try { sessionStorage.setItem(installDismissKey, 'yes'); } catch (error) {}
+});
+
 function openAppGuide(os) {
-  demoMember.navigate(os ? `app-guide.html#${os}` : 'app-guide.html');
+  location.href = os ? `app-guide.html#${os}` : 'app-guide.html';
 }
 
 const isCatalogPage = document.documentElement.classList.contains('catalog-route');
@@ -273,19 +274,9 @@ if (isCatalogPage) {
   catalogTab.setAttribute('aria-current', 'page');
 }
 
-const isDepositPage = document.body.classList.contains('deposit-page');
-
-function openAccountView(hash = '#deposit-title') {
-  if (isDepositPage) {
-    location.hash = hash;
-  } else {
-    location.assign(hash === '#deposit-title' ? 'deposit.html' : 'deposit.html' + hash);
-  }
-}
-
 const actions = {
-  home: () => (isDepositPage || isCatalogPage || document.querySelector('#desktop-games')) ? demoMember.navigate('index.html') : window.scrollTo({top:0, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}),
-  all: () => { if (!isCatalogPage) demoMember.navigate('all-games.html'); },
+  home: () => (isCatalogPage || document.querySelector('#desktop-games')) ? location.assign('index.html') : window.scrollTo({top:0, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}),
+  all: () => { if (!isCatalogPage) location.assign("all-games.html"); },
   recent: () => openHomeGameList('玩過', recentProviders.map(provider => provider.id), true),
   favorites: () => openHomeGameList('收藏', favorites),
   referral: () => showModal('推薦好友', '依序取得推薦資訊、分享給好友並確認活動條件。', [
@@ -293,11 +284,8 @@ const actions = {
     ['2　分享給好友', placeholder('分享給好友', '可於取得正式連結後傳送給好友。')],
     ['3　確認活動條件', placeholder('確認活動條件', '獎勵及資格等待活動公告。')]
   ]),
-  deposit: () => openAccountView(),
-  withdraw: () => openAccountView('#withdraw'),
-  transfer: () => openAccountView('#transfer'),
-  personal: () => openAccountView('#personal-center'),
-  logout: () => demoMember.logout(),
+  deposit: placeholder('主錢包｜儲值','金流等待正式串接。此視窗展示入口。'),
+  withdraw: placeholder('主錢包｜託售','正式託售服務等待串接。'),
   promo: () => showModal('優惠活動', '活動內容為原型示範。', announcements.slice(1).map(([title, message]) => [title, () => showModal(title, message)])),
   notifications: () => showModal('通知中心', '未讀通知為原型示範。', [[announcements[0][0], () => showModal(...announcements[0])]]),
   announcements: () => showModal('最新公告', '選擇要閱讀的公告。', announcements.map(([title, message]) => [title, () => showModal(title,message)])),
@@ -315,10 +303,9 @@ const actions = {
 };
 
 const menus = [
-  ['#memberMenuButton', '#memberMenu'],
   ['#walletBtn', '#walletMenu'],
   ['#languageBtn', '#languageMenu']
-].map(([button, menu]) => [$(button), $(menu)]).filter(([button, menu]) => button && menu);
+].map(([button, menu]) => [$(button), $(menu)]);
 
 function openMenu(activeMenu) {
   for (const [button, menu] of menus) {
@@ -327,18 +314,8 @@ function openMenu(activeMenu) {
   }
 }
 for (const [button, menu] of menus) {
-  button.addEventListener('click', () => {
-    openMenu(menu.classList.contains('open') ? null : menu);
-  });
+  button.addEventListener('click', () => openMenu(menu.classList.contains('open') ? null : menu));
 }
-
-document.addEventListener('keydown', event => {
-  const activeMenu = menus.find(([, menu]) => menu.classList.contains('open'));
-  if (event.key === 'Escape' && activeMenu) {
-    openMenu(null);
-    activeMenu[0].focus();
-  }
-});
 
 document.addEventListener('click', (event) => {
   const target = event.target.closest('[data-game], [data-action], [data-category], [data-lang]');
@@ -372,60 +349,58 @@ document.addEventListener('keydown', (event) => {
 
 
 
-setLanguage(locale);
-
 const hero = $('#hero');
-if (hero) {
-  const slideCopy = [
-    ['多元遊戲 一站暢玩', '全新娛樂平台', '真人・電子・彩票・棋牌・捕魚・體育賽事', '真人 × 電子 × 多元玩法'],
-    ['首儲優惠', '首儲優惠', '限時活動・原型預覽', '限時活動・原型預覽'],
-    ['VIP 專屬禮遇', 'VIP 專屬禮遇', '會員優惠・原型預覽', '會員優惠・原型預覽']
-  ];
-  const slideLabels = [...hero.querySelectorAll('.hero-copy .desktop-title,.hero-copy .mobile-title')];
-  const dots = [...$('#bannerDots').querySelectorAll('button')];
-  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  let slide = 0;
-  let timer;
-  let touchStart;
+const slideCopy = [
+  ['多元遊戲 一站暢玩', '全新娛樂平台', '真人・電子・彩票・棋牌・捕魚・體育賽事', '真人 × 電子 × 多元玩法'],
+  ['首儲優惠', '首儲優惠', '限時活動・原型預覽', '限時活動・原型預覽'],
+  ['VIP 專屬禮遇', 'VIP 專屬禮遇', '會員優惠・原型預覽', '會員優惠・原型預覽']
+];
+const slideLabels = [...hero.querySelectorAll('.hero-copy .desktop-title,.hero-copy .mobile-title')];
+const dots = [...$('#bannerDots').querySelectorAll('button')];
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+let slide = 0;
+let timer;
+let touchStart;
 
-  function setSlide(next) {
-    slide = (next + slideCopy.length) % slideCopy.length;
-    hero.dataset.slide = String(slide);
-    slideLabels.forEach((node, index) => { node.textContent = slideCopy[slide][index]; });
-    dots.forEach((dot, index) => {
-      dot.classList.toggle('on', index === slide);
-      dot.setAttribute('aria-current', String(index === slide));
-    });
-  }
+function setSlide(next) {
+  slide = (next + slideCopy.length) % slideCopy.length;
+  hero.dataset.slide = String(slide);
+  slideLabels.forEach((node, index) => { node.textContent = slideCopy[slide][index]; });
+  dots.forEach((dot, index) => {
+    dot.classList.toggle('on', index === slide);
+    dot.setAttribute('aria-current', String(index === slide));
+  });
+}
 
-  function scheduleSlide() {
-    clearTimeout(timer);
-    if (reducedMotion.matches || document.hidden || hero.matches(':hover, :focus-within')) return;
-    timer = setTimeout(() => { setSlide(slide + 1); scheduleSlide(); }, 6500);
-  }
-  function changeSlide(next) {
-    setSlide(next);
-    scheduleSlide();
-  }
-  $('#bannerPrev').addEventListener('click', () => changeSlide(slide - 1));
-  $('#bannerNext').addEventListener('click', () => changeSlide(slide + 1));
-  dots.forEach((dot, index) => dot.addEventListener('click', () => changeSlide(index)));
-  hero.addEventListener('touchstart', (event) => {
-    const {clientX, clientY} = event.changedTouches[0];
-    touchStart = {clientX, clientY};
-  }, {passive:true});
-  hero.addEventListener('touchend', (event) => {
-    if (!touchStart) return;
-    const dx = event.changedTouches[0].clientX - touchStart.clientX;
-    const dy = event.changedTouches[0].clientY - touchStart.clientY;
-    if (Math.abs(dx) > 34 && Math.abs(dx) > Math.abs(dy)) changeSlide(slide + (dx < 0 ? 1 : -1));
-    touchStart = null;
-  }, {passive:true});
-  for (const event of ['pointerenter','pointerleave','focusin','focusout']) {
-    hero.addEventListener(event, () => setTimeout(scheduleSlide, 0));
-  }
-  document.addEventListener('visibilitychange', scheduleSlide);
-  reducedMotion.addEventListener('change', scheduleSlide);
-  setSlide(0);
+function scheduleSlide() {
+  clearTimeout(timer);
+  if (reducedMotion.matches || document.hidden || hero.matches(':hover, :focus-within')) return;
+  timer = setTimeout(() => { setSlide(slide + 1); scheduleSlide(); }, 6500);
+}
+function changeSlide(next) {
+  setSlide(next);
   scheduleSlide();
 }
+$('#bannerPrev').addEventListener('click', () => changeSlide(slide - 1));
+$('#bannerNext').addEventListener('click', () => changeSlide(slide + 1));
+dots.forEach((dot, index) => dot.addEventListener('click', () => changeSlide(index)));
+hero.addEventListener('touchstart', (event) => {
+  const {clientX, clientY} = event.changedTouches[0];
+  touchStart = {clientX, clientY};
+}, {passive:true});
+hero.addEventListener('touchend', (event) => {
+  if (!touchStart) return;
+  const dx = event.changedTouches[0].clientX - touchStart.clientX;
+  const dy = event.changedTouches[0].clientY - touchStart.clientY;
+  if (Math.abs(dx) > 34 && Math.abs(dx) > Math.abs(dy)) changeSlide(slide + (dx < 0 ? 1 : -1));
+  touchStart = null;
+}, {passive:true});
+for (const event of ['pointerenter','pointerleave','focusin','focusout']) {
+  hero.addEventListener(event, () => setTimeout(scheduleSlide, 0));
+}
+document.addEventListener('visibilitychange', scheduleSlide);
+reducedMotion.addEventListener('change', scheduleSlide);
+setSlide(0);
+setLanguage(locale);
+scheduleSlide();
+
