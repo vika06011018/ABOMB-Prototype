@@ -598,7 +598,123 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <link rel="stylesheet" href="member-layout.css?v=61">
 <link rel="stylesheet" href="shared-footer.css?v=56">
 <link rel="stylesheet" href="room-transfer.css">
-<script src="site-settings.js?v=3"></script>
+<script id="bomb-site-theme-js">
+(() => {
+  const key = 'bomb-site-settings';
+  const themes = new Set(['original', 'red', 'navy', 'indigo', 'bronze', 'white', 'gold']);
+  let settings = { theme: 'original', volume: 100, haptics: false };
+
+  function restore() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(key));
+      if (!stored) return;
+      const theme = { d:'white', e:'white', f:'bronze', g:'white', h:'gold' }[stored.theme] ?? stored.theme;
+      settings = {
+        theme: themes.has(theme) ? theme : 'original',
+        volume: Number.isInteger(stored.volume) && stored.volume >= 0 && stored.volume <= 100 ? stored.volume : 100,
+        haptics: stored.haptics === true
+      };
+    } catch { /* Use the current settings when storage is unavailable. */ }
+  }
+
+  function applyTheme() {
+    if (settings.theme === 'original') delete document.documentElement.dataset.siteTheme;
+    else document.documentElement.dataset.siteTheme = settings.theme;
+  }
+
+  function applyVolume() {
+    for (const media of document.querySelectorAll('audio,video')) {
+      media.volume = settings.volume / 100;
+    }
+  }
+
+  restore();
+  applyTheme();
+  const initControls = () => {
+    const volume = document.querySelector('#site-volume');
+    const volumeOutput = document.querySelector('#site-volume-value');
+    const haptics = document.querySelector('#site-haptics');
+    const status = document.querySelector('#site-haptic-status');
+
+    function refresh() {
+      applyTheme();
+      applyVolume();
+      for (const option of document.querySelectorAll('[name="site-theme"]')) {
+        option.checked = option.value === settings.theme;
+      }
+      if (volume) {
+        volume.value = settings.volume;
+        volumeOutput.textContent = settings.volume + '%';
+      }
+      if (haptics) haptics.checked = settings.haptics;
+    }
+
+    function save() {
+      try { localStorage.setItem(key, JSON.stringify(settings)); }
+      catch { /* Preferences still work in the current page. */ }
+      refresh();
+    }
+
+    document.querySelector('#site-theme-options')?.addEventListener('change', event => {
+      if (!event.target.matches('[name="site-theme"]')) return;
+      settings.theme = event.target.value;
+      save();
+    });
+    volume?.addEventListener('input', () => {
+      settings.volume = Number(volume.value);
+      save();
+    });
+    let audioContext;
+    document.querySelector('#site-volume-test')?.addEventListener('click', async () => {
+      if (!window.AudioContext || settings.volume === 0) return;
+      try {
+        audioContext ??= new AudioContext();
+        await audioContext.resume();
+        const now = audioContext.currentTime;
+        const tone = audioContext.createOscillator();
+        const level = audioContext.createGain();
+        tone.frequency.value = 520;
+        level.gain.setValueAtTime(0, now);
+        level.gain.linearRampToValueAtTime(settings.volume / 100 * 0.12, now + 0.03);
+        level.gain.linearRampToValueAtTime(0, now + 0.28);
+        tone.connect(level).connect(audioContext.destination);
+        tone.start(now);
+        tone.stop(now + 0.28);
+      } catch { /* Sound preview is optional on browsers that block audio. */ }
+    });
+    haptics?.addEventListener('change', () => {
+      settings.haptics = haptics.checked;
+      save();
+      if (settings.haptics && !navigator.vibrate?.(18)) {
+        status.textContent = '此瀏覽器目前無法播放震動。';
+      } else {
+        status.textContent = '';
+      }
+    });
+    document.addEventListener('click', event => {
+      if (!settings.haptics || !matchMedia('(max-width:899px) and (pointer:coarse)').matches) return;
+      if (!event.target.closest('button:not(:disabled),a[href],.deposit-tile')) return;
+      navigator.vibrate?.(12);
+    });
+    document.addEventListener('play', event => {
+      if (event.target.matches('audio,video')) event.target.volume = settings.volume / 100;
+    }, true);
+    window.addEventListener('storage', event => {
+      if (event.key !== key) return;
+      restore();
+      refresh();
+    });
+    window.addEventListener('pageshow', () => {
+      restore();
+      refresh();
+    });
+    refresh();
+  };
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initControls, { once:true });
+  else initControls();
+})();
+</script>
 </head>
 <body class="deposit-page">
 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
@@ -642,10 +758,10 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <main class="main site-width" id="top">
 <div class="deposit-layout">
 <aside class="deposit-side"><h2>帳務中心</h2><nav aria-label="帳務中心選單">
-<a href="#deposit-title" data-deposit-view="deposit" aria-current="page"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h17v13H3zM3 10h17m-5 5h2"/></svg>儲值</a><a href="#withdraw" data-deposit-view="withdraw"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/></svg>提領</a>
-<a href="#transfer" data-deposit-view="transfer"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h17m-4-4 4 4-4 4M21 17H4m4-4-4 4 4 4"/></svg>轉點</a><button type="button" data-account-label="遊戲紀錄"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h14v18H5zM8 8h8m-8 4h8m-8 4h6"/></svg>遊戲紀錄</button><a href="#bind-bank-card" data-deposit-view="binding"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zM3 10h18m-14 5h4"/></svg>綁定銀行卡</a>
-<h2>公會中心</h2><button type="button" data-account-label="公會推廣"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4m0 1c5-4 9 4 15 0v10c-6 4-10-4-15 0"/></svg>公會推廣</button><button type="button" data-account-label="公會成員"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20v-2a4 4 0 0 1 4-4h5a4 4 0 0 1 4 4v2m3-6a4 4 0 0 1 4 4v2M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0m6-3a3 3 0 0 1 0 6"/></svg>公會成員</button><h2>個人中心</h2><a href="#announcements" data-deposit-view="announcements" data-unread-link="announcements"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17h16l-2-3V9a6 6 0 0 0-12 0v5zm6 3h4"/></svg>消息公告<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="#messages" data-deposit-view="messages" data-unread-link="messages"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zm0 1 9 7 9-7"/></svg>個人訊息<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="#referral" data-deposit-view="referral"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20v-2a4 4 0 0 1 4-4h5a4 4 0 0 1 4 4v2m3-6a4 4 0 0 1 4 4v2M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0m6-3a3 3 0 0 1 0 6"/></svg>推薦好友</a><a href="#personal-center" data-deposit-view="personal"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zm4 5h3m-3 4h4m3-4h4m-4 4h4"/></svg>個人資料</a><button type="button" data-account-label="密碼修改"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10h14v11H5zm3 0V7a4 4 0 0 1 8 0v3"/></svg>密碼修改</button><button type="button" data-account-label="維護時間"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm0 4v5l3 2"/></svg>維護時間</button><a href="app-guide.html"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/></svg>APP 下載</a>
-<a href="#settings" data-deposit-view="settings"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16M8 4v4m8 2v4m-5 2v4"/></svg>設定</a>
+<a href="#deposit-title" data-deposit-view="deposit" aria-current="page"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 6h17v13H3zM3 10h17m-5 5h2"/></svg>儲值</a><a href="#withdraw" data-deposit-view="withdraw"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/></svg>提領</a>
+<a href="#transfer" data-deposit-view="transfer"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h17m-4-4 4 4-4 4M21 17H4m4-4-4 4 4 4"/></svg>轉點</a><button type="button" data-account-label="遊戲紀錄"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 3h14v18H5zM8 8h8m-8 4h8m-8 4h6"/></svg>遊戲紀錄</button><a href="#bind-bank-card" data-deposit-view="binding"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 5h18v14H3zM3 10h18m-14 5h4"/></svg>綁定銀行卡</a>
+<h2>公會中心</h2><button type="button" data-account-label="公會推廣"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 21V4m0 1c5-4 9 4 15 0v10c-6 4-10-4-15 0"/></svg>公會推廣</button><button type="button" data-account-label="公會成員"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 20v-2a4 4 0 0 1 4-4h5a4 4 0 0 1 4 4v2m3-6a4 4 0 0 1 4 4v2M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0m6-3a3 3 0 0 1 0 6"/></svg>公會成員</button><h2>個人中心</h2><a href="#announcements" data-deposit-view="announcements" data-unread-link="announcements"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 17h16l-2-3V9a6 6 0 0 0-12 0v5zm6 3h4"/></svg>消息公告<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="#messages" data-deposit-view="messages" data-unread-link="messages"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 5h18v14H3zm0 1 9 7 9-7"/></svg>個人訊息<span class="inbox-dot" hidden aria-hidden="true"></span><span class="inbox-sr" hidden>（未讀）</span></a><a href="#referral" data-deposit-view="referral"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 20v-2a4 4 0 0 1 4-4h5a4 4 0 0 1 4 4v2m3-6a4 4 0 0 1 4 4v2M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0m6-3a3 3 0 0 1 0 6"/></svg>推薦好友</a><a href="#personal-center" data-deposit-view="personal"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 5h18v14H3zm4 5h3m-3 4h4m3-4h4m-4 4h4"/></svg>個人資料</a><button type="button" data-account-label="密碼修改"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 10h14v11H5zm3 0V7a4 4 0 0 1 8 0v3"/></svg>密碼修改</button><button type="button" data-account-label="維護時間"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm0 4v5l3 2"/></svg>維護時間</button><a href="app-guide.html"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/></svg>APP 下載</a>
+<a href="#settings" data-deposit-view="settings"><svg class="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16M8 4v4m8 2v4m-5 2v4"/></svg>設定</a>
 </nav></aside>
 <section class="deposit-content">
 <nav class="deposit-mobile-menu account-tiles" aria-label="帳務中心">
@@ -1056,6 +1172,336 @@ body { background: radial-gradient(ellipse at 50% 43%,#350128,#1c0029 72%,#18001
 <script src="avatar-picker.js" defer></script>
 <script src="account-withdraw.js?v=73" defer></script>
 <link rel="stylesheet" href="button-depth.css">
-<link rel="stylesheet" href="site-settings.css?v=3">
+<style id="bomb-site-theme-css">
+#settingsView .settings-back { display:none; }
+.settings-panel {
+  margin:14px 0; padding:clamp(12px,2vw,22px); border:1px solid #8a6650;
+  border-radius:12px; background:#281629; color:#fff0d8;
+}
+.settings-panel h2 { margin:0 0 14px; font-size:18px; }
+.settings-options {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr));
+  gap:10px; padding:0; margin:0; border:0; min-inline-size:0;
+}
+.settings-option { position:relative; display:grid; gap:6px; cursor:pointer; }
+.settings-option input { position:absolute; inset:0; opacity:0; width:100%; height:100%; margin:0; cursor:pointer; }
+.settings-option span {
+  display:grid; gap:5px; align-content:start; height:100%; padding:7px;
+  border:1px solid #a089756e; border-radius:8px; font-weight:650;
+}
+.settings-option small { font-size:12px; font-weight:500; }
+.settings-option input:checked + span { outline:2px solid #d4a65d; outline-offset:-2px; }
+.settings-option input:focus-visible + span { outline:2px solid #b08341; outline-offset:2px; }
+.settings-option i {
+  display:block; height:26px; border-radius:5px; border:1px solid #8e795a;
+  background:linear-gradient(106deg,var(--swatch-base) 0 55%,var(--swatch-panel) 55% 80%,var(--swatch-accent,#d6aa61) 80%);
+}
+.settings-original { --swatch-base:#1d081f; --swatch-panel:#421c35; }
+.settings-volume { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+.settings-volume input { flex:1 1 130px; min-width:0; accent-color:#c89649; }
+.settings-volume output { min-width:45px; text-align:end; font-variant-numeric:tabular-nums; }
+.settings-volume button { padding:6px 14px; }
+.settings-haptics { display:none; }
+@media (max-width:899px) {
+  #settingsView .settings-back { display:inline-flex; margin-block-end:10px; }
+  .settings-haptics { display:block; }
+  .settings-haptics label { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+  .settings-haptics input { width:22px; height:22px; accent-color:#c89649; }
+  #site-haptic-status:empty { display:none; }
+}
+
+
+html[data-site-theme] body {
+  background:var(--site-bg) !important;
+  color:var(--site-heading);
+}
+html[data-site-theme] body :is(.top,.mobile-bottom,.mobile-nav,#bombQuickPanel,.dropdown,.floating) {
+  background-color:#252426;
+}
+html[data-site-theme] body :is(.top,.mobile-bottom,.mobile-nav,#bombQuickPanel,.dropdown) {
+  background-image:linear-gradient(180deg,#333236,#202023) !important;
+  border-color:#746852;
+  color:var(--site-bar-ink);
+}
+html[data-site-theme] body :is(
+  .deposit-side,.deposit-tile,.deposit-notes,.withdraw-form,.withdraw-turnover,
+  .profile-panel,.member-tile-panel,.personal-account,.transfer-grid li,.transfer-toolbar,
+  .catalog-card,.catalog-categories,.desktop-game-card,.announcement,.news,.settings-panel,
+  #bombQuickPanel .bqp-item
+) {
+  background:var(--site-surface) !important;
+  border-color:var(--site-edge) !important;
+  color:var(--site-ink);
+}
+html[data-site-theme] body :is(.deposit-content > div > h1,.deposit-content header > h1,.deposit-content legend,.section-head h2) {
+  color:var(--site-heading);
+}
+html[data-site-theme] body :is(.deposit-tile strong,.deposit-tile .deposit-range,.deposit-side h2,
+  .withdraw-count-label,.withdraw-count-value,.withdraw-count-value strong,.withdraw-row output,
+  .withdraw-row strong,.withdraw-form small,.deposit-notes h2,#depositForm :is(h2,label[for])) {
+  color:var(--site-ink);
+}
+html[data-site-theme] body :is(.bind-form,#depositForm) :is(input:not([type="radio"],[type="checkbox"]),select) {
+  background:var(--site-field);
+  border-color:var(--site-edge);
+  color:var(--site-ink);
+}
+html[data-site-theme] :is(.deposit-side,.member-tile-panel) :is(a,button):not([aria-current="page"],.goldbtn) {
+  color:var(--site-ink);
+}
+
+/* The preview uses the same color tokens as the surrounding page. */
+.settings-preview {
+  margin-block-start:16px; overflow:hidden; border:1px solid var(--site-edge,#89614e);
+  border-radius:10px; background:var(--site-bg,#1d081f); color:var(--site-heading,#ffe2a0);
+}
+.settings-preview header {
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  padding:9px 12px; background:var(--site-surface,#421c35); color:var(--site-ink,#fff0d8);
+}
+.settings-preview header small { font-size:12px; }
+.settings-preview-body { padding:clamp(10px,2vw,16px); }
+.settings-preview-body > strong { display:block; margin-block-end:8px; }
+.settings-preview-card {
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px;
+  padding:10px; border:1px solid var(--site-edge,#89614e); border-radius:8px;
+  background:var(--site-surface,#421c35); color:var(--site-ink,#fff0d8);
+}
+.settings-preview-action {
+  padding:5px 9px; border:1px solid #e0b370; border-radius:8px;
+  color:#2d2116; background:linear-gradient(#fff1c1,#cca056);
+}
+
+@media (min-width:900px) {
+  html body .deposit-layout .deposit-side > nav > :is(a,button) {
+    display:flex; justify-content:center; align-items:center; gap:6px; text-align:center;
+    min-height:38px; padding-inline:10px;
+  }
+  html body .deposit-layout .deposit-side :is(h2,nav h2) { text-align:center; }
+}
+@media (max-width:899px) {
+  .member-mobile-services .member-download-tile { grid-column:1/-1; }
+  .member-mobile-services .member-download-tile a {
+    grid-auto-flow:column; justify-content:center; align-items:center; gap:8px; min-height:44px;
+  }
+  .member-download-tile .account-tile-icon { width:24px; height:24px; padding:3px; }
+}
+
+/* Use theme colors for both the resting surface and its interaction states. */
+html[data-site-theme] {
+  --site-active:#684c29;
+  --site-raise:inset 0 1px 0 #fff5dc50,0 2px 0 color-mix(in srgb,var(--site-edge),#121212 35%),0 4px 5px #0003;
+  --site-pressed:inset 0 2px 4px #0004,0 1px 2px #0004;
+}
+html[data-site-theme] body :is(
+  .deposit-layout .deposit-side nav > :is(a,button),.account-tiles > :is(a,button),
+  .catalog-categories button,.catalog-favorites,.profile-tabs button,.inbox-filters button,
+  .deposit-quick button,.outline-gold,.bind-tabs button,.room-transfer [data-confirm],
+  .bqp-item,.modal-content-list button
+) {
+  background:var(--site-surface) !important; color:var(--site-ink) !important;
+  border-color:var(--site-edge) !important; box-shadow:var(--site-raise) !important;
+}
+html[data-site-theme] body :is(
+  .deposit-layout .deposit-side nav > :is(a,button),.account-tiles > :is(a,button),
+  .catalog-categories button,.catalog-favorites,.profile-tabs button,.inbox-filters button,
+  .deposit-quick button,.outline-gold,.bind-tabs button,.room-transfer [data-confirm],
+  .bqp-item,.modal-content-list button
+):is(:hover,:focus-visible):not(:disabled,[aria-disabled="true"]) {
+  background:color-mix(in srgb,var(--site-surface),var(--site-accent) 16%) !important;
+  border-color:var(--site-accent) !important;
+}
+html[data-site-theme] body :is(
+  .deposit-layout nav,.catalog-categories,.profile-tabs,.inbox-filters,.bind-tabs,.primary-menu,.mobile-bottom
+) :is([aria-current="page"],[aria-current="location"],[aria-pressed="true"],.selected,.active) {
+  background:var(--site-action) !important;
+  color:var(--site-action-ink) !important; border-color:var(--site-accent) !important;
+}
+html[data-site-theme] body .mobile-bottom :is([aria-current="page"],.active) :is(svg,span) { color:inherit; }
+html[data-site-theme] body :is(
+  .deposit-layout nav > :is(a,button),.catalog-categories button,.outline-gold,.goldbtn,.catalog-favorites,
+  .profile-tabs button,.inbox-filters button,.deposit-quick button,.bqp-item,.modal-content-list button
+):active:not(:disabled,[aria-disabled="true"]) { box-shadow:var(--site-pressed) !important; }
+
+html[data-site-theme] body :is(
+  .modal,.bank-examples,.room-transfer,.saved-games-dialog,#saved-games-dialog,
+  .live-detail-dialog,#event-details,#sports-event,#bombQuickPanel,.avatar-dialog,
+  .catalog-controls input,.marquee,.catalog-card footer,.desktop-game-caption,
+  .member-app-tile,.withdraw-turnover,.room-transfer-direction div
+) {
+  background:var(--site-surface) !important; color:var(--site-ink) !important;
+  border-color:var(--site-edge) !important;
+}
+html[data-site-theme] body :is(.catalog-controls input,.room-transfer input,.modal input) {
+  background:var(--site-field) !important; color:var(--site-ink) !important;
+  border-color:var(--site-edge) !important;
+}
+html[data-site-theme] body :is(.catalog-controls input,.room-transfer input,.modal input)::placeholder {
+  color:var(--site-ink); opacity:.7;
+}
+html[data-site-theme] body :is(
+  .modal,.bank-examples,.room-transfer,.live-detail-dialog,#saved-games-dialog,
+  #bombQuickPanel,.catalog-card footer,.desktop-game-caption,.withdraw-turnover
+) :is(h1,h2,h3,p,strong,small,output,.bqp-title,.bqp-sub,.bqp-chevron) {
+  color:var(--site-ink); text-shadow:none;
+}
+html[data-site-theme] body .room-transfer header { background:var(--site-field); }
+html[data-site-theme] body :is(.hero,.marquee,.mobile-bottom,.mobile-nav,.catalog-card) {
+  border-color:var(--site-edge) !important; box-shadow:0 3px 9px #0003 !important;
+}
+html[data-site-theme] body :is(.hero)::before,
+html[data-site-theme] body :is(.mobile-bottom,.mobile-nav)::before {
+  border-color:var(--site-edge) !important; box-shadow:none !important;
+}
+html[data-site-theme] body :is(.catalog-group h2,.desktop-game-section h2,.marquee a) { color:var(--site-heading); }
+html[data-site-theme] body .marquee a { color:var(--site-ink); }
+html[data-site-theme] body .account-tiles .account-tile-icon { color:inherit; }
+html[data-site-theme] body .deposit-layout nav [aria-current="page"] .account-tile-icon { color:#523819; }
+
+.settings-red { --swatch-base:#121212; --swatch-panel:#441012; --swatch-accent:#ffb464; }
+html[data-site-theme="red"] {
+  --site-bg:#121212; --site-surface:#441012; --site-field:#280a0b; --site-ink:#fff1dc;
+  --site-heading:#ffd08a; --site-edge:#794039; --site-bar:#211314; --site-bar-ink:#ffe6d4; --site-accent:#ffb464;
+  --site-action:linear-gradient(#a51e19,#620906); --site-action-ink:#fff7e9;
+}
+
+.settings-navy { --swatch-base:#090f26; --swatch-panel:#142348; --swatch-accent:#e9c578; }
+html[data-site-theme="navy"] {
+  --site-bg:#090f26; --site-surface:#142348; --site-field:#101a36; --site-ink:#eef2ff;
+  --site-heading:#f0d69b; --site-edge:#526184; --site-bar:#101a34; --site-bar-ink:#eef2ff; --site-accent:#e9c578;
+  --site-action:linear-gradient(#ead091,#bc8c47); --site-action-ink:#24160a;
+}
+
+.settings-indigo { --swatch-base:#100d1d; --swatch-panel:#241936; --swatch-accent:#dfbf83; }
+html[data-site-theme="indigo"] {
+  --site-bg:#100d1d; --site-surface:#241936; --site-field:#1a1229; --site-ink:#f6edff;
+  --site-heading:#f1d49c; --site-edge:#634a7d; --site-bar:#191126; --site-bar-ink:#f6edff; --site-accent:#dfbf83;
+  --site-action:linear-gradient(#70519c,#3b245e); --site-action-ink:#fff7e9;
+}
+
+.settings-bronze { --swatch-base:#21160f; --swatch-panel:#38241a; --swatch-accent:#e1a765; }
+html[data-site-theme="bronze"] {
+  --site-bg:#21160f; --site-surface:#38241a; --site-field:#2b1b13; --site-ink:#fff0dc;
+  --site-heading:#f1c287; --site-edge:#805b42; --site-bar:#2c1c14; --site-bar-ink:#fff0dc; --site-accent:#e1a765;
+  --site-action:linear-gradient(#a06b36,#613716); --site-action-ink:#fff7e9;
+}
+
+.settings-white { --swatch-base:#f9f8f6; --swatch-panel:#eeedea; --swatch-accent:#242321; }
+html[data-site-theme="white"] {
+  --site-bg:#f9f8f6; --site-surface:#eeedea; --site-field:#ffffff; --site-ink:#232220;
+  --site-heading:#222120; --site-edge:#ada9a2; --site-bar:#ffffff; --site-bar-ink:#232220; --site-accent:#242321;
+  --site-action:linear-gradient(#363533,#171715); --site-action-ink:#fff7e9;
+}
+
+.settings-gold { --swatch-base:#111111; --swatch-panel:#25231f; --swatch-accent:#ebc37d; }
+html[data-site-theme="gold"] {
+  --site-bg:#111111; --site-surface:#25231f; --site-field:#191815; --site-ink:#fff2d7;
+  --site-heading:#f2d09a; --site-edge:#6c5a3c; --site-bar:#191815; --site-bar-ink:#fff2d7; --site-accent:#ebc37d;
+  --site-action:linear-gradient(#f9db9d,#b48640); --site-action-ink:#24160a;
+}
+
+/* Color the shared controls without tinting game or banner artwork. */
+html[data-site-theme] body :is(.goldbtn,.gold-btn,.app-install-link,.deposit-mini,.room-transfer [data-enter]) {
+  background:var(--site-action) !important; color:var(--site-action-ink) !important;
+  border-color:var(--site-accent) !important;
+}
+html[data-site-theme] body :is(.goldbtn,.gold-btn,.app-install-link,.deposit-mini,.room-transfer [data-enter]):hover:not(:disabled) { filter:brightness(1.1); }
+html[data-site-theme] body :is(.goldbtn,.gold-btn,.app-install-link,.deposit-mini,.room-transfer [data-enter]):active:not(:disabled) { filter:brightness(.92); }
+html[data-site-theme] body :is(.app-install,.app-install-banner,.app-install-bar,.member-menu,#walletMenu,#languageMenu) {
+  background:var(--site-bar) !important; color:var(--site-bar-ink);
+}
+html[data-site-theme] body :is(.dropdown,.top) :is(.wallet-readout,.wallet-balance,#languageLabel,.desktop-account-entry,.member-menu a) {
+  color:var(--site-bar-ink);
+}
+html[data-site-theme] body .settings-preview header { background:var(--site-bar); color:var(--site-bar-ink); }
+html[data-site-theme] body .settings-preview-action {
+  background:var(--site-action); color:var(--site-action-ink); border-color:var(--site-accent);
+}
+html[data-site-theme] body .deposit-tile:has(input:checked) {
+  border-color:var(--site-accent) !important;
+  box-shadow:inset 0 0 0 1px var(--site-accent),0 2px 7px #0003;
+}
+html[data-site-theme] body .deposit-tile:has(input:checked)::after { background:var(--site-accent); color:var(--site-bg); }
+html[data-site-theme] body .account-tiles .account-tile-icon { color:inherit; }
+html[data-site-theme] body .deposit-layout nav [aria-current="page"] .account-tile-icon { color:var(--site-action-ink); }
+html[data-site-theme] body :is(.settings-volume input,.settings-haptics input) { accent-color:var(--site-accent); }
+
+.sidebar-icon {
+  width:18px; height:18px; flex:none; fill:none; stroke:currentColor;
+  stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round;
+}
+
+@media (min-width:900px) {
+  html body .deposit-layout .deposit-side {
+    background:none !important; border:0 !important; border-radius:0; box-shadow:none !important;
+    padding:8px clamp(8px,1vw,16px) 8px 0;
+    color:var(--site-heading,#ffeddb);
+  }
+  html body .deposit-layout .deposit-side :is(h2,nav h2) {
+    text-align:start; padding-inline:12px; color:var(--site-heading,#ffdb8a);
+    border-color:var(--site-edge,#694153);
+  }
+  html body .deposit-layout .deposit-side nav > :is(a,button) {
+    display:flex; align-items:center; justify-content:flex-start; gap:10px; min-height:38px;
+    padding:7px 12px; text-align:start; background:none !important; border:0 !important;
+    box-shadow:none !important; color:var(--site-heading,#fff1e5) !important;
+  }
+  html body .deposit-layout .deposit-side nav > :is(a,button):is(:hover,:focus-visible) {
+    background:color-mix(in srgb,var(--site-heading,#ffe1b3),transparent 91%) !important;
+  }
+  html body .deposit-layout .deposit-side nav > a[aria-current="page"] {
+    background:color-mix(in srgb,var(--site-accent,#f3c476),transparent 75%) !important;
+    box-shadow:inset 2px 0 var(--site-accent,#f3c476) !important; font-weight:750;
+  }
+  html body .top .primary-menu > button {
+    position:relative; background:none !important; border:0 !important; border-radius:0;
+    box-shadow:none !important; color:var(--site-bar-ink,#fff1db) !important;
+  }
+  html body .top .primary-menu > button:is(.selected,[aria-current],:hover,:focus-visible)::after {
+    content:""; height:2px; border-radius:2px; position:absolute; bottom:3px;
+    inset-inline:22%; background:var(--site-accent,#edc577);
+  }
+  html body .top :is(#memberMenuButton,#inboxBell) { border:0; box-shadow:none; background:none; }
+}
+
+@media (max-width:899px) {
+  html body .top .top-actions { min-width:0; gap:clamp(3px,1.4vw,10px); align-items:center; }
+  html body .top .top-actions :is(#walletBtn,#languageBtn,#inboxBell) {
+    margin:0; box-shadow:none !important; white-space:nowrap;
+  }
+  html body .top .top-actions #walletBtn { padding-inline:clamp(2px,1vw,8px); }
+  html body .top .top-actions #languageBtn { padding-inline:clamp(3px,1vw,7px); }
+  html body .top .top-actions #inboxBell { border:0; background:none; }
+
+  html body .member-mobile-dashboard .member-tile-panel {
+    background:none !important; box-shadow:none !important; border:none !important;
+    padding:0; border-radius:0;
+  }
+  html body .member-mobile-dashboard .account-tiles > :is(a,button) {
+    color:var(--site-heading,#fff1dd) !important; border:0 !important;
+    box-shadow:none !important; background:none !important; min-height:62px;
+  }
+  html body .member-mobile-dashboard .account-tiles > :is(a,button):is(:active,:hover,:focus-visible) {
+    background:color-mix(in srgb,var(--site-heading,#fff1dd),transparent 90%) !important;
+  }
+  html body .member-mobile-dashboard .account-tile-icon {
+    width:25px; height:25px; padding:0; color:inherit; box-shadow:none;
+    border:0; background:none; filter:none;
+  }
+  html body .member-mobile-services { border-block-start:1px solid var(--site-edge,#694153); padding-block-start:10px; }
+  html body .member-mobile-services h2 { color:var(--site-heading,#ffdb8a); }
+  html body .member-mobile-services .member-download-tile a { min-height:44px; }
+  html[data-site-theme] body .mobile-bottom {
+    background:var(--site-bar) !important; border:1px solid var(--site-edge) !important;
+    box-shadow:0 4px 14px #0005 !important;
+  }
+  html[data-site-theme] body .mobile-bottom .dock-surface { visibility:hidden; }
+  html[data-site-theme] body .mobile-bottom::after { background:var(--site-bar); }
+  html[data-site-theme] body .mobile-bottom button:not(.active) {
+    color:var(--site-bar-ink) !important; border-color:transparent; box-shadow:none;
+  }
+  html[data-site-theme] body .mobile-bottom svg.nav-art { color:inherit; }
+}
+</style>
 </body>
 </html>
