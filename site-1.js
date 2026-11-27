@@ -201,7 +201,8 @@ function showModal(title, message, items = [], secondaryAction) {
 
 function openGame(game) {
   const isFavorite = favorites.includes(game.id);
-  showModal(game.name, '原型互動。遊戲入口等待正式網址。', [], {
+  const room = {baccarat:'BOMB 真人百家', pachinko:'BOMB 柏青 SLOT', seth:'ATG 電子'}[game.id] ?? game.name;
+  roomTransfer.open(room, false, {
     label: isFavorite ? '取消最愛' : '加入最愛',
     run: () => {
       favorites = isFavorite ? favorites.filter((id) => id !== game.id) : [game.id, ...favorites];
