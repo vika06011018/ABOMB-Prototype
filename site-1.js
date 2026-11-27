@@ -284,7 +284,7 @@ function openAccountView(hash = '#deposit-title') {
 }
 
 const actions = {
-  home: () => (isDepositPage || isCatalogPage || document.querySelector('#desktop-games')) ? demoMember.navigate('index.html') : window.scrollTo({top:0, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}),
+  home: () => (isDepositPage || isCatalogPage || document.body.classList.contains('promotions-page') || document.querySelector('#desktop-games')) ? demoMember.navigate('index.html') : window.scrollTo({top:0, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}),
   all: () => { if (!isCatalogPage) demoMember.navigate('all-games.html'); },
   recent: () => openHomeGameList('玩過', recentProviders.map(provider => provider.id), true),
   favorites: () => openHomeGameList('收藏', favorites),
@@ -298,7 +298,7 @@ const actions = {
   transfer: () => openAccountView('#transfer'),
   personal: () => openAccountView('#personal-center'),
   logout: () => demoMember.logout(),
-  promo: () => showModal('優惠活動', '活動內容為原型示範。', announcements.slice(1).map(([title, message]) => [title, () => showModal(title, message)])),
+  promo: () => { if (!document.body.classList.contains('promotions-page')) demoMember.navigate('promotions.html'); },
   notifications: () => showModal('通知中心', '未讀通知為原型示範。', [[announcements[0][0], () => showModal(...announcements[0])]]),
   announcements: () => showModal('最新公告', '選擇要閱讀的公告。', announcements.map(([title, message]) => [title, () => showModal(title,message)])),
   member: () => showModal('會員中心', '會員資料等待正式串接。', [['收藏', () => showModal('收藏', '管理已收藏遊戲。', favorites.map((id) => {
