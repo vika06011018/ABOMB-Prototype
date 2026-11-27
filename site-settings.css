@@ -97,3 +97,112 @@ html[data-site-theme] :is(.deposit-side,.member-tile-panel) :is(a,button):not([a
 html[data-site-theme="d"] body :is(.deposit-side,.member-tile-panel) .account-tile-icon,
 html[data-site-theme="e"] body :is(.deposit-side,.member-tile-panel) .account-tile-icon,
 html[data-site-theme="f"] body :is(.deposit-side,.member-tile-panel) .account-tile-icon { color:#77501c; }
+
+/* The preview uses the same color tokens as the surrounding page. */
+.settings-preview {
+  margin-block-start:16px; overflow:hidden; border:1px solid var(--site-edge,#89614e);
+  border-radius:10px; background:var(--site-bg,#1d081f); color:var(--site-heading,#ffe2a0);
+}
+.settings-preview header {
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  padding:9px 12px; background:var(--site-surface,#421c35); color:var(--site-ink,#fff0d8);
+}
+.settings-preview header small { font-size:12px; }
+.settings-preview-body { padding:clamp(10px,2vw,16px); }
+.settings-preview-body > strong { display:block; margin-block-end:8px; }
+.settings-preview-card {
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px;
+  padding:10px; border:1px solid var(--site-edge,#89614e); border-radius:8px;
+  background:var(--site-surface,#421c35); color:var(--site-ink,#fff0d8);
+}
+.settings-preview-action {
+  padding:5px 9px; border:1px solid #e0b370; border-radius:8px;
+  color:#2d2116; background:linear-gradient(#fff1c1,#cca056);
+}
+
+@media (min-width:900px) {
+  html body .deposit-layout .deposit-side > nav > :is(a,button) {
+    display:flex; justify-content:center; align-items:center; gap:6px; text-align:center;
+    min-height:38px; padding-inline:10px;
+  }
+  html body .deposit-layout .deposit-side :is(h2,nav h2) { text-align:center; }
+}
+@media (max-width:899px) {
+  .member-mobile-services .member-download-tile { grid-column:1/-1; }
+  .member-mobile-services .member-download-tile a {
+    grid-auto-flow:column; justify-content:center; align-items:center; gap:8px; min-height:44px;
+  }
+  .member-download-tile .account-tile-icon { width:24px; height:24px; padding:3px; }
+}
+
+/* Use theme colors for both the resting surface and its interaction states. */
+html[data-site-theme] {
+  --site-accent:#d7ac65;
+  --site-active:#684c29;
+  --site-raise:inset 0 1px 0 #fff5dc50,0 2px 0 color-mix(in srgb,var(--site-edge),#121212 35%),0 4px 5px #0003;
+  --site-pressed:inset 0 2px 4px #0004,0 1px 2px #0004;
+}
+html[data-site-theme] body :is(
+  .deposit-layout .deposit-side nav > :is(a,button),.account-tiles > :is(a,button),
+  .catalog-categories button,.catalog-favorites,.profile-tabs button,.inbox-filters button,
+  .deposit-quick button,.outline-gold,.bind-tabs button,.room-transfer [data-confirm],
+  .bqp-item,.modal-content-list button
+) {
+  background:var(--site-surface) !important; color:var(--site-ink) !important;
+  border-color:var(--site-edge) !important; box-shadow:var(--site-raise) !important;
+}
+html[data-site-theme] body :is(
+  .deposit-layout .deposit-side nav > :is(a,button),.account-tiles > :is(a,button),
+  .catalog-categories button,.catalog-favorites,.profile-tabs button,.inbox-filters button,
+  .deposit-quick button,.outline-gold,.bind-tabs button,.room-transfer [data-confirm],
+  .bqp-item,.modal-content-list button
+):is(:hover,:focus-visible):not(:disabled,[aria-disabled="true"]) {
+  background:color-mix(in srgb,var(--site-surface),var(--site-accent) 16%) !important;
+  border-color:var(--site-accent) !important;
+}
+html[data-site-theme] body :is(
+  .deposit-layout nav,.catalog-categories,.profile-tabs,.inbox-filters,.bind-tabs,.primary-menu,.mobile-bottom
+) :is([aria-current="page"],[aria-current="location"],[aria-pressed="true"],.selected,.active) {
+  background:linear-gradient(#ffe8b4,#d2a35b) !important;
+  color:#2d2116 !important; border-color:#d9b06d !important;
+}
+html[data-site-theme] body .mobile-bottom :is([aria-current="page"],.active) :is(svg,span) { color:inherit; }
+html[data-site-theme] body :is(
+  .deposit-layout nav > :is(a,button),.catalog-categories button,.outline-gold,.goldbtn,.catalog-favorites,
+  .profile-tabs button,.inbox-filters button,.deposit-quick button,.bqp-item,.modal-content-list button
+):active:not(:disabled,[aria-disabled="true"]) { box-shadow:var(--site-pressed) !important; }
+
+html[data-site-theme] body :is(
+  .modal,.bank-examples,.room-transfer,.saved-games-dialog,#saved-games-dialog,
+  .live-detail-dialog,#event-details,#sports-event,#bombQuickPanel,.avatar-dialog,
+  .catalog-controls input,.marquee,.catalog-card footer,.desktop-game-caption,
+  .member-app-tile,.withdraw-turnover,.room-transfer-direction div
+) {
+  background:var(--site-surface) !important; color:var(--site-ink) !important;
+  border-color:var(--site-edge) !important;
+}
+html[data-site-theme] body :is(.catalog-controls input,.room-transfer input,.modal input) {
+  background:var(--site-field) !important; color:var(--site-ink) !important;
+  border-color:var(--site-edge) !important;
+}
+html[data-site-theme] body :is(.catalog-controls input,.room-transfer input,.modal input)::placeholder {
+  color:var(--site-ink); opacity:.7;
+}
+html[data-site-theme] body :is(
+  .modal,.bank-examples,.room-transfer,.live-detail-dialog,#saved-games-dialog,
+  #bombQuickPanel,.catalog-card footer,.desktop-game-caption,.withdraw-turnover
+) :is(h1,h2,h3,p,strong,small,output,.bqp-title,.bqp-sub,.bqp-chevron) {
+  color:var(--site-ink); text-shadow:none;
+}
+html[data-site-theme] body .room-transfer header { background:var(--site-field); }
+html[data-site-theme] body :is(.hero,.marquee,.mobile-bottom,.mobile-nav,.catalog-card) {
+  border-color:var(--site-edge) !important; box-shadow:0 3px 9px #0003 !important;
+}
+html[data-site-theme] body :is(.hero)::before,
+html[data-site-theme] body :is(.mobile-bottom,.mobile-nav)::before {
+  border-color:var(--site-edge) !important; box-shadow:none !important;
+}
+html[data-site-theme] body :is(.catalog-group h2,.desktop-game-section h2,.marquee a) { color:var(--site-heading); }
+html[data-site-theme] body .marquee a { color:var(--site-ink); }
+html[data-site-theme] body .account-tiles .account-tile-icon { color:inherit; }
+html[data-site-theme] body .deposit-layout nav [aria-current="page"] .account-tile-icon { color:#523819; }
